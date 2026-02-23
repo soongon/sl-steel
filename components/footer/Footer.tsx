@@ -1,5 +1,6 @@
 import { SITE } from "@/lib/site";
 import { ui } from "@/lib/ui";
+import SLSteelLogo from "@/components/logo/SLSteelLogo";
 
 const QUICK_LINKS = [
   { label: "회사소개", href: "#about"    },
@@ -23,9 +24,7 @@ export default function Footer() {
             className="flex items-center gap-2.5"
             aria-label="SL Steel 홈으로"
           >
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-brand-navy text-xs font-bold text-white">
-              S
-            </div>
+            <SLSteelLogo size={28} fill="#3B82F6" gap="#F1F5F9" />
             <span className="font-display text-base font-bold tracking-tight text-brand-navy">
               <span className="text-accent">SL</span>{" 철강"}
             </span>
@@ -59,9 +58,7 @@ export default function Footer() {
                 aria-label="SL Steel 홈으로"
                 className="inline-flex items-center gap-2.5 transition-opacity hover:opacity-80"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-brand-navy text-xs font-bold text-white">
-                  S
-                </div>
+                <SLSteelLogo size={32} fill="#3B82F6" gap="#F1F5F9" />
                 <div className="leading-none">
                   <p className="text-sm font-semibold text-foreground">{SITE.brand.en}</p>
                   <p className="mt-0.5 text-[11px] text-muted">{SITE.brand.ko}</p>

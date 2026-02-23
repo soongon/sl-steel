@@ -1,4 +1,5 @@
 import { SITE } from "@/lib/site";
+import SLSteelLogo from "@/components/logo/SLSteelLogo";
 
 const NAV_LINKS = [
   { label: "회사소개", href: "#about"    },
@@ -18,10 +19,7 @@ export default function Header() {
           aria-label="SL Steel 홈으로"
           className="flex shrink-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
         >
-          {/* 심볼 placeholder */}
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/20 bg-white/10 text-sm font-bold text-blue-400">
-            S
-          </div>
+          <SLSteelLogo size={38} fill="#3B82F6" gap="#0F172A" />
           <div className="flex items-baseline gap-2">
             <span className="font-display text-[1.75rem] font-bold leading-none tracking-tight text-white">
               <span className="text-blue-400">SL</span>
