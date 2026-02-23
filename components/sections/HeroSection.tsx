@@ -40,7 +40,7 @@ export default function HeroSection() {
               {SITE.hero.badges.map((badge) => (
                 <span
                   key={badge}
-                  className="inline-flex items-center rounded-full border border-blue-400/40 bg-blue-400/10 px-3.5 py-1 text-sm font-medium text-blue-300"
+                  className="inline-flex items-center rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-sm font-medium text-accent/80"
                 >
                   {badge}
                 </span>
@@ -66,7 +66,7 @@ export default function HeroSection() {
             <div className="mt-8 grid grid-cols-2 gap-4 sm:max-w-md">
               <a
                 href="#contact?type=매입"
-                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition-all duration-200 hover:bg-blue-400 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgb(59_130_246/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition-all duration-200 hover:bg-accent-dark hover:-translate-y-1 hover:shadow-[0_8px_32px_rgb(59_130_246/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               >
                 {SITE.hero.cta.primary}
               </a>
@@ -88,7 +88,7 @@ export default function HeroSection() {
         <div className="mt-14 grid grid-cols-1 gap-6 border-t border-white/10 pt-10 sm:grid-cols-3">
           {SITE.points.map((point, i) => (
             <div key={point.title} className="flex items-center gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-400/30 bg-blue-400/10 text-blue-400">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent">
                 {POINT_ICONS[i] ?? null}
               </div>
               <div>

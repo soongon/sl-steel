@@ -31,6 +31,9 @@
   /* 헤딩 전용 디스플레이 세리프 (next/font 변수 참조) */
   --font-display: var(--font-noto-serif), "Noto Serif KR", Georgia, serif;
 
+  /* 산업용 압축 볼드 — 로고 영문 전용 */
+  --font-condensed: var(--font-bebas-neue), "Bebas Neue", Impact, sans-serif;
+
   /* ── 그림자 ── */
   --shadow-card:  0 1px 3px 0 rgb(15 30 46 / 0.06),
                   0 4px 16px 0 rgb(15 30 46 / 0.05);

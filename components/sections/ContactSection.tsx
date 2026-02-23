@@ -145,7 +145,7 @@ export default function ContactSection() {
                 <input
                   type="text"
                   name="location"
-                  placeholder="경주, 포항, 울산 등"
+                  placeholder="예) 경기 화성시, 천안, 전주 등"
                   className={inputBase}
                 />
               </div>

@@ -20,12 +20,12 @@ export default function Header() {
           className="flex shrink-0 items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
         >
           <SLSteelLogo size={38} fill="#3B82F6" gap="#0F172A" />
-          <div className="flex items-baseline gap-2">
-            <span className="font-display text-[1.75rem] font-bold leading-none tracking-tight text-white">
-              <span className="text-blue-400">SL</span>
-              {" 철강"}
+          <div className="flex items-baseline gap-3">
+            <span className="font-sans text-[1.55rem] font-black leading-none text-white">
+              <span className="font-condensed text-accent text-[1.1em] tracking-[0.06em] mr-[3px]">SL</span>
+              <span className="tracking-[-0.01em]">철강</span>
             </span>
-            <span className="hidden text-[0.65rem] font-light tracking-[0.2em] text-white/30 sm:block">
+            <span className="hidden font-sans text-[0.68rem] font-medium uppercase tracking-[0.16em] text-white/25 sm:block">
               {SITE.brand.en}
             </span>
           </div>
@@ -50,7 +50,7 @@ export default function Header() {
         {/* ── 우측 CTA ─────────────────────────────────────────────── */}
         <a
           href="#contact"
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-bold text-white transition-all duration-200 hover:bg-blue-400 hover:shadow-[0_4px_16px_rgb(59_130_246/0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-bold text-white transition-all duration-200 hover:bg-accent-dark hover:shadow-[0_4px_16px_rgb(59_130_246/0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
         >
           매입 문의
         </a>

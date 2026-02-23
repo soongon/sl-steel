@@ -69,7 +69,7 @@ export default function Footer() {
                 {SITE.hero.h1}
               </p>
               <p className="mt-2 text-xs leading-relaxed text-muted break-keep">
-                철근·H빔 안정 공급과 표면 녹 철근 가치 회수를 함께 제공합니다.
+                녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.
               </p>
             </div>
 

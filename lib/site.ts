@@ -7,10 +7,10 @@
 
 export const NAV_SECTIONS = [
   "hero",
-  "points",
   "about",
-  "business",
+  "products",
   "system",
+  "business",
   "process",
   "why",
   "contact",
