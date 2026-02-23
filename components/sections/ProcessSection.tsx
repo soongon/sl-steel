@@ -6,9 +6,10 @@ import { ui } from "@/lib/ui";
 
 type TabIndex = 0 | 1;
 
+// tabs[0] = 매입 프로세스, tabs[1] = 납품 프로세스
 const STEPS = [
-  SITE.process.delivery.steps,
   SITE.process.recovery.steps,
+  SITE.process.delivery.steps,
 ] as const;
 
 export default function ProcessSection() {

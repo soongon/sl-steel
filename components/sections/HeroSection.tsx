@@ -64,11 +64,11 @@ export default function HeroSection() {
 
             {/* CTA 버튼 */}
             <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#contact?type=납품" className={ui.btn.accent}>
+              <a href="#contact?type=매입" className={ui.btn.accent}>
                 {SITE.hero.cta.primary}
               </a>
               <a
-                href="#contact?type=매입"
+                href="#contact?type=납품"
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
               >
                 {SITE.hero.cta.secondary}

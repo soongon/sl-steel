@@ -20,7 +20,7 @@ export type SectionId = (typeof NAV_SECTIONS)[number];
 
 // ─── 문의 타입 ────────────────────────────────────────────────────────────────
 
-export const INQUIRY_TYPES = ["납품 문의", "매입 문의"] as const;
+export const INQUIRY_TYPES = ["매입 문의", "납품 문의"] as const;
 export type InquiryType = (typeof INQUIRY_TYPES)[number];
 
 // ─── 메인 상수 ────────────────────────────────────────────────────────────────
@@ -34,67 +34,67 @@ export const SITE = {
 
   // SEO 메타
   seo: {
-    title: "SL Steel | 현장을 잇는 철강 유통 전문 기업",
+    title: "SL Steel | 현장 철근 전문 매입",
     description:
-      "철근·H빔 안정 공급과 표면 녹 발생 철근 가치 매입까지. 자체 물류 기반 현장 대응.",
+      "녹 발생 철근·4m 이상 절단 철근 합리적 매입. 경북 경주 기반 현장 직수거.",
   },
 
   // 히어로 섹션
   hero: {
-    h1: "현장을 잇는 철강 유통 전문 기업",
+    h1: "현장 잉여 철근, 제값으로 매입합니다",
     subcopy:
-      "철근과 H빔의 안정적인 공급, 그리고 사용이 어려운 철근의 가치 회수까지.\nSL Steel은 철강의 흐름을 연결합니다.",
-    badges: ["대형 창고", "야적장", "크레인 장착 5톤 트럭"] as const,
+      "녹이 슬었거나 절단된 철근도 명확한 기준으로 현장에서 직접 수거합니다.\n처치 곤란한 철근의 가치를 SL Steel이 연결합니다.",
+    badges: ["대형 창고", "야적장", "5톤·25톤 크레인 카고 트럭"] as const,
     cta: {
-      primary: "납품 문의" as InquiryType,
-      secondary: "매입 문의" as InquiryType,
+      primary: "매입 문의" as InquiryType,
+      secondary: "납품 문의" as InquiryType,
     },
   },
 
   // Key Points 3카드
   points: [
     {
-      title: "안정적 공급",
-      desc: "철근·H빔 재고 기반으로 현장 요구에 빠르게 대응",
+      title: "녹슨 철근 매입",
+      desc: "표면에 녹이 발생한 온전한 철근, 상품성 없어도 합리적 기준으로 매입합니다",
     },
     {
-      title: "가치 회수",
-      desc: "표면 녹 발생 철근을 합리적 기준으로 매입",
+      title: "절단 철근도 OK",
+      desc: "4m 이상 절단 철근도 매입 가능. 현장에서 처리 어렵던 자재를 직접 수거합니다",
     },
     {
-      title: "자체 물류",
-      desc: "크레인 장착 5톤 트럭으로 상하차·운송까지 대응",
+      title: "현장 직수거",
+      desc: "5톤·25톤 크레인 카고 트럭으로 현장에 직접 방문. 별도 운반 부담이 없습니다",
     },
   ] as const,
 
   // About 섹션
   about: {
-    title: "건설 현장의 시작과 마무리를 연결합니다",
-    body: "SL 철강은 경상북도 경주시를 기반으로 철근 및 H빔을 전문 유통하는 철강 기업입니다.\n대형 창고와 야적장, 크레인 장착 5톤 트럭을 보유해 현장 요구에 신속히 대응합니다.",
+    title: "처치 곤란한 현장 철근, SL Steel이 가져갑니다",
+    body: "현장에서 오래 방치된 녹슨 철근이나 작업 중 절단된 잔여 철근은 일반적으로 처리가 어렵습니다.\nSL Steel은 경북 경주를 기반으로 이러한 잉여 철근을 합리적인 가격에 직접 매입·수거합니다.",
   },
 
   // Business 섹션
   business: {
-    delivery: {
-      title: "철근·H빔 전문 납품",
-      bullets: ["대량 재고 보유", "현장 직납", "긴급 대응", "안정 공급"] as const,
-      cta: "납품 문의" as InquiryType,
-    },
     recovery: {
-      title: "자재 가치 회수 사업",
-      lead: "사용이 어려워진 철근의 가치를 다시 연결합니다.",
+      title: "현장 철근 전문 매입",
+      lead: "녹슨 철근과 절단 철근, 명확한 기준으로 합리적 가격에 매입합니다.",
       table: {
-        target: "표면에 녹이 발생한 온전한 철근",
-        exclude: "절단·훼손 폐철근, 일반 고철",
+        target: "녹 발생 온전한 철근 / 4m 이상 절단 철근",
+        exclude: "3m 미만 단재 · 폐철근 · 일반 고철",
       },
       bullets: [
-        "현장 잔여 처리",
+        "현장 직접 수거",
+        "빠른 정산",
         "보관 공간 확보",
-        "자재 손실 최소화",
-        "합리적 매입",
+        "합리적 매입가",
       ] as const,
-      notice: "폐철근/일반 고철은 취급하지 않습니다.",
+      notice: "3m 미만 단재 및 폐철근·일반 고철은 매입하지 않습니다.",
       cta: "매입 문의" as InquiryType,
+    },
+    delivery: {
+      title: "철근·H빔 납품",
+      bullets: ["대량 재고 보유", "현장 직납", "긴급 대응", "안정 공급"] as const,
+      cta: "납품 문의" as InquiryType,
     },
   },
 
@@ -111,38 +111,38 @@ export const SITE = {
       value: "대형 물량도 안정 대응",
     },
     {
-      title: "크레인 장착 5톤 트럭",
+      title: "5톤·25톤 크레인 카고 트럭",
       desc: "상하차 및 운송",
-      value: "현장 작업 부담 감소",
+      value: "소형·대형 물량 모두 대응",
     },
   ] as const,
 
-  // Process 섹션
+  // Process 섹션 — 매입 탭이 첫 번째
   process: {
-    tabs: ["납품 프로세스", "매입 프로세스"] as const,
+    tabs: ["매입 프로세스", "납품 프로세스"] as const,
+    recovery: {
+      steps: ["문의", "상태 확인", "매입가 제시", "현장 수거", "정산"] as const,
+    },
     delivery: {
       steps: ["문의", "견적/일정", "출고", "현장 납품", "사후 대응"] as const,
-    },
-    recovery: {
-      steps: ["문의", "상태 확인", "매입가 제시", "회수", "정산"] as const,
     },
   },
 
   // Why 섹션
   why: {
     checklist: [
-      "납품과 회수를 함께 보는 구조적 운영",
-      "재고·물류 자체 보유",
-      "자재 흐름을 끊지 않는 연결형 서비스",
-      "정직한 커뮤니케이션",
+      "녹슨 철근·4m↑ 절단 철근 모두 명확한 기준으로 매입",
+      "5톤·25톤 크레인 카고 트럭으로 현장 직수거 — 별도 운반 불필요",
+      "합리적인 매입가 — 상품성 없어도 제값에 가져갑니다",
+      "매입과 납품을 함께 운영하는 현장 밀착 구조",
     ] as const,
   },
 
   // Contact 섹션
   contact: {
-    title: "납품 · 매입 문의",
+    title: "철근 매입 문의",
     subtitle:
-      "철근·H빔 납품 문의와 표면 녹 철근 매입 상담을 빠르게 도와드립니다.",
+      "녹 발생 철근·절단 철근 매입 상담을 바로 도와드립니다. 납품 문의도 함께 받습니다.",
     fields: {
       name: "성함/업체명",
       phone: "연락처",
@@ -154,27 +154,45 @@ export const SITE = {
 
   // 통계 수치
   stats: [
-    { value: "15년+", label: "업력" },
-    { value: "경북 경주", label: "지역 거점" },
-    { value: "당일 출고", label: "재고 보유 품목" },
-    { value: "납품+회수", label: "원스톱 서비스" },
+    { value: "2009년~", label: "업력" },
+    { value: "4개 권역", label: "전국 거점 네트워크" },
+    { value: "4m↑", label: "절단 철근 매입 기준" },
+    { value: "당일 수거", label: "현장 직접 방문" },
   ] as const,
 
-  // 취급 품목
+  // 매입 대상 품목
   products: [
-    { name: "H빔",   spec: "KS D 3503 · SS400", desc: "철골 구조, 교량, 건축 기둥" },
-    { name: "철근",  spec: "KS D 3504 · SD400",  desc: "RC 구조물, 슬래브, 기초" },
-    { name: "각관",  spec: "KS D 3568 · SGH275", desc: "구조체, 파티션, 가설물" },
-    { name: "철판",  spec: "KS D 3503 · SS400",  desc: "배관 플레이트, 보강재" },
-    { name: "앵글",  spec: "KS D 3503 · SS400",  desc: "브래킷, 프레임, 보강재" },
-    { name: "C형강", spec: "KS D 3530 · G540",  desc: "지붕 purlin, 내외장 골조" },
+    {
+      name: "녹 발생 철근",
+      spec: "온전한 길이",
+      desc: "표면에 녹이 발생했으나 절단되지 않은 원형·이형철근",
+      available: true,
+    },
+    {
+      name: "절단 철근",
+      spec: "4m 이상",
+      desc: "현장 작업 중 절단된 4m 이상 철근 (4m 미만 불가)",
+      available: true,
+    },
+    {
+      name: "매입 불가 항목",
+      spec: "제외 기준",
+      desc: "3m 미만 단재 · 심하게 부식된 폐철근 · 일반 고철",
+      available: false,
+    },
   ] as const,
 
   // 푸터
   footer: {
-    address: "경상북도 경주시 충효동",
-    phone: "010-0000-0000",
+    address: "서울특별시 (본사)",
+    phone: "02-3462-5710",
     email: "sl-steel@gmail.com",
     kakao: "https://pf.kakao.com/_xxxxx",
+    regions: [
+      { name: "서울 본사", phone: "02-3462-5710" },
+      { name: "중부권", phone: "010-XXXX-XXXX" },
+      { name: "경상권", phone: "010-XXXX-XXXX" },
+      { name: "전라권", phone: "010-XXXX-XXXX" },
+    ] as const,
   },
 } as const;

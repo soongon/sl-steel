@@ -25,26 +25,10 @@ export default function BusinessSection() {
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
 
-          {/* ── 납품 카드 ──────────────────────────────────────────── */}
+          {/* ── 매입 카드 (주) ─────────────────────────────────────── */}
           <div className={`${ui.card} ${ui.cardPad} flex flex-col transition-shadow hover:shadow-lift`}>
             <div className="flex-1">
-              <span className={ui.chip}>납품</span>
-              <h3 className="mt-3 text-xl font-semibold text-foreground">
-                {delivery.title}
-              </h3>
-              <BulletList items={delivery.bullets} />
-            </div>
-            <div className="mt-8 border-t border-border pt-6">
-              <a href="#contact?type=납품" className={`${ui.btn.primary} h-12 w-full justify-center`}>
-                {delivery.cta}
-              </a>
-            </div>
-          </div>
-
-          {/* ── 가치 회수 카드 ─────────────────────────────────────── */}
-          <div className={`${ui.card} ${ui.cardPad} flex flex-col transition-shadow hover:shadow-lift`}>
-            <div className="flex-1">
-              <span className={ui.chip}>회수</span>
+              <span className={ui.chip}>매입 · 주력</span>
               <h3 className="mt-3 text-xl font-semibold text-foreground">
                 {recovery.title}
               </h3>
@@ -72,15 +56,30 @@ export default function BusinessSection() {
 
               <BulletList items={recovery.bullets} />
 
-              {/* 고지 문구 — 작고 명확하게 */}
               <p className="mt-4 border-l-2 border-border pl-3 text-xs text-muted">
                 {recovery.notice}
               </p>
             </div>
 
             <div className="mt-8 border-t border-border pt-6">
-              <a href="#contact?type=매입" className={`${ui.btn.secondary} h-12 w-full justify-center`}>
+              <a href="#contact?type=매입" className={`${ui.btn.accent} h-12 w-full justify-center`}>
                 {recovery.cta}
+              </a>
+            </div>
+          </div>
+
+          {/* ── 납품 카드 (보조) ───────────────────────────────────── */}
+          <div className={`${ui.card} ${ui.cardPad} flex flex-col transition-shadow hover:shadow-lift`}>
+            <div className="flex-1">
+              <span className={ui.chip}>납품 · 보조</span>
+              <h3 className="mt-3 text-xl font-semibold text-foreground">
+                {delivery.title}
+              </h3>
+              <BulletList items={delivery.bullets} />
+            </div>
+            <div className="mt-8 border-t border-border pt-6">
+              <a href="#contact?type=납품" className={`${ui.btn.secondary} h-12 w-full justify-center`}>
+                {delivery.cta}
               </a>
             </div>
           </div>

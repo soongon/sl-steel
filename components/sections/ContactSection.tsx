@@ -19,7 +19,7 @@ const inputBase =
   "h-11 w-full rounded-xl border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent";
 
 export default function ContactSection() {
-  const { address, phone, email, kakao } = SITE.footer;
+  const { email, kakao, regions } = SITE.footer;
   const { title, subtitle, fields, privacy } = SITE.contact;
 
   const [inquiryType, setInquiryType] = useState<InquiryType>(INQUIRY_TYPES[0]);
@@ -48,17 +48,19 @@ export default function ContactSection() {
               {subtitle}
             </p>
 
-            {/* 전화번호 강조 */}
-            {phone && (
-              <div className="mt-8">
+            {/* 지역별 연락처 */}
+            <div className="mt-8 grid grid-cols-2 gap-3">
+              {regions.map((region) => (
                 <a
-                  href={`tel:${phone}`}
-                  className="text-3xl font-display font-bold text-foreground hover:text-accent transition-colors"
+                  key={region.name}
+                  href={`tel:${region.phone}`}
+                  className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-card"
                 >
-                  {phone}
+                  <span className="text-xs font-semibold text-accent">{region.name}</span>
+                  <span className="text-base font-bold text-foreground tabular-nums">{region.phone}</span>
                 </a>
-              </div>
-            )}
+              ))}
+            </div>
 
             {/* 카카오 문의 버튼 */}
             {kakao && (
@@ -74,33 +76,16 @@ export default function ContactSection() {
               </div>
             )}
 
-            {/* 연락처 정보 */}
-            <div className="mt-8 space-y-3 text-sm text-muted">
-              <div className="flex items-start gap-2">
-                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 h-4 w-4 shrink-0 text-accent">
-                  <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z" />
-                  <circle cx="12" cy="10" r="3" />
+            {/* 이메일 */}
+            {email && (
+              <div className="mt-5 flex items-center gap-2 text-sm text-muted">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-accent">
+                  <rect width="20" height="16" x="2" y="4" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                 </svg>
-                <span>{address}</span>
+                <a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a>
               </div>
-              {phone && (
-                <div className="flex items-center gap-2">
-                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-accent">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.41 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.34 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.92a16 16 0 0 0 5.9 5.9l.83-.83a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" />
-                  </svg>
-                  <a href={`tel:${phone}`} className="hover:text-accent transition-colors">{phone}</a>
-                </div>
-              )}
-              {email && (
-                <div className="flex items-center gap-2">
-                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-accent">
-                    <rect width="20" height="16" x="2" y="4" rx="2" />
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                  </svg>
-                  <a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a>
-                </div>
-              )}
-            </div>
+            )}
           </div>
 
           {/* ── 우측: 폼 카드 ─────────────────────────────────────── */}
