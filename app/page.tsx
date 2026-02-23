@@ -10,7 +10,7 @@ import ContactSection from "@/components/sections/ContactSection";
 
 export default function Home() {
   return (
-    <main className="pt-[4.5rem]">
+    <main>
       <HeroSection />
       <StatsSection />
       <AboutSection />

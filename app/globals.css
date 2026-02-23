@@ -7,10 +7,10 @@
 
 @theme {
   /* ── 브랜드 ── */
-  --color-brand-navy:   #0F1E2E;   /* 헤더, 히어로, 주요 강조 */
-  --color-brand-light:  #162840;   /* hover / 다크 레이어 */
-  --color-accent:       #D97706;   /* CTA 버튼, 링크 포인트, ring (amber-600) */
-  --color-accent-dark:  #B45309;   /* accent hover (amber-700) */
+  --color-brand-navy:   #0F172A;   /* 헤더, 히어로 — 쿨 슬레이트 다크 */
+  --color-brand-light:  #1E293B;   /* hover / 다크 레이어 */
+  --color-accent:       #3B82F6;   /* CTA 버튼, 링크 포인트, ring (blue-500) */
+  --color-accent-dark:  #2563EB;   /* accent hover (blue-600) */
 
   /* ── 뉴트럴 ── */
   --color-steel:        #64748B;   /* 아이콘, 메탈 톤 부제목 */
@@ -21,8 +21,8 @@
   --color-card:         #FFFFFF;   /* 카드 배경 */
 
   /* ── 시맨틱 ── */
-  --color-notice:       #B45309;   /* 고지 문구 텍스트 (amber-700) */
-  --color-notice-bg:    #FEF3C7;   /* 고지 배경 (amber-100) */
+  --color-notice:       #1D4ED8;   /* 고지 문구 텍스트 (blue-700) */
+  --color-notice-bg:    #DBEAFE;   /* 고지 배경 (blue-100) */
 
   /* ── 타이포 ── */
   --font-sans: "Pretendard Variable", "Pretendard", -apple-system,
@@ -35,8 +35,8 @@
   --shadow-card:  0 1px 3px 0 rgb(15 30 46 / 0.06),
                   0 4px 16px 0 rgb(15 30 46 / 0.05);
   --shadow-lift:  0 4px 24px 0 rgb(15 30 46 / 0.10);
-  --shadow-amber: 0 0 0 1px rgb(217 119 6 / 0.15),
-                  0 4px 16px 0 rgb(217 119 6 / 0.10);
+  --shadow-blue:  0 0 0 1px rgb(59 130 246 / 0.15),
+                  0 4px 16px 0 rgb(59 130 246 / 0.10);
 }
 
 /* ─── 베이스 ────────────────────────────────────────────────────────────────── */

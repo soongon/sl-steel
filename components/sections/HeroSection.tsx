@@ -27,7 +27,7 @@ export default function HeroSection() {
   const subLines = SITE.hero.subcopy.split("\n");
 
   return (
-    <section id="hero" className="bg-brand-navy py-24 sm:py-32">
+    <section id="hero" className="bg-brand-navy pt-20 pb-24 sm:pt-24 sm:pb-32">
       <div className={ui.container}>
 
         {/* ── 메인 2열 그리드 ─────────────────────────────────────── */}
@@ -40,7 +40,7 @@ export default function HeroSection() {
               {SITE.hero.badges.map((badge) => (
                 <span
                   key={badge}
-                  className="inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-3.5 py-1 text-sm font-medium text-amber-300"
+                  className="inline-flex items-center rounded-full border border-blue-400/40 bg-blue-400/10 px-3.5 py-1 text-sm font-medium text-blue-300"
                 >
                   {badge}
                 </span>
@@ -63,13 +63,16 @@ export default function HeroSection() {
             </p>
 
             {/* CTA 버튼 */}
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a href="#contact?type=매입" className={ui.btn.accent}>
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:max-w-md">
+              <a
+                href="#contact?type=매입"
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition-all duration-200 hover:bg-blue-400 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgb(59_130_246/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
                 {SITE.hero.cta.primary}
               </a>
               <a
                 href="#contact?type=납품"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/30 px-6 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl border border-white/30 text-base font-bold text-white transition-all duration-200 hover:bg-white/20 hover:border-white/60 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgb(255_255_255/0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
               >
                 {SITE.hero.cta.secondary}
               </a>
@@ -85,7 +88,7 @@ export default function HeroSection() {
         <div className="mt-14 grid grid-cols-1 gap-6 border-t border-white/10 pt-10 sm:grid-cols-3">
           {SITE.points.map((point, i) => (
             <div key={point.title} className="flex items-center gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-400/30 bg-blue-400/10 text-blue-400">
                 {POINT_ICONS[i] ?? null}
               </div>
               <div>
