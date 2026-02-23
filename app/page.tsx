@@ -15,9 +15,9 @@ export default function Home() {
       <StatsSection />
       <AboutSection />
       <ProductsSection />
+      <SystemSection />
       <BusinessSection />
       <ProcessSection />
-      <SystemSection />
       <WhySection />
       <ContactSection />
     </main>
