@@ -29,7 +29,7 @@ export const ui = {
   // ── 히어로 H1 전용 (Noto Serif KR, 디스플레이 사이즈) ──────────────────────
   // font-display → --font-display → var(--font-noto-serif)
   h1Hero:
-    "font-display text-[clamp(1.1rem,5vw,2.875rem)] font-bold leading-tight tracking-normal text-white break-keep",
+    "font-display text-[clamp(1.75rem,5.5vw,3.5rem)] font-bold leading-tight tracking-normal text-white break-keep",
 
   // ── 카드 ──────────────────────────────────────────────────────────────────
   card:     "rounded-2xl border border-border bg-card shadow-sm",

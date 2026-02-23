@@ -152,10 +152,29 @@ export const SITE = {
     privacy: "문의 응대를 위해 연락처를 수집합니다.",
   },
 
+  // 통계 수치
+  stats: [
+    { value: "15년+", label: "업력" },
+    { value: "경북 경주", label: "지역 거점" },
+    { value: "당일 출고", label: "재고 보유 품목" },
+    { value: "납품+회수", label: "원스톱 서비스" },
+  ] as const,
+
+  // 취급 품목
+  products: [
+    { name: "H빔",   spec: "KS D 3503 · SS400", desc: "철골 구조, 교량, 건축 기둥" },
+    { name: "철근",  spec: "KS D 3504 · SD400",  desc: "RC 구조물, 슬래브, 기초" },
+    { name: "각관",  spec: "KS D 3568 · SGH275", desc: "구조체, 파티션, 가설물" },
+    { name: "철판",  spec: "KS D 3503 · SS400",  desc: "배관 플레이트, 보강재" },
+    { name: "앵글",  spec: "KS D 3503 · SS400",  desc: "브래킷, 프레임, 보강재" },
+    { name: "C형강", spec: "KS D 3530 · G540",  desc: "지붕 purlin, 내외장 골조" },
+  ] as const,
+
   // 푸터
   footer: {
     address: "경상북도 경주시 충효동",
     phone: "010-0000-0000",
     email: "sl-steel@gmail.com",
+    kakao: "https://pf.kakao.com/_xxxxx",
   },
 } as const;

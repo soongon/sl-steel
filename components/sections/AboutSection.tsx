@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { SITE } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
@@ -29,9 +30,15 @@ export default function AboutSection() {
       <div className={ui.container}>
         <div className="grid gap-10 lg:grid-cols-[38fr_62fr] lg:items-center">
 
-          {/* ── 좌측: 이미지 플레이스홀더 ──────────────────────── */}
-          <div className="aspect-4/3 w-full rounded-2xl border border-border bg-surface flex items-center justify-center">
-            <span className="text-sm text-muted">창고 / 야적장 실제 사진 영역</span>
+          {/* ── 좌측: 현장 이미지 ──────────────────────────────── */}
+          <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
+            <Image
+              src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&q=80"
+              alt="SL Steel 철강 유통 현장"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 38vw"
+            />
           </div>
 
           {/* ── 우측: 텍스트 ────────────────────────────────────── */}

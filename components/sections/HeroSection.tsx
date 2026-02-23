@@ -40,7 +40,7 @@ export default function HeroSection() {
               {SITE.hero.badges.map((badge) => (
                 <span
                   key={badge}
-                  className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-sm font-medium text-white/80"
+                  className="inline-flex items-center rounded-full border border-amber-500/40 bg-amber-500/10 px-3.5 py-1 text-sm font-medium text-amber-300"
                 >
                   {badge}
                 </span>
@@ -85,7 +85,7 @@ export default function HeroSection() {
         <div className="mt-14 grid grid-cols-1 gap-6 border-t border-white/10 pt-10 sm:grid-cols-3">
           {SITE.points.map((point, i) => (
             <div key={point.title} className="flex items-center gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white/80">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400">
                 {POINT_ICONS[i] ?? null}
               </div>
               <div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 import { SITE, INQUIRY_TYPES, type InquiryType } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
@@ -19,14 +19,14 @@ const inputBase =
   "h-11 w-full rounded-xl border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent";
 
 export default function ContactSection() {
-  const { address, phone, email } = SITE.footer;
+  const { address, phone, email, kakao } = SITE.footer;
   const { title, subtitle, fields, privacy } = SITE.contact;
 
   const [inquiryType, setInquiryType] = useState<InquiryType>(INQUIRY_TYPES[0]);
 
   // 마운트 시 hash 읽어서 select 기본값 설정
   useEffect(() => {
-    setInquiryType(resolveTypeFromHash());
+    startTransition(() => setInquiryType(resolveTypeFromHash()));
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -47,6 +47,32 @@ export default function ContactSection() {
             <p className="mt-4 text-base leading-relaxed text-muted break-keep">
               {subtitle}
             </p>
+
+            {/* 전화번호 강조 */}
+            {phone && (
+              <div className="mt-8">
+                <a
+                  href={`tel:${phone}`}
+                  className="text-3xl font-display font-bold text-foreground hover:text-accent transition-colors"
+                >
+                  {phone}
+                </a>
+              </div>
+            )}
+
+            {/* 카카오 문의 버튼 */}
+            {kakao && (
+              <div className="mt-4">
+                <a
+                  href={kakao}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#FEE500] px-6 text-sm font-semibold text-[#3A1D1D] hover:opacity-90 transition-opacity"
+                >
+                  카카오로 문의하기
+                </a>
+              </div>
+            )}
 
             {/* 연락처 정보 */}
             <div className="mt-8 space-y-3 text-sm text-muted">

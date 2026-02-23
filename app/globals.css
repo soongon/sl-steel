@@ -9,8 +9,8 @@
   /* ── 브랜드 ── */
   --color-brand-navy:   #0F1E2E;   /* 헤더, 히어로, 주요 강조 */
   --color-brand-light:  #162840;   /* hover / 다크 레이어 */
-  --color-accent:       #1A6FA8;   /* CTA 버튼, 링크 포인트, ring */
-  --color-accent-dark:  #155B8C;   /* accent hover */
+  --color-accent:       #D97706;   /* CTA 버튼, 링크 포인트, ring (amber-600) */
+  --color-accent-dark:  #B45309;   /* accent hover (amber-700) */
 
   /* ── 뉴트럴 ── */
   --color-steel:        #64748B;   /* 아이콘, 메탈 톤 부제목 */
@@ -35,6 +35,8 @@
   --shadow-card:  0 1px 3px 0 rgb(15 30 46 / 0.06),
                   0 4px 16px 0 rgb(15 30 46 / 0.05);
   --shadow-lift:  0 4px 24px 0 rgb(15 30 46 / 0.10);
+  --shadow-amber: 0 0 0 1px rgb(217 119 6 / 0.15),
+                  0 4px 16px 0 rgb(217 119 6 / 0.10);
 }
 
 /* ─── 베이스 ────────────────────────────────────────────────────────────────── */
