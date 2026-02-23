@@ -36,7 +36,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className={ui.sectionAlt}>
+    <section id="contact" className={ui.section}>
       <div className={ui.container}>
         <div className="grid gap-12 lg:grid-cols-[40fr_60fr] lg:items-start">
 

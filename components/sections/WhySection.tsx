@@ -21,7 +21,7 @@ function CheckIcon() {
 
 export default function WhySection() {
   return (
-    <section id="why" className={ui.section}>
+    <section id="why" className={ui.sectionAlt}>
       <div className={ui.container}>
         <p className={ui.eyebrow}>Why SL Steel</p>
         <h2 className={ui.h2Display}>SL Steel이 선택받는 이유</h2>
