@@ -1,5 +1,8 @@
+"use client";
+
 import { SITE } from "@/lib/site";
 import { ui } from "@/lib/ui";
+import { scrollToContact } from "@/lib/scroll";
 
 function BulletList({ items }: { items: readonly string[] }) {
   return (
@@ -18,7 +21,7 @@ export default function BusinessSection() {
   const { delivery, recovery } = SITE.business;
 
   return (
-    <section id="business" className={ui.sectionAlt}>
+    <section id="business" className={ui.section}>
       <div className={ui.container}>
         <p className={ui.eyebrow}>Business</p>
         <h2 className={ui.h2Display}>사업 영역</h2>
@@ -62,7 +65,11 @@ export default function BusinessSection() {
             </div>
 
             <div className="mt-8 border-t border-border pt-6">
-              <a href="#contact?type=매입" className={`${ui.btn.accent} h-12 w-full justify-center`}>
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); scrollToContact(recovery.cta); }}
+                className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-semibold text-white transition-all duration-200 hover:bg-accent-dark hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgb(59_130_246/0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
                 {recovery.cta}
               </a>
             </div>
@@ -78,7 +85,11 @@ export default function BusinessSection() {
               <BulletList items={delivery.bullets} />
             </div>
             <div className="mt-8 border-t border-border pt-6">
-              <a href="#contact?type=납품" className={`${ui.btn.secondary} h-12 w-full justify-center`}>
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); scrollToContact(delivery.cta); }}
+                className="inline-flex h-12 w-full items-center justify-center rounded-xl border border-border bg-card text-base font-semibold text-foreground transition-all duration-200 hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
                 {delivery.cta}
               </a>
             </div>

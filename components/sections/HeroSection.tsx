@@ -1,20 +1,23 @@
+"use client";
+
 import { SITE } from "@/lib/site";
 import { ui } from "@/lib/ui";
+import { scrollToContact } from "@/lib/scroll";
 import HeroCarousel from "./HeroCarousel";
 
 const POINT_ICONS = [
-  // 안정적 공급
-  <svg key="supply" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-    <path d="M2 7.5L12 3l10 4.5v9L12 21 2 16.5v-9Z" />
-    <path d="M12 3v18M2 7.5l10 4.5 10-4.5" />
+  // 매입 (가격 태그)
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+    <circle cx="7" cy="7" r="1" fill="currentColor" stroke="none" />
   </svg>,
   // 가치 회수
-  <svg key="recycle" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
     <path d="M3 3v5h5" />
   </svg>,
   // 자체 물류
-  <svg key="truck" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
     <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" />
     <path d="M15 18H9" />
     <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" />
@@ -65,13 +68,15 @@ export default function HeroSection() {
             {/* CTA 버튼 */}
             <div className="mt-8 grid grid-cols-2 gap-4 sm:max-w-md">
               <a
-                href="#contact?type=매입"
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); scrollToContact(SITE.hero.cta.primary); }}
                 className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition-all duration-200 hover:bg-accent-dark hover:-translate-y-1 hover:shadow-[0_8px_32px_rgb(59_130_246/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               >
                 {SITE.hero.cta.primary}
               </a>
               <a
-                href="#contact?type=납품"
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); scrollToContact(SITE.hero.cta.secondary); }}
                 className="inline-flex h-14 w-full items-center justify-center rounded-xl border border-white/30 text-base font-bold text-white transition-all duration-200 hover:bg-white/20 hover:border-white/60 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgb(255_255_255/0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
               >
                 {SITE.hero.cta.secondary}

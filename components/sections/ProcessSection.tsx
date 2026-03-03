@@ -17,7 +17,7 @@ export default function ProcessSection() {
   const steps = STEPS[active];
 
   return (
-    <section id="process" className={ui.section}>
+    <section id="process" className={ui.sectionAlt}>
       <div className={ui.container}>
         <p className={ui.eyebrow}>Process</p>
         <h2 className={ui.h2Display}>진행 절차</h2>

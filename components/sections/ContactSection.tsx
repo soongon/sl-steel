@@ -4,10 +4,9 @@ import { useEffect, useState, startTransition } from "react";
 import { SITE, INQUIRY_TYPES, type InquiryType } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
-// "#contact?type=납품" → "납품 문의" 파싱
 function resolveTypeFromHash(): InquiryType {
   if (typeof window === "undefined") return INQUIRY_TYPES[0];
-  const raw = window.location.hash; // e.g. "#contact?type=납품"
+  const raw = window.location.hash;
   const match = raw.match(/type=([^&]+)/);
   if (!match) return INQUIRY_TYPES[0];
   const keyword = decodeURIComponent(match[1]);
@@ -16,7 +15,7 @@ function resolveTypeFromHash(): InquiryType {
 }
 
 const inputBase =
-  "h-11 w-full rounded-xl border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent";
+  "h-12 w-full rounded-xl border border-border bg-surface px-4 text-base text-foreground placeholder:text-steel/50 outline-none transition-colors focus:border-accent focus:bg-card focus:ring-2 focus:ring-accent/20";
 
 export default function ContactSection() {
   const { email, kakao, regions } = SITE.footer;
@@ -24,9 +23,11 @@ export default function ContactSection() {
 
   const [inquiryType, setInquiryType] = useState<InquiryType>(INQUIRY_TYPES[0]);
 
-  // 마운트 시 hash 읽어서 select 기본값 설정
   useEffect(() => {
-    startTransition(() => setInquiryType(resolveTypeFromHash()));
+    const sync = () => startTransition(() => setInquiryType(resolveTypeFromHash()));
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
   }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -44,75 +45,78 @@ export default function ContactSection() {
           <div>
             <p className={ui.eyebrow}>Contact</p>
             <h2 className={ui.h2Display}>{title}</h2>
-            <p className="mt-4 text-base leading-relaxed text-muted break-keep">
+            <p className="mt-4 text-lg leading-relaxed text-muted break-keep">
               {subtitle}
             </p>
 
             {/* 지역별 연락처 */}
-            <div className="mt-8 grid grid-cols-2 gap-3">
+            <div className="mt-8 flex flex-col gap-3">
               {regions.map((region) => (
                 <a
                   key={region.name}
                   href={`tel:${region.phone}`}
-                  className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-card"
+                  className="flex items-center justify-between rounded-xl border border-border bg-card px-5 py-4 transition-shadow hover:shadow-sm"
                 >
-                  <span className="text-xs font-semibold text-accent">{region.name}</span>
-                  <span className="text-base font-bold text-foreground tabular-nums">{region.phone}</span>
+                  <span className="text-sm font-semibold text-accent">{region.name}</span>
+                  <span className="text-xl font-bold text-foreground tabular-nums">{region.phone}</span>
                 </a>
               ))}
             </div>
 
-            {/* 카카오 문의 버튼 */}
             {kakao && (
               <div className="mt-4">
                 <a
                   href={kakao}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#FEE500] px-6 text-sm font-semibold text-[#3A1D1D] hover:opacity-90 transition-opacity"
+                  className="inline-flex h-12 items-center gap-2 rounded-xl bg-[#FEE500] px-6 text-base font-semibold text-[#3A1D1D] hover:opacity-90 transition-opacity"
                 >
                   카카오로 문의하기
                 </a>
               </div>
             )}
 
-            {/* 이메일 */}
             {email && (
-              <div className="mt-5 flex items-center gap-2 text-sm text-muted">
-                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 shrink-0 text-accent">
+              <div className="mt-6 flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-4">
+                <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5 shrink-0 text-accent">
                   <rect width="20" height="16" x="2" y="4" rx="2" />
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                 </svg>
-                <a href={`mailto:${email}`} className="hover:text-accent transition-colors">{email}</a>
+                <a href={`mailto:${email}`} className="text-base font-medium text-foreground hover:text-accent transition-colors">{email}</a>
               </div>
             )}
           </div>
 
           {/* ── 우측: 폼 카드 ─────────────────────────────────────── */}
-          <div className={`${ui.card} ${ui.cardPad}`}>
-            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+          <div className={`${ui.card} p-8 sm:p-10`}>
+            <form onSubmit={handleSubmit} noValidate className="space-y-5">
 
-              {/* 문의 구분 */}
-              <div>
-                <label className="mb-1.5 block text-sm font-medium text-foreground">
-                  문의 구분
-                </label>
-                <select
-                  name="inquiryType"
-                  value={inquiryType}
-                  onChange={(e) => setInquiryType(e.target.value as InquiryType)}
-                  className={inputBase}
-                >
+              {/* 문의 구분 — 컴팩트 세그먼트 */}
+              <div className="flex items-center gap-3">
+                <span className="shrink-0 text-base font-semibold text-foreground">문의 구분</span>
+                <div className="flex rounded-lg border border-border bg-surface p-0.5">
                   {INQUIRY_TYPES.map((type) => (
-                    <option key={type} value={type}>{type}</option>
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setInquiryType(type)}
+                      className={[
+                        "rounded-md px-4 py-1.5 text-sm font-semibold transition-colors",
+                        inquiryType === type
+                          ? "bg-accent text-white shadow-sm"
+                          : "text-muted hover:text-foreground",
+                      ].join(" ")}
+                    >
+                      {type}
+                    </button>
                   ))}
-                </select>
+                </div>
               </div>
 
               {/* 성함/업체명 + 연락처 */}
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-foreground">
+                  <label className="mb-2 block text-base font-semibold text-foreground">
                     {fields.name}
                   </label>
                   <input
@@ -124,7 +128,7 @@ export default function ContactSection() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-foreground">
+                  <label className="mb-2 block text-base font-semibold text-foreground">
                     {fields.phone}
                   </label>
                   <input
@@ -139,7 +143,7 @@ export default function ContactSection() {
 
               {/* 현장/지역 */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-foreground">
+                <label className="mb-2 block text-base font-semibold text-foreground">
                   {fields.location}
                 </label>
                 <input
@@ -152,14 +156,14 @@ export default function ContactSection() {
 
               {/* 문의 내용 */}
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-foreground">
+                <label className="mb-2 block text-base font-semibold text-foreground">
                   {fields.message}
                 </label>
                 <textarea
                   name="message"
-                  rows={5}
-                  placeholder="규격, 수량, 납기 등 필요한 내용을 자유롭게 적어주세요."
-                  className="w-full resize-none rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent"
+                  rows={4}
+                  placeholder="수량, 규격, 현장 상황 등 자유롭게 적어주세요."
+                  className="w-full resize-none rounded-xl border border-border bg-surface px-4 py-3 text-base text-foreground placeholder:text-steel/50 outline-none transition-colors focus:border-accent focus:bg-card focus:ring-2 focus:ring-accent/20"
                 />
               </div>
 
@@ -167,7 +171,10 @@ export default function ContactSection() {
               <p className="text-xs text-muted">{privacy}</p>
 
               {/* 제출 버튼 */}
-              <button type="submit" className={`${ui.btn.primary} h-12 w-full justify-center`}>
+              <button
+                type="submit"
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-lg font-bold text-white transition-colors hover:bg-accent-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
                 문의 보내기
               </button>
 

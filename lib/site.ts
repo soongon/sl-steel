@@ -3,21 +3,6 @@
 // <h1>{SITE.hero.h1}</h1>
 // <p>{SITE.brand.ko}</p>
 
-// ─── 섹션 앵커 ────────────────────────────────────────────────────────────────
-
-export const NAV_SECTIONS = [
-  "hero",
-  "about",
-  "products",
-  "system",
-  "business",
-  "process",
-  "why",
-  "contact",
-] as const;
-
-export type SectionId = (typeof NAV_SECTIONS)[number];
-
 // ─── 문의 타입 ────────────────────────────────────────────────────────────────
 
 export const INQUIRY_TYPES = ["매입 문의", "납품 문의"] as const;
@@ -70,7 +55,12 @@ export const SITE = {
   // About 섹션
   about: {
     title: "처치 곤란한 현장 철근, SL Steel이 가져갑니다",
-    body: "현장에서 오래 방치된 녹슨 철근이나 작업 중 절단된 잔여 철근은 일반적으로 처리가 어렵습니다.\nSL Steel은 경북 경주를 기반으로 이러한 잉여 철근을 합리적인 가격에 직접 매입·수거합니다.",
+    body: "현장에서 오래 방치된 녹슨 철근이나 작업 중 절단된 잔여 철근은 일반적으로 처리가 어렵습니다.\nSL Steel은 이러한 잉여 철근을 합리적인 가격에 직접 매입·수거합니다.",
+    steps: [
+      { label: "전화 한 통",  sub: "연락 즉시 상담" },
+      { label: "현장 직방문", sub: "트럭 직접 출동" },
+      { label: "즉시 정산",   sub: "현장에서 바로"  },
+    ] as const,
   },
 
   // Business 섹션
@@ -103,7 +93,7 @@ export const SITE = {
     {
       title: "대형 창고",
       desc: "철근 보관/재고 운영",
-      value: "필요할 때 바로 출고",
+      value: "수거 즉시 입고·보관",
     },
     {
       title: "야적장",
@@ -171,28 +161,27 @@ export const SITE = {
     {
       name: "절단 철근",
       spec: "4m 이상",
-      desc: "현장 작업 중 절단된 4m 이상 철근 (4m 미만 불가)",
+      desc: "현장 작업 중 절단된 4m 이상 철근",
       available: true,
     },
     {
       name: "매입 불가 항목",
       spec: "제외 기준",
-      desc: "3m 미만 단재 · 심하게 부식된 폐철근 · 일반 고철",
+      desc: "3m 미만 단재 · 일반 고철",
       available: false,
     },
   ] as const,
 
   // 푸터
   footer: {
-    address: "서울특별시 (본사)",
-    phone: "02-3462-5710",
+    address: "경상북도 경주시",
+    tagline: "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
     email: "sl-steel@gmail.com",
-    kakao: "https://pf.kakao.com/_xxxxx",
+    kakao: "",   // 카카오 채널 URL 확정 후 입력
     regions: [
-      { name: "서울 본사", phone: "02-3462-5710" },
-      { name: "중부권", phone: "010-XXXX-XXXX" },
-      { name: "경상권", phone: "010-XXXX-XXXX" },
-      { name: "전라권", phone: "010-XXXX-XXXX" },
+      { name: "대표 전화", phone: "02-3333-4444" },
+      { name: "중부권",    phone: "010-2222-3333" },
+      { name: "남부권",    phone: "010-3333-4444" },
     ] as const,
   },
 } as const;

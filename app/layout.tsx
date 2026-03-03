@@ -37,7 +37,6 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${notoSerifKR.variable} ${bebasNeue.variable}`}>
         <Header />
-        {/* pt-16: 고정 헤더 높이 보정 — 헤더 높이 변경 시 함께 조정 */}
         {children}
         <Footer />
       </body>

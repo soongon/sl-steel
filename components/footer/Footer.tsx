@@ -10,8 +10,9 @@ const QUICK_LINKS = [
 ] as const;
 
 export default function Footer() {
-  const { address, phone, email } = SITE.footer;
-  const hasContact = !!(address || phone || email);
+  const { address, email, regions, tagline } = SITE.footer;
+  const mainPhone = regions[0].phone;
+  const hasContact = !!(address || mainPhone || email);
 
   return (
     <footer className="border-t border-border bg-surface" aria-label="사이트 하단">
@@ -32,7 +33,7 @@ export default function Footer() {
 
           {address && (
             <p className="mt-3 text-xs text-muted">
-              {address}{phone && <span className="ml-2">{phone}</span>}
+              {address}<span className="ml-2">{mainPhone}</span>
             </p>
           )}
 
@@ -69,7 +70,7 @@ export default function Footer() {
                 {SITE.hero.h1}
               </p>
               <p className="mt-2 text-xs leading-relaxed text-muted break-keep">
-                녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.
+                {tagline}
               </p>
             </div>
 
@@ -98,11 +99,9 @@ export default function Footer() {
                 <p className="mb-4 text-sm font-semibold text-foreground">Contact</p>
                 <address className="not-italic space-y-2.5 text-sm text-muted">
                   {address && <p>{address}</p>}
-                  {phone && (
-                    <a href={`tel:${phone}`} className="block transition-colors hover:text-foreground">
-                      {phone}
-                    </a>
-                  )}
+                  <a href={`tel:${mainPhone}`} className="block transition-colors hover:text-foreground">
+                    {mainPhone}
+                  </a>
                   {email && (
                     <a href={`mailto:${email}`} className="block transition-colors hover:text-foreground">
                       {email}

@@ -48,6 +48,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 앵커 링크 클릭 시 sticky 헤더(4.5rem)에 가리지 않도록 */
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
 body {
   background-color: var(--color-card);
   color: var(--color-foreground);

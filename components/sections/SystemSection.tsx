@@ -23,7 +23,7 @@ export default function SystemSection() {
       <div className={ui.container}>
         <p className={ui.eyebrow}>Infrastructure</p>
         <h2 className={ui.h2Display}>자체 인프라</h2>
-        <p className={ui.lead}>필요한 자재를 필요한 때에. 직접 보유한 설비로 대응합니다.</p>
+        <p className={ui.lead}>직접 운영하는 인프라가 즉시 수거와 안정 납품을 가능하게 합니다.</p>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {SITE.system.map((item, i) => (

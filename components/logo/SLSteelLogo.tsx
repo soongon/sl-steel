@@ -45,6 +45,7 @@ export default function SLSteelLogo({
       width={size}
       height={size}
       fill="none"
+      role="img"
       aria-label="SL 철강 로고"
       className={className}
     >
