@@ -82,7 +82,7 @@ export default function HeroCarousel() {
             sizes="(max-width: 1024px) 100vw, 45vw"
             priority={i === 0}
           />
-          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent px-6 pb-6 pt-12">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-6 pb-6 pt-12">
             <p className="text-base font-semibold text-white">{slide.label}</p>
             <p className="mt-0.5 text-sm text-white/70">{slide.caption}</p>
           </div>

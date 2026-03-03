@@ -26,9 +26,9 @@ export const SITE = {
 
   // 히어로 섹션
   hero: {
-    h1: "현장 잉여 철근, 제값으로 매입합니다",
+    h1: "공사 후 남은 철근, 최고가로 매입합니다",
     subcopy:
-      "녹이 슬었거나 절단된 철근도 명확한 기준으로 현장에서 직접 수거합니다.\n처치 곤란한 철근의 가치를 SL Steel이 연결합니다.",
+      "녹이 슬었거나 절단된 철근도 명확한 기준으로 현장에서 직접 수거합니다.\n공사 후 남은 철근의 가치를 SL Steel이 연결합니다.",
     badges: ["대형 창고", "야적장", "5톤·25톤 크레인 카고 트럭"] as const,
     cta: {
       primary: "매입 문의" as InquiryType,
@@ -54,8 +54,8 @@ export const SITE = {
 
   // About 섹션
   about: {
-    title: "처치 곤란한 현장 철근, SL Steel이 가져갑니다",
-    body: "현장에서 오래 방치된 녹슨 철근이나 작업 중 절단된 잔여 철근은 일반적으로 처리가 어렵습니다.\nSL Steel은 이러한 잉여 철근을 합리적인 가격에 직접 매입·수거합니다.",
+    title: "공사 후 현장에 남은 철근, SL Steel이 가져갑니다",
+    body: "공사 후 현장에 남은 녹슨 철근이나 작업 중 절단된 철근은 일반적으로 처리가 어렵습니다.\nSL Steel은 이러한 공사 후 남은 철근을 최고가에 직접 매입·수거합니다.",
     steps: [
       { label: "전화 한 통",  sub: "연락 즉시 상담" },
       { label: "현장 직방문", sub: "트럭 직접 출동" },
@@ -70,7 +70,7 @@ export const SITE = {
       lead: "녹슨 철근과 절단 철근, 명확한 기준으로 합리적 가격에 매입합니다.",
       table: {
         target: "녹 발생 온전한 철근 / 4m 이상 절단 철근",
-        exclude: "3m 미만 단재 · 폐철근 · 일반 고철",
+        exclude: "휘거나 3.5m 이하 철근 · 일반 고철",
       },
       bullets: [
         "현장 직접 수거",
@@ -78,7 +78,7 @@ export const SITE = {
         "보관 공간 확보",
         "합리적 매입가",
       ] as const,
-      notice: "3m 미만 단재 및 폐철근·일반 고철은 매입하지 않습니다.",
+      notice: "휘거나 3.5m 이하 철근 및 일반 고철은 매입하지 않습니다.",
       cta: "매입 문의" as InquiryType,
     },
     delivery: {
@@ -123,7 +123,7 @@ export const SITE = {
     checklist: [
       "녹슨 철근·4m↑ 절단 철근 모두 명확한 기준으로 매입",
       "5톤·25톤 크레인 카고 트럭으로 현장 직수거 — 별도 운반 불필요",
-      "합리적인 매입가 — 상품성 없어도 제값에 가져갑니다",
+      "최고가 매입 — 상품성 없어도 최고가에 가져갑니다",
       "매입과 납품을 함께 운영하는 현장 밀착 구조",
     ] as const,
   },
@@ -145,7 +145,7 @@ export const SITE = {
   // 통계 수치
   stats: [
     { value: "2009년~", label: "업력" },
-    { value: "4개 권역", label: "전국 거점 네트워크" },
+    { value: "중부·남부권", label: "전국 거점 네트워크" },
     { value: "4m↑", label: "절단 철근 매입 기준" },
     { value: "당일 수거", label: "현장 직접 방문" },
   ] as const,
@@ -167,7 +167,7 @@ export const SITE = {
     {
       name: "매입 불가 항목",
       spec: "제외 기준",
-      desc: "3m 미만 단재 · 일반 고철",
+      desc: "휘거나 3.5m 이하 철근 · 일반 고철",
       available: false,
     },
   ] as const,
@@ -179,9 +179,9 @@ export const SITE = {
     email: "sl-steel@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력
     regions: [
-      { name: "대표 전화", phone: "02-3333-4444" },
-      { name: "중부권",    phone: "010-2222-3333" },
-      { name: "남부권",    phone: "010-3333-4444" },
+      { name: "서울 본사", phone: "02-3462-5710", coverage: "" },
+      { name: "중부권",    phone: "010-5295-9288", coverage: "경기·강원·충청" },
+      { name: "남부권",    phone: "010-5038-5710", coverage: "경상·전라" },
     ] as const,
   },
 } as const;

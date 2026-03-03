@@ -51,16 +51,30 @@ export default function ContactSection() {
 
             {/* 지역별 연락처 */}
             <div className="mt-8 flex flex-col gap-3">
-              {regions.map((region) => (
-                <a
-                  key={region.name}
-                  href={`tel:${region.phone}`}
-                  className="flex items-center justify-between rounded-xl border border-border bg-card px-5 py-4 transition-shadow hover:shadow-sm"
-                >
-                  <span className="text-sm font-semibold text-accent">{region.name}</span>
-                  <span className="text-xl font-bold text-foreground tabular-nums">{region.phone}</span>
-                </a>
-              ))}
+              {/* 서울 본사 — 풀 너비 */}
+              <a
+                href={`tel:${regions[0].phone}`}
+                className="flex items-center justify-between rounded-xl border border-accent/40 bg-card px-5 py-4 transition-shadow hover:shadow-sm"
+              >
+                <span className="text-sm font-semibold text-accent">{regions[0].name}</span>
+                <span className="text-xl font-bold text-foreground tabular-nums">{regions[0].phone}</span>
+              </a>
+              {/* 중부권·남부권 — 2열 */}
+              <div className="grid grid-cols-2 gap-3">
+                {(regions.slice(1) as readonly { name: string; phone: string; coverage: string }[]).map((region) => (
+                  <a
+                    key={region.name}
+                    href={`tel:${region.phone}`}
+                    className="flex flex-col gap-1 rounded-xl border border-border bg-card px-4 py-4 transition-shadow hover:shadow-sm"
+                  >
+                    <span className="text-xs font-semibold text-accent">{region.name}</span>
+                    <span className="text-base font-bold text-foreground tabular-nums">{region.phone}</span>
+                    {region.coverage && (
+                      <span className="text-xs text-muted">{region.coverage}</span>
+                    )}
+                  </a>
+                ))}
+              </div>
             </div>
 
             {kakao && (
