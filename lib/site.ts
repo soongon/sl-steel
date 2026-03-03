@@ -174,12 +174,12 @@ export const SITE = {
 
   // 푸터
   footer: {
-    address: "경상북도 경주시",
+    address: "대표 전화",
     tagline: "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
     email: "sl-steel@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력
     regions: [
-      { name: "서울 본사", phone: "02-3462-5710", coverage: "" },
+      { name: "대표 전화", phone: "02-3462-5710", coverage: "" },
       { name: "중부권",    phone: "010-5295-9288", coverage: "경기·강원·충청" },
       { name: "남부권",    phone: "010-5038-5710", coverage: "경상·전라" },
     ] as const,
