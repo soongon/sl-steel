@@ -174,7 +174,6 @@ export const SITE = {
 
   // 푸터
   footer: {
-    address: "대표 전화",
     tagline: "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
     email: "sl-steel@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력

@@ -10,9 +10,9 @@ const QUICK_LINKS = [
 ] as const;
 
 export default function Footer() {
-  const { address, email, regions, tagline } = SITE.footer;
+  const { email, regions, tagline } = SITE.footer;
   const mainPhone = regions[0].phone;
-  const hasContact = !!(address || mainPhone || email);
+  const hasContact = !!(mainPhone || email);
 
   return (
     <footer className="border-t border-border bg-surface" aria-label="사이트 하단">
@@ -31,11 +31,10 @@ export default function Footer() {
             </span>
           </a>
 
-          {address && (
-            <p className="mt-3 text-xs text-muted">
-              {address}<span className="ml-2">{mainPhone}</span>
-            </p>
-          )}
+          <p className="mt-3 text-xs text-muted">
+            <span className="font-medium">{regions[0].name}</span>
+            <span className="ml-2">{mainPhone}</span>
+          </p>
 
           <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
             <p className="text-xs text-muted">© {new Date().getFullYear()} {SITE.brand.en}</p>
@@ -98,7 +97,6 @@ export default function Footer() {
               <div>
                 <p className="mb-4 text-sm font-semibold text-foreground">Contact</p>
                 <address className="not-italic space-y-2.5 text-sm text-muted">
-                  {address && <p>{address}</p>}
                   <a href={`tel:${mainPhone}`} className="block transition-colors hover:text-foreground">
                     {mainPhone}
                   </a>
