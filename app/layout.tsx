@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Serif_KR, Bebas_Neue } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
 import { SITE } from "@/lib/site";
 
 // 헤딩 전용 디스플레이 세리프
@@ -36,9 +34,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${notoSerifKR.variable} ${bebasNeue.variable}`}>
-        <Header />
         {children}
-        <Footer />
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ const NAV_LINKS = [
   { label: "회사소개", href: "#about"    },
   { label: "사업영역", href: "#business" },
   { label: "진행절차", href: "#process"  },
+  { label: "블로그",   href: "/blog"     },
   { label: "문의",     href: "#contact"  },
 ] as const;
 
