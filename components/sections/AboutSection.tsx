@@ -15,8 +15,8 @@ export default function AboutSection() {
           {/* ── 좌측: 현장 이미지 ──────────────────────────────── */}
           <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
             <Image
-              src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&q=80"
-              alt="SL Steel 철강 유통 현장"
+              src="/images/workers-on-site.jpg"
+              alt="SL Steel 현장 작업 모습"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 38vw"

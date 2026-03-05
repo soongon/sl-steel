@@ -4,16 +4,16 @@ import { ui } from "@/lib/ui";
 
 const SYSTEM_IMAGES = [
   {
-    src: "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?w=800&q=80",
-    alt: "대형 산업용 창고 내부",
+    src: "/images/warehouse-rebar.jpg",
+    alt: "SL Steel 창고 내부 철근 재고",
   },
   {
-    src: "https://images.unsplash.com/photo-1565043666747-69f6646db940?w=800&q=80",
-    alt: "야외 자재 야적장",
+    src: "/images/facility-yard.jpg",
+    alt: "SL Steel 야적장 전경",
   },
   {
-    src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
-    alt: "크레인 장착 트럭",
+    src: "/images/facility-truck-wide.jpg",
+    alt: "SL Steel 크레인 카고 트럭",
   },
 ];
 

@@ -8,19 +8,19 @@ const SLIDES = [
     id: "warehouse",
     label: "대형 창고",
     caption: "철근·H빔 재고 상시 보유 · 즉시 출고 대응",
-    imagePath: "/images/hero-1.jpg",
+    imagePath: "/images/warehouse-large.jpg",
   },
   {
     id: "yard",
     label: "야적장",
     caption: "대형 물량 적치 · 현장 배송 기반 확보",
-    imagePath: "/images/hero-2.png",
+    imagePath: "/images/facility-truck-wide.jpg",
   },
   {
     id: "truck",
-    label: "크레인 장착 5톤 트럭",
+    label: "크레인 장착 카고 트럭",
     caption: "상하차부터 현장 납품까지 자체 대응",
-    imagePath: "/images/hero-3.jpg",
+    imagePath: "/images/crane-truck-front.jpg",
   },
 ] as const;
 
