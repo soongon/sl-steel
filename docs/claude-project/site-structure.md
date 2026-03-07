@@ -4,16 +4,29 @@
 - Next.js 16 (App Router)
 - React 19, TypeScript 5
 - Tailwind CSS v4
+- Supabase (블로그 DB, RLS)
+- Cloudinary (이미지 CDN/최적화)
 - 배포 예정: Vercel
+
+---
+
+## 외부 서비스 연동 현황
+
+| 서비스 | 용도 | 상태 |
+|--------|------|------|
+| **Supabase** | 블로그 posts/categories DB, RLS | ✅ 연결됨 |
+| **Cloudinary** | 블로그 이미지 저장·자동 최적화 | ✅ 연결됨 |
+| **Vercel** | 프로덕션 배포 | ⬜ 미배포 |
 
 ---
 
 ## 전체 URL 구조
 
 ```
-/          랜딩 페이지 (단일 스크롤 페이지)
-/blog      블로그 목록
-/blog/[slug]  블로그 포스트
+/              랜딩 페이지 (단일 스크롤 페이지)
+/blog          블로그 목록 (카테고리 필터, 페이지네이션)
+/blog/[slug]   블로그 포스트
+/admin         관리자 페이지 (예정)
 ```
 
 ---
@@ -82,14 +95,26 @@ Hero → Stats → About → Products → Business → Process → System → Wh
 
 **구조**
 - 목록 페이지: 카테고리 탭 필터 + 사이드바 (CTA·카테고리·최근글·키워드)
-- 포스트 페이지: 본문 + 사이드바 + 포스트 하단 CTA
+- 포스트 페이지: 본문 (MDX 렌더링) + 사이드바 + 포스트 하단 CTA
 
 **카테고리**
 매입 기준 / 현장 실무 / 업계 정보 / 시설·인프라 / 수거 사례
 
-**콘텐츠 관리**
-현재: MDX 파일 (`content/blog/*.mdx`)
-향후: Supabase DB로 마이그레이션 예정
+**데이터 흐름**
+```
+Supabase (posts 테이블) → lib/blog.ts → 페이지 컴포넌트
+Cloudinary (이미지) → thumbnail_url → next/image
+```
+
+**이미지 관리**
+- Cloudinary `blog/` 폴더에 업로드
+- URL 형식: `https://res.cloudinary.com/dpwpptrhe/image/upload/f_auto,q_auto,w_800/blog/파일명.jpg`
+- 자동 최적화: 포맷 변환(WebP/AVIF), 품질 조절, 리사이즈
+
+**DB 스키마**
+- `posts`: slug, title, category, excerpt, content, thumbnail_url, status(draft/published), view_count, published_at
+- `categories`: name, sort_order
+- RLS: published 포스트만 공개 읽기
 
 ---
 
@@ -99,8 +124,11 @@ Hero → Stats → About → Products → Business → Process → System → Wh
 |------|------|
 | 랜딩 페이지 전체 섹션 | ✅ 완료 |
 | 블로그 레이아웃·라우팅 | ✅ 완료 |
-| 문의 폼 → Supabase 연동 | ⬜ 예정 |
+| Supabase 블로그 DB 연동 | ✅ 완료 |
+| Cloudinary 이미지 연동 | ✅ 완료 |
+| 관리자 페이지 (`/admin`) | ⬜ 예정 — 글 CRUD, 이미지 업로드, Supabase Auth |
+| 문의 폼 → Supabase 연동 | ⬜ 예정 — `inquiries` 테이블 |
 | 문의 알림 (이메일·Telegram) | ⬜ 예정 |
-| 관리자 페이지 (`/admin`) | ⬜ 예정 |
-| 블로그 Supabase 마이그레이션 | ⬜ 예정 |
-| OG 이미지·사이트맵 (SEO) | ⬜ 예정 |
+| SEO (사이트맵·OG 이미지) | ⬜ 예정 |
+| 조회수 카운트 | ⬜ 예정 — `view_count` 증가 API |
+| Vercel 프로덕션 배포 | ⬜ 예정 |
