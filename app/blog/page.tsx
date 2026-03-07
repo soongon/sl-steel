@@ -14,8 +14,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { category = "전체", page: pageStr = "1" } = await searchParams;
   const page = Math.max(1, parseInt(pageStr) || 1);
 
-  const allPosts = getPosts();
-  const categories = getCategoryCounts(allPosts);
+  const allPosts = await getPosts();
+  const categories = await getCategoryCounts(allPosts);
 
   const filtered =
     category === "전체"

@@ -1,8 +1,4 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-
-const POSTS_DIR = path.join(process.cwd(), "content/blog");
+import { supabase } from "./supabase";
 
 export interface PostMeta {
   slug: string;
@@ -30,58 +26,54 @@ export type BlogCategory = (typeof BLOG_CATEGORIES)[number];
 
 export const POSTS_PER_PAGE = 5;
 
-export function getPosts(): PostMeta[] {
-  if (!fs.existsSync(POSTS_DIR)) return [];
-
-  const files = fs
-    .readdirSync(POSTS_DIR)
-    .filter((f) => f.endsWith(".mdx") || f.endsWith(".md"));
-
-  return files
-    .map((filename) => {
-      const slug = filename.replace(/\.(mdx|md)$/, "");
-      const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf-8");
-      const { data } = matter(raw);
-      return {
-        slug,
-        title: (data.title as string) ?? "",
-        category: (data.category as string) ?? "기타",
-        excerpt: (data.excerpt as string) ?? "",
-        date: (data.date as string) ?? "",
-        thumbnail: data.thumbnail as string | undefined,
-      };
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+function formatDate(raw: string | null): string {
+  if (!raw) return "";
+  return raw.slice(0, 10);
 }
 
-export function getPost(slug: string): Post | null {
-  const mdxPath = path.join(POSTS_DIR, `${slug}.mdx`);
-  const mdPath = path.join(POSTS_DIR, `${slug}.md`);
-  const filepath = fs.existsSync(mdxPath)
-    ? mdxPath
-    : fs.existsSync(mdPath)
-      ? mdPath
-      : null;
+export async function getPosts(): Promise<PostMeta[]> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("slug, title, category, excerpt, published_at, thumbnail_url")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
 
-  if (!filepath) return null;
+  if (error || !data) return [];
 
-  const raw = fs.readFileSync(filepath, "utf-8");
-  const { data, content } = matter(raw);
+  return data.map((row) => ({
+    slug: row.slug,
+    title: row.title,
+    category: row.category,
+    excerpt: row.excerpt,
+    date: formatDate(row.published_at),
+    thumbnail: row.thumbnail_url ?? undefined,
+  }));
+}
+
+export async function getPost(slug: string): Promise<Post | null> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("slug, title, category, excerpt, content, published_at, thumbnail_url")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .single();
+
+  if (error || !data) return null;
 
   return {
-    slug,
-    title: (data.title as string) ?? "",
-    category: (data.category as string) ?? "기타",
-    excerpt: (data.excerpt as string) ?? "",
-    date: (data.date as string) ?? "",
-    thumbnail: data.thumbnail as string | undefined,
-    content,
+    slug: data.slug,
+    title: data.title,
+    category: data.category,
+    excerpt: data.excerpt,
+    date: formatDate(data.published_at),
+    thumbnail: data.thumbnail_url ?? undefined,
+    content: data.content,
   };
 }
 
-export function getCategoryCounts(
+export async function getCategoryCounts(
   posts: PostMeta[]
-): { name: string; count: number }[] {
+): Promise<{ name: string; count: number }[]> {
   const counts = posts.reduce<Record<string, number>>((acc, post) => {
     acc[post.category] = (acc[post.category] ?? 0) + 1;
     return acc;
@@ -91,4 +83,14 @@ export function getCategoryCounts(
     name,
     count: name === "전체" ? posts.length : (counts[name] ?? 0),
   }));
+}
+
+export async function getSlugs(): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("slug")
+    .eq("status", "published");
+
+  if (error || !data) return [];
+  return data.map((row) => row.slug);
 }

@@ -1,4 +1,4 @@
-import { getPost, getPosts, getCategoryCounts } from "@/lib/blog";
+import { getPost, getPosts, getCategoryCounts, getSlugs } from "@/lib/blog";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,14 +12,15 @@ interface PostPageProps {
 }
 
 export async function generateStaticParams() {
-  return getPosts().map((p) => ({ slug: p.slug }));
+  const slugs = await getSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) return {};
   return {
     title: `${post.title} | SL Steel 블로그`,
@@ -29,11 +30,11 @@ export async function generateMetadata({
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
-  const allPosts = getPosts();
-  const categories = getCategoryCounts(allPosts);
+  const allPosts = await getPosts();
+  const categories = await getCategoryCounts(allPosts);
   const recentPosts = allPosts.slice(0, 4);
   const mainPhone = SITE.footer.regions[0].phone;
 

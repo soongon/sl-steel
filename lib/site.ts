@@ -178,9 +178,9 @@ export const SITE = {
     email: "sl-steel@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력
     regions: [
-      { name: "대표 전화", phone: "02-3462-5710", coverage: "" },
-      { name: "중부권",    phone: "010-5295-9288", coverage: "경기·강원·충청" },
-      { name: "남부권",    phone: "010-5038-5710", coverage: "경상·전라" },
+      { name: "대표 전화", phone: "010-9264-3336", coverage: "" },
+      { name: "중부권",    phone: "010-5761-0400", coverage: "경기·강원·충청" },
+      { name: "남부권",    phone: "010-9264-3336", coverage: "경상·전라" },
     ] as const,
   },
 } as const;
