@@ -73,9 +73,13 @@ Cloudinary (이미지 원본 + 자동 최적화)
 ### `categories` 테이블
 `id (serial)`, `name (unique)`, `sort_order`
 
+### `inquiries` 테이블
+`id (uuid)`, `inquiry_type`, `name`, `phone`, `location`, `message`, `status (new/read/resolved)`, `created_at`, `updated_at`
+
 ### RLS 정책
 - categories: 누구나 읽기
 - posts: `status = 'published'`만 공개 읽기
+- inquiries: 누구나 INSERT, 인증된 사용자만 SELECT/UPDATE
 
 마이그레이션 SQL: `supabase/migrations/`
 

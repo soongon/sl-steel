@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, startTransition } from "react";
+import { useEffect, useRef, useState, startTransition } from "react";
 import { SITE, INQUIRY_TYPES, type InquiryType } from "@/lib/site";
 import { ui } from "@/lib/ui";
+import { submitInquiry } from "@/lib/inquiries";
 
 function resolveTypeFromHash(): InquiryType {
   if (typeof window === "undefined") return INQUIRY_TYPES[0];
@@ -22,6 +23,10 @@ export default function ContactSection() {
   const { title, subtitle, fields, privacy } = SITE.contact;
 
   const [inquiryType, setInquiryType] = useState<InquiryType>(INQUIRY_TYPES[0]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     const sync = () => startTransition(() => setInquiryType(resolveTypeFromHash()));
@@ -30,10 +35,22 @@ export default function ContactSection() {
     return () => window.removeEventListener("hashchange", sync);
   }, []);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    console.log("문의 접수:", data);
+    setError("");
+    setSubmitting(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      formData.set("inquiry_type", inquiryType);
+      await submitInquiry(formData);
+      setSubmitted(true);
+      formRef.current?.reset();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "문의 접수에 실패했습니다.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -103,7 +120,25 @@ export default function ContactSection() {
 
           {/* ── 우측: 폼 카드 ─────────────────────────────────────── */}
           <div className={`${ui.card} p-8 sm:p-10`}>
-            <form onSubmit={handleSubmit} noValidate className="space-y-5">
+            {submitted ? (
+              <div className="flex flex-col items-center gap-4 py-12 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                  <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-foreground">문의가 접수되었습니다</h3>
+                <p className="text-base text-muted">빠른 시일 내에 연락드리겠습니다.</p>
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="mt-2 rounded-xl bg-accent px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-accent-dark"
+                >
+                  추가 문의하기
+                </button>
+              </div>
+            ) : (
+            <form ref={formRef} onSubmit={handleSubmit} noValidate className="space-y-5">
 
               {/* 문의 구분 — 컴팩트 세그먼트 */}
               <div className="flex items-center gap-3">
@@ -184,15 +219,21 @@ export default function ContactSection() {
               {/* 개인정보 수집 안내 */}
               <p className="text-xs text-muted">{privacy}</p>
 
+              {error && (
+                <p className="text-sm font-medium text-red-500">{error}</p>
+              )}
+
               {/* 제출 버튼 */}
               <button
                 type="submit"
-                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-lg font-bold text-white transition-colors hover:bg-accent-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                disabled={submitting}
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-lg font-bold text-white transition-colors hover:bg-accent-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:opacity-50"
               >
-                문의 보내기
+                {submitting ? "접수 중..." : "문의 보내기"}
               </button>
 
             </form>
+            )}
           </div>
 
         </div>
