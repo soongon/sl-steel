@@ -68,7 +68,7 @@ Cloudinary (이미지 원본 + 자동 최적화)
 ## DB schema
 
 ### `posts` 테이블
-`id (uuid)`, `slug (unique)`, `title`, `category (→ categories.name)`, `excerpt`, `content`, `thumbnail_url`, `status (draft/published)`, `view_count`, `published_at`, `created_at`, `updated_at`
+`id (uuid)`, `slug (unique)`, `title`, `categories (text[])`, `excerpt`, `content`, `thumbnail_url`, `status (draft/published)`, `view_count`, `published_at`, `created_at`, `updated_at`
 
 ### `categories` 테이블
 `id (serial)`, `name (unique)`, `sort_order`

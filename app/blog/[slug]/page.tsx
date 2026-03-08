@@ -65,10 +65,12 @@ export default async function PostPage({ params }: PostPageProps) {
             >
               ← 블로그 목록
             </Link>
-            <div>
-              <span className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
-                {post.category}
-              </span>
+            <div className="flex flex-wrap gap-1.5">
+              {post.categories.map((cat) => (
+                <span key={cat} className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
+                  {cat}
+                </span>
+              ))}
             </div>
             <h1 className="mt-2 text-xl font-bold leading-snug text-foreground sm:text-2xl">
               {post.title}
@@ -107,7 +109,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <Sidebar
               categories={categories}
               recentPosts={recentPosts}
-              activeCategory={post.category}
+              activeCategory={post.categories[0] ?? ""}
             />
           </div>
         </div>

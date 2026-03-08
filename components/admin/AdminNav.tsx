@@ -27,6 +27,12 @@ export default function AdminNav() {
 
         <div className="flex items-center gap-3">
           <Link
+            href="/admin/quick-post"
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
+          >
+            빠른 등록
+          </Link>
+          <Link
             href="/blog"
             className="hidden text-sm text-steel transition-colors hover:text-foreground sm:block"
           >

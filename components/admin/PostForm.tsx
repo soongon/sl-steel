@@ -26,7 +26,9 @@ export default function PostForm({ post, categories, action }: Props) {
   const [title, setTitle] = useState(post?.title ?? "");
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugManual, setSlugManual] = useState(!!post);
-  const [category, setCategory] = useState(post?.category ?? categories[0]?.name ?? "");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    post?.categories ?? (categories[0] ? [categories[0].name] : [])
+  );
   const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
   const [content, setContent] = useState(post?.content ?? "");
   const [thumbnailUrl, setThumbnailUrl] = useState(post?.thumbnail_url ?? "");
@@ -54,7 +56,7 @@ export default function PostForm({ post, categories, action }: Props) {
       const formData = new FormData();
       formData.set("title", title);
       formData.set("slug", slug);
-      formData.set("category", category);
+      formData.set("categories", JSON.stringify(selectedCategories));
       formData.set("excerpt", excerpt);
       formData.set("content", content);
       formData.set("thumbnail_url", thumbnailUrl);
@@ -182,23 +184,33 @@ export default function PostForm({ post, categories, action }: Props) {
               </select>
             </div>
 
-            {/* 카테고리 */}
+            {/* 카테고리 (멀티 선택) */}
             <div className="mb-3">
-              <label htmlFor="category" className="mb-1 block text-xs font-medium text-steel">
+              <label className="mb-1 block text-xs font-medium text-steel">
                 카테고리
               </label>
-              <select
-                id="category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-              >
+              <div className="space-y-1.5 rounded-lg border border-border bg-card px-3 py-2">
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.name}>
+                  <label key={cat.id} className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedCategories.includes(cat.name)}
+                      onChange={(e) => {
+                        setSelectedCategories((prev) =>
+                          e.target.checked
+                            ? [...prev, cat.name]
+                            : prev.filter((c) => c !== cat.name)
+                        );
+                      }}
+                      className="rounded border-border text-accent focus:ring-accent/20"
+                    />
                     {cat.name}
-                  </option>
+                  </label>
                 ))}
-              </select>
+              </div>
+              {selectedCategories.length === 0 && (
+                <p className="mt-1 text-xs text-red-500">카테고리를 1개 이상 선택하세요</p>
+              )}
             </div>
 
             {/* 발행일 */}

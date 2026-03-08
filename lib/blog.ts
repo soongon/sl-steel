@@ -3,7 +3,7 @@ import { supabase } from "./supabase";
 export interface PostMeta {
   slug: string;
   title: string;
-  category: string;
+  categories: string[];
   excerpt: string;
   date: string;
   thumbnail?: string;
@@ -34,7 +34,7 @@ function formatDate(raw: string | null): string {
 export async function getPosts(): Promise<PostMeta[]> {
   const { data, error } = await supabase
     .from("posts")
-    .select("slug, title, category, excerpt, published_at, thumbnail_url")
+    .select("slug, title, categories, excerpt, published_at, thumbnail_url")
     .eq("status", "published")
     .order("published_at", { ascending: false });
 
@@ -43,7 +43,7 @@ export async function getPosts(): Promise<PostMeta[]> {
   return data.map((row) => ({
     slug: row.slug,
     title: row.title,
-    category: row.category,
+    categories: row.categories ?? [],
     excerpt: row.excerpt,
     date: formatDate(row.published_at),
     thumbnail: row.thumbnail_url ?? undefined,
@@ -53,7 +53,7 @@ export async function getPosts(): Promise<PostMeta[]> {
 export async function getPost(slug: string): Promise<Post | null> {
   const { data, error } = await supabase
     .from("posts")
-    .select("slug, title, category, excerpt, content, published_at, thumbnail_url")
+    .select("slug, title, categories, excerpt, content, published_at, thumbnail_url")
     .eq("slug", slug)
     .eq("status", "published")
     .single();
@@ -63,7 +63,7 @@ export async function getPost(slug: string): Promise<Post | null> {
   return {
     slug: data.slug,
     title: data.title,
-    category: data.category,
+    categories: data.categories ?? [],
     excerpt: data.excerpt,
     date: formatDate(data.published_at),
     thumbnail: data.thumbnail_url ?? undefined,
@@ -75,7 +75,9 @@ export async function getCategoryCounts(
   posts: PostMeta[]
 ): Promise<{ name: string; count: number }[]> {
   const counts = posts.reduce<Record<string, number>>((acc, post) => {
-    acc[post.category] = (acc[post.category] ?? 0) + 1;
+    for (const cat of post.categories) {
+      acc[cat] = (acc[cat] ?? 0) + 1;
+    }
     return acc;
   }, {});
 

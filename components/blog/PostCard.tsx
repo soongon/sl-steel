@@ -37,9 +37,13 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
 
         {/* Body */}
         <div className="p-5">
-          <span className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
-            {post.category}
-          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {post.categories.map((cat) => (
+              <span key={cat} className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
+                {cat}
+              </span>
+            ))}
+          </div>
           <h2 className="mt-2 line-clamp-2 text-base font-bold leading-snug text-foreground transition-colors group-hover:text-accent">
             {post.title}
           </h2>
@@ -76,9 +80,13 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
 
       {/* Content */}
       <div className="min-w-0 flex-1">
-        <span className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
-          {post.category}
-        </span>
+        <div className="flex flex-wrap gap-1">
+          {post.categories.map((cat) => (
+            <span key={cat} className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
+              {cat}
+            </span>
+          ))}
+        </div>
         <h2 className="mt-1.5 line-clamp-2 text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-accent">
           {post.title}
         </h2>

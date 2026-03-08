@@ -20,7 +20,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const filtered =
     category === "전체"
       ? allPosts
-      : allPosts.filter((p) => p.category === category);
+      : allPosts.filter((p) => p.categories.includes(category));
 
   const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
   const pagePosts = filtered.slice(

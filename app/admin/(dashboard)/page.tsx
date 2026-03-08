@@ -44,8 +44,14 @@ export default async function AdminDashboardPage() {
                       {post.title}
                     </Link>
                   </td>
-                  <td className="hidden px-4 py-3 text-steel sm:table-cell">
-                    {post.category}
+                  <td className="hidden px-4 py-3 sm:table-cell">
+                    <div className="flex flex-wrap gap-1">
+                      {post.categories.map((cat) => (
+                        <span key={cat} className="inline-block rounded bg-accent/10 px-1.5 py-0.5 text-xs font-semibold text-accent">
+                          {cat}
+                        </span>
+                      ))}
+                    </div>
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={post.status} />

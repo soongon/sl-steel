@@ -7,7 +7,7 @@ export interface AdminPost {
   id: string;
   slug: string;
   title: string;
-  category: string;
+  categories: string[];
   excerpt: string;
   content: string;
   thumbnail_url: string | null;
@@ -28,7 +28,7 @@ export async function getAdminPosts(): Promise<AdminPost[]> {
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("posts")
-    .select("id, slug, title, category, excerpt, content, thumbnail_url, status, published_at, created_at")
+    .select("id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at")
     .order("created_at", { ascending: false });
 
   if (error || !data) return [];
@@ -39,7 +39,7 @@ export async function getAdminPost(id: string): Promise<AdminPost | null> {
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("posts")
-    .select("id, slug, title, category, excerpt, content, thumbnail_url, status, published_at, created_at")
+    .select("id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at")
     .eq("id", id)
     .single();
 
@@ -75,7 +75,7 @@ export async function createPost(formData: FormData) {
   const { error } = await admin.from("posts").insert({
     title: formData.get("title") as string,
     slug: formData.get("slug") as string,
-    category: formData.get("category") as string,
+    categories: JSON.parse(formData.get("categories") as string),
     excerpt: formData.get("excerpt") as string,
     content: formData.get("content") as string,
     thumbnail_url: (formData.get("thumbnail_url") as string) || null,
@@ -108,7 +108,7 @@ export async function updatePost(id: string, formData: FormData) {
     .update({
       title: formData.get("title") as string,
       slug: formData.get("slug") as string,
-      category: formData.get("category") as string,
+      categories: JSON.parse(formData.get("categories") as string),
       excerpt: formData.get("excerpt") as string,
       content: formData.get("content") as string,
       thumbnail_url: (formData.get("thumbnail_url") as string) || null,
