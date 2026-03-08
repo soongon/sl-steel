@@ -16,7 +16,6 @@ interface ParsedPost {
 function replaceImageMarkers(content: string, imageUrls: string[]): string {
   let result = content;
 
-  // [사진1], [사진2], ... 마커를 실제 이미지 마크다운으로 치환
   imageUrls.forEach((url, i) => {
     const marker = `[사진${i + 1}]`;
     result = result.replace(marker, `![사진 ${i + 1}](${url})`);

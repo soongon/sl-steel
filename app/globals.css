@@ -110,6 +110,12 @@ body {
   margin: 2rem 0;
 }
 
+.blog-content img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
 .blog-content h2:first-child,
 .blog-content h3:first-child,
 .blog-content p:first-child {

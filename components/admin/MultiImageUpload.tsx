@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 import Image from "next/image";
 import Script from "next/script";
 
@@ -9,19 +9,27 @@ interface Props {
   onChange: (images: string[]) => void;
 }
 
-declare global {
-  interface Window {
-    cloudinary?: {
-      createUploadWidget: (
-        config: Record<string, unknown>,
-        callback: (error: unknown, result: { event: string; info: { secure_url: string } }) => void
-      ) => { open: () => void };
-    };
-  }
-}
+// Window.cloudinary 타입은 CloudinaryUpload.tsx에서 선언됨
 
 export default function MultiImageUpload({ images, onChange }: Props) {
   const widgetRef = useRef<{ open: () => void } | null>(null);
+  // 클로저 문제 해결: ref로 최신 images 참조
+  const imagesRef = useRef(images);
+  imagesRef.current = images;
+
+  const handleUpload = useCallback(
+    (error: unknown, result: { event: string; info: { secure_url: string } }) => {
+      if (error) return;
+      if (result.event === "success") {
+        const url = result.info.secure_url.replace(
+          "/upload/",
+          "/upload/f_auto,q_auto,w_800/"
+        );
+        onChange([...imagesRef.current, url]);
+      }
+    },
+    [onChange]
+  );
 
   function openWidget() {
     if (widgetRef.current) {
@@ -39,19 +47,10 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         sources: ["local", "url", "camera"],
         multiple: true,
         maxFiles: 10,
-        maxFileSize: 5_000_000,
+        maxFileSize: 10_000_000,
         cropping: false,
       },
-      (error, result) => {
-        if (error) return;
-        if (result.event === "success") {
-          const url = result.info.secure_url.replace(
-            "/upload/",
-            "/upload/f_auto,q_auto,w_800/"
-          );
-          onChange([...images, url]);
-        }
-      }
+      handleUpload
     );
 
     widgetRef.current = widget;
@@ -125,7 +124,7 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         onClick={openWidget}
         className="w-full rounded-lg border-2 border-dashed border-border px-4 py-6 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
       >
-        {images.length > 0 ? "이미지 추가" : "현장 사진 업로드 (여러 장 가능)"}
+        {images.length > 0 ? "사진 추가" : "현장 사진 업로드 (여러 장 가능)"}
       </button>
 
       {images.length > 0 && (

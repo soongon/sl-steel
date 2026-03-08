@@ -24,6 +24,7 @@
 | `docs/claude-project/brand-guide.md` | 브랜드 정보, 톤 & 보이스, 주의사항 |
 | `docs/claude-project/site-structure.md` | 현재 홈페이지 구조, 섹션별 메시지 |
 | `docs/claude-project/blog-strategy.md` | 블로그 전략, 콘텐츠 계획, 작성 방법 |
+| `docs/claude-project/blog-prompt.md` | **블로그 자동 작성 프롬프트** (커스텀 인스트럭션용) |
 
 ---
 
@@ -48,7 +49,13 @@ SL Steel의 브랜드 정체성 전반. 새로운 Claude 세션에서 가장 먼
 - SEO 키워드 목록
 - 콘텐츠 아이디어 20선 (발행 여부 표시)
 - 포스팅 구조 템플릿
-- MDX 파일 작성 방법
+- Supabase DB 기반 작성 방법
+
+### `blog-prompt.md`
+Claude.ai 프로젝트 **커스텀 인스트럭션**에 복사할 프롬프트.
+- 현장 사진 + 키워드 → JSON 블로그 포스트 자동 생성
+- `[사진N]` 마커로 이미지 위치 지정
+- `categories` 배열로 멀티 카테고리 출력
 
 ---
 

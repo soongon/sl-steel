@@ -93,20 +93,34 @@
 
 ---
 
-## MDX 포스트 작성 방법
+## 블로그 포스트 작성 방법
 
-파일 위치: `content/blog/파일명.mdx`
+현재 블로그 데이터는 **Supabase DB**에 저장됩니다 (기존 MDX 파일 방식에서 전환 완료).
 
-```yaml
----
-title: "제목 (SEO 키워드 포함, 30자 이내)"
-category: "매입 기준"  # 카테고리 5가지 중 하나
-excerpt: "목록 페이지에 표시되는 요약 (2~3줄)"
-date: "2026-03-05"
-thumbnail: "/images/파일명.jpg"  # public/images/ 경로
----
+### 작성 경로 (2가지)
 
-본문 마크다운 내용...
-```
+**1. 관리자 페이지 → 새 포스트**
+- `/admin/posts/new`에서 직접 작성
+- MDX 에디터 + 실시간 미리보기
+- Cloudinary 이미지 업로드
+- 체크박스로 카테고리 복수 선택
 
-**사용 가능한 카테고리**: 매입 기준 / 현장 실무 / 업계 정보 / 시설·인프라 / 수거 사례
+**2. Claude.ai → 빠른 등록 (권장)**
+- Claude.ai 프로젝트에 현장 사진 + 키워드 전송
+- 생성된 JSON을 `/admin/quick-post`에 붙여넣기
+- `[사진N]` 마커가 업로드된 이미지 URL로 자동 치환
+- 자세한 설정: `docs/claude-project/blog-prompt.md` 참조
+
+### DB 필드
+
+| 필드 | 설명 |
+|------|------|
+| title | SEO 키워드 포함 제목 (30자 이내) |
+| slug | 영문 하이픈 구분 URL |
+| categories | 카테고리 배열 (1~3개 복수 선택) |
+| excerpt | 목록 요약 (2~3줄) |
+| content | MDX 형식 본문 |
+| thumbnail_url | Cloudinary 이미지 URL |
+| status | draft / published |
+
+**사용 가능한 카테고리** (복수 선택): 매입 기준 / 현장 실무 / 업계 정보 / 시설·인프라 / 수거 사례

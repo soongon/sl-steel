@@ -26,7 +26,11 @@
 /              랜딩 페이지 (단일 스크롤 페이지)
 /blog          블로그 목록 (카테고리 필터, 페이지네이션)
 /blog/[slug]   블로그 포스트
-/admin         관리자 페이지 (예정)
+/admin         관리자 대시보드 (포스트 목록, CRUD)
+/admin/login   관리자 로그인
+/admin/posts/new      새 포스트 작성
+/admin/posts/[id]/edit  포스트 수정
+/admin/quick-post     빠른 등록 (Claude.ai JSON 붙여넣기)
 ```
 
 ---
@@ -112,7 +116,7 @@ Cloudinary (이미지) → thumbnail_url → next/image
 - 자동 최적화: 포맷 변환(WebP/AVIF), 품질 조절, 리사이즈
 
 **DB 스키마**
-- `posts`: slug, title, category, excerpt, content, thumbnail_url, status(draft/published), view_count, published_at
+- `posts`: slug, title, categories(text[]), excerpt, content, thumbnail_url, status(draft/published), view_count, published_at
 - `categories`: name, sort_order
 - RLS: published 포스트만 공개 읽기
 
@@ -126,7 +130,10 @@ Cloudinary (이미지) → thumbnail_url → next/image
 | 블로그 레이아웃·라우팅 | ✅ 완료 |
 | Supabase 블로그 DB 연동 | ✅ 완료 |
 | Cloudinary 이미지 연동 | ✅ 완료 |
-| 관리자 페이지 (`/admin`) | ⬜ 예정 — 글 CRUD, 이미지 업로드, Supabase Auth |
+| 관리자 페이지 (`/admin`) | ✅ 완료 — 글 CRUD, 이미지 업로드, Supabase Auth |
+| 빠른 등록 (`/admin/quick-post`) | ✅ 완료 — Claude.ai JSON 붙여넣기 → 초안 저장 |
+| 멀티 카테고리 | ✅ 완료 — categories text[] 배열 |
+| POST API (`/api/admin/posts`) | ✅ 완료 — Bearer 토큰 인증 |
 | 문의 폼 → Supabase 연동 | ⬜ 예정 — `inquiries` 테이블 |
 | 문의 알림 (이메일·Telegram) | ⬜ 예정 |
 | SEO (사이트맵·OG 이미지) | ⬜ 예정 |
