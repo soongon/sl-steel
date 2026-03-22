@@ -4,10 +4,16 @@ import { createSupabaseAdmin } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
   // Bearer 토큰 인증
+  const apiKey = process.env.ADMIN_API_KEY;
+  if (!apiKey) {
+    console.error("ADMIN_API_KEY is not configured");
+    return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+  }
+
   const authHeader = request.headers.get("authorization");
   const token = authHeader?.replace("Bearer ", "");
 
-  if (!token || token !== process.env.ADMIN_API_KEY) {
+  if (!token || token !== apiKey) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -93,7 +99,11 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("Post creation error:", error.message);
+    return NextResponse.json(
+      { error: "글 저장에 실패했습니다. 다시 시도해 주세요." },
+      { status: 500 }
+    );
   }
 
   revalidatePath("/blog");
