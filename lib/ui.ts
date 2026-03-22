@@ -27,12 +27,16 @@ export const ui = {
   // ── 섹션 라벨 (영문 작은 라벨 + 좌측 액센트 라인) ─────────────────────────
   label:
     'inline-flex items-center gap-2 text-xs font-semibold text-primary-600 uppercase tracking-widest mb-3 before:content-[""] before:w-5 before:h-0.5 before:bg-accent-600 before:rounded-full',
+  labelDark:
+    'inline-flex items-center gap-2 text-xs font-semibold text-primary-400 uppercase tracking-widest mb-3 before:content-[""] before:w-5 before:h-0.5 before:bg-accent-400 before:rounded-full',
 
   // ── 섹션 타이틀 ───────────────────────────────────────────────────────────
   title: "text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight leading-tight mb-4",
+  titleDark: "text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight mb-4",
 
   // ── 섹션 설명 ─────────────────────────────────────────────────────────────
   desc: "text-[15px] text-neutral-600 leading-relaxed max-w-xl",
+  descDark: "text-[15px] text-white/60 leading-relaxed max-w-xl",
 
   // ── 레거시 호환 (Phase 2에서 label/title/desc로 전환 예정) ──────────────────
   eyebrow:   "text-xs font-semibold uppercase tracking-widest text-primary-600",
@@ -98,4 +102,14 @@ export const ui = {
   // ── 아이콘 컨테이너 ───────────────────────────────────────────────────────
   iconBox:
     "flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 text-primary-600",
+} as const;
+
+// ─── 디자인 시스템 색상 상수 (SVG prop 등 Tailwind class 외 용도) ──────────────
+export const COLOR = {
+  primary400: "#5A8AB8",
+  primary600: "#2C5F8A",
+  primary900: "#0F2640",
+  accent600:  "#D4700E",
+  neutral50:  "#F7F6F3",
+  white:      "#FFFFFF",
 } as const;

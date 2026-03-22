@@ -17,8 +17,8 @@ interface Props {
 
 export default function SLSteelLogo({
   size = 40,
-  fill = "#3B82F6",
-  gap = "#0F172A",
+  fill = "#2C5F8A",
+  gap = "#0F2640",
   className,
 }: Props) {
   // 뷰박스 중심

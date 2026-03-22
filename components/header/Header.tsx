@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SITE } from "@/lib/site";
-import { ui } from "@/lib/ui";
+import { ui, COLOR } from "@/lib/ui";
 import { scrollToContact } from "@/lib/scroll";
 import SLSteelLogo from "@/components/logo/SLSteelLogo";
 
@@ -51,8 +51,8 @@ export default function Header() {
           >
             <SLSteelLogo
               size={36}
-              fill={scrolled ? "#2C5F8A" : "#5A8AB8"}
-              gap={scrolled ? "#FFFFFF" : "#0F2640"}
+              fill={scrolled ? COLOR.primary600 : COLOR.primary400}
+              gap={scrolled ? COLOR.white : COLOR.primary900}
             />
             <span className={`text-[1.4rem] font-black leading-none transition-colors ${scrolled ? "text-neutral-900" : "text-white"}`}>
               <span className={`font-condensed text-[1.1em] tracking-[0.06em] mr-[3px] ${scrolled ? "text-primary-600" : "text-primary-400"}`}>
@@ -123,7 +123,7 @@ export default function Header() {
           {/* 상단 바 */}
           <div className="flex h-[72px] items-center justify-between px-5">
             <a href="#top" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-              <SLSteelLogo size={36} fill="#5A8AB8" gap="#0F2640" />
+              <SLSteelLogo size={36} fill={COLOR.primary400} gap={COLOR.primary900} />
               <span className="text-[1.4rem] font-black leading-none text-white">
                 <span className="font-condensed text-primary-400 text-[1.1em] tracking-[0.06em] mr-[3px]">SL</span>
                 <span className="tracking-[-0.01em]">철강</span>

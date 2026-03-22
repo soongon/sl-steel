@@ -5,13 +5,9 @@ export default function WhySection() {
   return (
     <section id="why" className={`${ui.sectionDark}`}>
       <div className={ui.container}>
-        <span className="inline-flex items-center gap-2 text-xs font-semibold text-primary-400 uppercase tracking-widest mb-3">
-          Why SL Steel
-        </span>
-        <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-tight mb-4">
-          SL Steel이 선택받는 이유
-        </h2>
-        <p className="text-[15px] text-white/60 leading-relaxed max-w-xl">
+        <span className={ui.labelDark}>Why SL Steel</span>
+        <h2 className={ui.titleDark}>SL Steel이 선택받는 이유</h2>
+        <p className={ui.descDark}>
           납품과 회수를 함께 운영하는 구조가 현장의 흐름을 끊지 않습니다.
         </p>
 

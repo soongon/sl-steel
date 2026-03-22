@@ -6,6 +6,9 @@
 ─────────────────────────────────────────────────────────────────────────────── */
 
 @theme {
+  /* Tailwind v4 기본 neutral 스케일 리셋 (커스텀 Warm Gray로 교체) */
+  --color-neutral-*: initial;
+
   /* === Brand Colors (Steel Blue) === */
   --color-primary-50:  #E8EEF4;
   --color-primary-100: #C5D4E5;

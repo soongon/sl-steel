@@ -30,7 +30,7 @@ export default function HeroSection() {
   const subLines = SITE.hero.subcopy.split("\n");
 
   return (
-    <section id="hero" className="bg-brand-navy pt-20 pb-24 sm:pt-24 sm:pb-32">
+    <section id="hero" className="bg-primary-900 pt-20 pb-24 sm:pt-24 sm:pb-32">
       <div className={ui.container}>
 
         {/* ── 메인 2열 그리드 ─────────────────────────────────────── */}
@@ -43,7 +43,7 @@ export default function HeroSection() {
               {SITE.hero.badges.map((badge) => (
                 <span
                   key={badge}
-                  className="inline-flex items-center rounded-full border border-accent/40 bg-accent/10 px-3.5 py-1 text-sm font-medium text-accent/80"
+                  className="inline-flex items-center rounded-full border border-primary-400/40 bg-primary-400/10 px-3.5 py-1 text-sm font-medium text-primary-400/80"
                 >
                   {badge}
                 </span>
@@ -70,14 +70,14 @@ export default function HeroSection() {
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); scrollToContact(SITE.hero.cta.primary); }}
-                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent text-base font-bold text-white transition-all duration-200 hover:bg-accent-dark hover:-translate-y-1 hover:shadow-[0_8px_32px_rgb(59_130_246/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl bg-accent-600 text-base font-bold text-white transition-all duration-200 hover:bg-accent-800 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgb(212_112_14/0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 focus-visible:ring-offset-2"
               >
                 {SITE.hero.cta.primary}
               </a>
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); scrollToContact(SITE.hero.cta.secondary); }}
-                className="inline-flex h-14 w-full items-center justify-center rounded-xl border border-white/30 text-base font-bold text-white transition-all duration-200 hover:bg-white/20 hover:border-white/60 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgb(255_255_255/0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+                className="inline-flex h-14 w-full items-center justify-center rounded-xl border border-white/30 text-base font-bold text-white transition-all duration-200 hover:bg-white/20 hover:border-white/60 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgb(255_255_255/0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-900"
               >
                 {SITE.hero.cta.secondary}
               </a>
@@ -93,7 +93,7 @@ export default function HeroSection() {
         <div className="mt-14 grid grid-cols-1 gap-6 border-t border-white/10 pt-10 sm:grid-cols-3">
           {SITE.points.map((point, i) => (
             <div key={point.title} className="flex items-center gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary-400/30 bg-primary-400/10 text-primary-400">
                 {POINT_ICONS[i] ?? null}
               </div>
               <div>

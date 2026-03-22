@@ -1,5 +1,5 @@
 import { SITE } from "@/lib/site";
-import { ui } from "@/lib/ui";
+import { ui, COLOR } from "@/lib/ui";
 import SLSteelLogo from "@/components/logo/SLSteelLogo";
 
 const QUICK_LINKS = [
@@ -21,7 +21,7 @@ export default function Footer() {
         {/* 모바일 전용 */}
         <div className="py-8 sm:hidden">
           <a href="#top" className="flex items-center gap-2.5" aria-label="SL Steel 홈으로">
-            <SLSteelLogo size={28} fill="#2C5F8A" gap="#F7F6F3" />
+            <SLSteelLogo size={28} fill={COLOR.primary600} gap={COLOR.neutral50} />
             <span className="text-base font-bold tracking-tight text-neutral-900">
               <span className="text-primary-600">SL</span>{" 철강"}
             </span>
@@ -53,7 +53,7 @@ export default function Footer() {
                 aria-label="SL Steel 홈으로"
                 className="inline-flex items-center gap-2.5 transition-opacity hover:opacity-80"
               >
-                <SLSteelLogo size={32} fill="#2C5F8A" gap="#F7F6F3" />
+                <SLSteelLogo size={32} fill={COLOR.primary600} gap={COLOR.neutral50} />
                 <div className="leading-none">
                   <p className="text-sm font-semibold text-neutral-900">{SITE.brand.en}</p>
                   <p className="mt-0.5 text-[11px] text-neutral-400">{SITE.brand.ko}</p>
