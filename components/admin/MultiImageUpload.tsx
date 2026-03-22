@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Script from "next/script";
 
@@ -15,7 +15,9 @@ export default function MultiImageUpload({ images, onChange }: Props) {
   const widgetRef = useRef<{ open: () => void } | null>(null);
   // 클로저 문제 해결: ref로 최신 images 참조
   const imagesRef = useRef(images);
-  imagesRef.current = images;
+  useEffect(() => {
+    imagesRef.current = images;
+  }, [images]);
 
   const handleUpload = useCallback(
     (error: unknown, result: { event: string; info: { secure_url: string } }) => {

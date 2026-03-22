@@ -71,7 +71,13 @@ export async function getInquiry(id: string): Promise<Inquiry | null> {
 
 // ── 관리자: 상태 변경 ───────────────────────────────────────────────
 
+const VALID_INQUIRY_STATUSES = ["new", "read", "resolved"] as const;
+
 export async function updateInquiryStatus(id: string, status: string) {
+  if (!VALID_INQUIRY_STATUSES.includes(status as typeof VALID_INQUIRY_STATUSES[number])) {
+    throw new Error("잘못된 상태값입니다.");
+  }
+
   const serverSupabase = await createSupabaseServer();
   const { data: { user } } = await serverSupabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
@@ -82,7 +88,10 @@ export async function updateInquiryStatus(id: string, status: string) {
     .update({ status, updated_at: new Date().toISOString() })
     .eq("id", id);
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Inquiry status update error:", error.message);
+    throw new Error("상태 변경에 실패했습니다. 다시 시도해 주세요.");
+  }
 
   revalidatePath("/admin/inquiries");
   revalidatePath("/admin");
