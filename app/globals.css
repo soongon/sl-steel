@@ -6,27 +6,53 @@
 ─────────────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  /* ── 브랜드 ── */
-  --color-brand-navy:   #0F172A;   /* 헤더, 히어로 — 쿨 슬레이트 다크 */
-  --color-brand-light:  #1E293B;   /* hover / 다크 레이어 */
-  --color-accent:       #3B82F6;   /* CTA 버튼, 링크 포인트, ring (blue-500) */
-  --color-accent-dark:  #2563EB;   /* accent hover (blue-600) */
+  /* === Brand Colors (Steel Blue) === */
+  --color-primary-50:  #E8EEF4;
+  --color-primary-100: #C5D4E5;
+  --color-primary-200: #9FB8D4;
+  --color-primary-400: #5A8AB8;
+  --color-primary-600: #2C5F8A;   /* 메인 브랜드 컬러 */
+  --color-primary-800: #1A3D5C;
+  --color-primary-900: #0F2640;
 
-  /* ── 뉴트럴 ── */
-  --color-steel:        #64748B;   /* 아이콘, 메탈 톤 부제목 */
-  --color-surface:      #F1F5F9;   /* 섹션 교차 배경 */
-  --color-foreground:   #0F172A;   /* 본문 주 텍스트 */
-  --color-muted:        #64748B;   /* 보조 텍스트, placeholder */
-  --color-border:       #E2E8F0;   /* 카드·구분선 테두리 */
-  --color-card:         #FFFFFF;   /* 카드 배경 */
+  /* === Accent Colors (Industrial Orange) === */
+  --color-accent-50:  #FFF3E8;
+  --color-accent-100: #FFD9B3;
+  --color-accent-200: #FFBE7D;
+  --color-accent-400: #F28C28;
+  --color-accent-600: #D4700E;    /* CTA 컬러 (매입 문의) */
+  --color-accent-800: #8C4A09;
 
-  /* ── 시맨틱 ── */
-  --color-notice:       #1D4ED8;   /* 고지 문구 텍스트 (blue-700) */
-  --color-notice-bg:    #DBEAFE;   /* 고지 배경 (blue-100) */
+  /* === Neutral (Warm Gray) === */
+  --color-neutral-0:   #FFFFFF;
+  --color-neutral-50:  #F7F6F3;
+  --color-neutral-100: #EDEBE6;
+  --color-neutral-200: #D9D6CF;
+  --color-neutral-400: #A8A49B;
+  --color-neutral-600: #6B675F;
+  --color-neutral-800: #3D3A34;
+  --color-neutral-900: #1E1C18;
 
-  /* ── 타이포 ── */
-  --font-sans: "Pretendard Variable", "Pretendard", -apple-system,
-               BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* === Semantic === */
+  --color-success: #1D9E75;
+  --color-danger:  #D93025;
+
+  /* === 기존 토큰 호환 (블로그 등에서 참조) === */
+  --color-accent:      #2C5F8A;
+  --color-accent-dark: #1A3D5C;
+  --color-brand-navy:  #0F2640;
+  --color-brand-light: #1A3D5C;
+  --color-steel:       #6B675F;
+  --color-surface:     #F7F6F3;
+  --color-foreground:  #1E1C18;
+  --color-muted:       #6B675F;
+  --color-border:      #D9D6CF;
+  --color-card:        #FFFFFF;
+  --color-notice:      #2C5F8A;
+  --color-notice-bg:   #E8EEF4;
+
+  /* === Typography === */
+  --font-sans: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
 
   /* 헤딩 전용 디스플레이 세리프 (next/font 변수 참조) */
   --font-display: var(--font-noto-serif), "Noto Serif KR", Georgia, serif;
@@ -34,12 +60,18 @@
   /* 산업용 압축 볼드 — 로고 영문 전용 */
   --font-condensed: var(--font-bebas-neue), "Bebas Neue", Impact, sans-serif;
 
-  /* ── 그림자 ── */
+  /* === Radius === */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* === Shadow === */
   --shadow-card:  0 1px 3px 0 rgb(15 30 46 / 0.06),
                   0 4px 16px 0 rgb(15 30 46 / 0.05);
   --shadow-lift:  0 4px 24px 0 rgb(15 30 46 / 0.10);
-  --shadow-blue:  0 0 0 1px rgb(59 130 246 / 0.15),
-                  0 4px 16px 0 rgb(59 130 246 / 0.10);
+  --shadow-blue:  0 0 0 1px rgb(44 95 138 / 0.15),
+                  0 4px 16px 0 rgb(44 95 138 / 0.10);
 }
 
 /* ─── 베이스 ────────────────────────────────────────────────────────────────── */

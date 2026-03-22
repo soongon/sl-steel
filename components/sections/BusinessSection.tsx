@@ -8,8 +8,8 @@ function BulletList({ items }: { items: readonly string[] }) {
   return (
     <ul className="mt-5 space-y-2">
       {items.map((item) => (
-        <li key={item} className="flex items-center gap-2.5 text-sm text-muted">
-          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+        <li key={item} className="flex items-center gap-2.5 text-sm text-neutral-600">
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-600" />
           {item}
         </li>
       ))}
@@ -23,72 +23,66 @@ export default function BusinessSection() {
   return (
     <section id="business" className={ui.section}>
       <div className={ui.container}>
-        <p className={ui.eyebrow}>Business</p>
-        <h2 className={ui.h2Display}>사업 영역</h2>
+        <span className={ui.label}>Business</span>
+        <h2 className={ui.title}>사업 영역</h2>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
 
-          {/* ── 매입 카드 (주) ─────────────────────────────────────── */}
-          <div className={`${ui.card} ${ui.cardPad} flex flex-col transition-shadow hover:shadow-lift`}>
+          {/* 매입 카드 — 상단 accent 라인 */}
+          <div className={`${ui.card} ${ui.cardPad} flex flex-col border-t-[3px] border-t-accent-600 transition-shadow hover:shadow-lift`}>
             <div className="flex-1">
-              <span className={ui.chip}>매입 · 주력</span>
-              <h3 className="mt-3 text-xl font-semibold text-foreground">
+              <span className="inline-flex h-7 items-center rounded-sm bg-accent-50 px-2.5 text-xs font-semibold text-accent-600">
+                매입 · 주력
+              </span>
+              <h3 className="mt-3 text-xl font-semibold text-neutral-900">
                 {recovery.title}
               </h3>
-              <p className="mt-2 text-sm text-muted">{recovery.lead}</p>
+              <p className="mt-2 text-sm text-neutral-600">{recovery.lead}</p>
 
               {/* 대상/제외 표 */}
-              <div className="mt-5 overflow-hidden rounded-xl border border-border">
+              <div className="mt-5 overflow-hidden rounded-lg border border-neutral-200">
                 <div className="flex text-sm">
-                  <span className="w-16 shrink-0 bg-surface px-4 py-3 font-medium text-foreground">
-                    대상
-                  </span>
-                  <span className="flex-1 border-l border-border bg-card px-4 py-3 text-muted">
-                    {recovery.table.target}
-                  </span>
+                  <span className="w-16 shrink-0 bg-neutral-50 px-4 py-3 font-medium text-neutral-900">대상</span>
+                  <span className="flex-1 border-l border-neutral-200 bg-white px-4 py-3 text-neutral-600">{recovery.table.target}</span>
                 </div>
-                <div className="flex border-t border-border text-sm">
-                  <span className="w-16 shrink-0 bg-surface px-4 py-3 font-medium text-foreground">
-                    제외
-                  </span>
-                  <span className="flex-1 border-l border-border bg-card px-4 py-3 text-muted">
-                    {recovery.table.exclude}
-                  </span>
+                <div className="flex border-t border-neutral-200 text-sm">
+                  <span className="w-16 shrink-0 bg-neutral-50 px-4 py-3 font-medium text-neutral-900">제외</span>
+                  <span className="flex-1 border-l border-neutral-200 bg-white px-4 py-3 text-neutral-600">{recovery.table.exclude}</span>
                 </div>
               </div>
 
               <BulletList items={recovery.bullets} />
 
-              <p className="mt-4 border-l-2 border-border pl-3 text-xs text-muted">
+              <p className="mt-4 border-l-2 border-neutral-200 pl-3 text-xs text-neutral-400">
                 {recovery.notice}
               </p>
             </div>
 
-            <div className="mt-8 border-t border-border pt-6">
+            <div className="mt-8 border-t border-neutral-200 pt-6">
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); scrollToContact(recovery.cta); }}
-                className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-semibold text-white transition-all duration-200 hover:bg-accent-dark hover:-translate-y-0.5 hover:shadow-[0_4px_20px_rgb(59_130_246/0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className={`${ui.btn.base} ${ui.btn.primary} ${ui.btn.md} w-full`}
               >
                 {recovery.cta}
               </a>
             </div>
           </div>
 
-          {/* ── 납품 카드 (보조) ───────────────────────────────────── */}
-          <div className={`${ui.card} ${ui.cardPad} flex flex-col transition-shadow hover:shadow-lift`}>
+          {/* 납품 카드 — 상단 primary 라인 */}
+          <div className={`${ui.card} ${ui.cardPad} flex flex-col border-t-[3px] border-t-primary-600 transition-shadow hover:shadow-lift`}>
             <div className="flex-1">
               <span className={ui.chip}>납품 · 보조</span>
-              <h3 className="mt-3 text-xl font-semibold text-foreground">
+              <h3 className="mt-3 text-xl font-semibold text-neutral-900">
                 {delivery.title}
               </h3>
               <BulletList items={delivery.bullets} />
             </div>
-            <div className="mt-8 border-t border-border pt-6">
+            <div className="mt-8 border-t border-neutral-200 pt-6">
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); scrollToContact(delivery.cta); }}
-                className="inline-flex h-12 w-full items-center justify-center rounded-xl border border-border bg-card text-base font-semibold text-foreground transition-all duration-200 hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                className={`${ui.btn.base} ${ui.btn.secondary} ${ui.btn.md} w-full`}
               >
                 {delivery.cta}
               </a>

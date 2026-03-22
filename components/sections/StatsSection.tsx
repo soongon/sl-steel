@@ -3,23 +3,22 @@ import { ui } from "@/lib/ui";
 
 export default function StatsSection() {
   return (
-    <section className="bg-brand-light py-14 sm:py-16">
+    <section className="relative -mt-8 z-10 pb-8">
       <div className={ui.container}>
-        <div className="grid grid-cols-2 gap-px bg-white/10 overflow-hidden rounded-2xl lg:grid-cols-4">
-          {SITE.stats.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={[
-                "flex flex-col items-center justify-center gap-2 bg-brand-light px-6 py-10 text-center",
-                i < SITE.stats.length - 1 ? "lg:border-r lg:border-white/10" : "",
-              ].join(" ")}
-            >
-              <span className="text-[clamp(1.5rem,3.5vw,2.25rem)] font-display font-bold leading-none text-accent whitespace-nowrap">
-                {stat.value}
-              </span>
-              <span className="text-sm text-white/60">{stat.label}</span>
-            </div>
-          ))}
+        <div className="rounded-xl bg-white shadow-lift border border-neutral-100">
+          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-neutral-100">
+            {SITE.stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="flex flex-col items-center justify-center gap-2 px-6 py-8 text-center"
+              >
+                <span className="text-[clamp(1.5rem,3.5vw,2rem)] font-bold leading-none text-primary-600 whitespace-nowrap">
+                  {stat.value}
+                </span>
+                <span className="text-sm text-neutral-400">{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
