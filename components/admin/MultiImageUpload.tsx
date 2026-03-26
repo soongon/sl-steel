@@ -48,7 +48,7 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         folder: "blog",
         sources: ["local", "url", "camera"],
         multiple: true,
-        maxFiles: 10,
+        maxFiles: 15,
         maxFileSize: 10_000_000,
         cropping: false,
       },
