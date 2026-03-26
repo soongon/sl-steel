@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseAdmin, createSupabaseServer } from "./supabase-server";
+import { VALID_POST_STATUSES, type PostStatus } from "./types";
 
 export interface AdminPost {
   id: string;
@@ -11,7 +12,7 @@ export interface AdminPost {
   excerpt: string;
   content: string;
   thumbnail_url: string | null;
-  status: string;
+  status: PostStatus;
   published_at: string | null;
   created_at: string;
 }
@@ -119,6 +120,9 @@ export async function createPost(formData: FormData) {
   const content = requireString(formData, "content");
   const thumbnailUrl = optionalString(formData, "thumbnail_url") || null;
   const status = requireString(formData, "status");
+  if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
+    throw new Error("상태값은 draft 또는 published만 가능합니다.");
+  }
   const publishedAt = status === "published"
     ? optionalString(formData, "published_at") || new Date().toISOString()
     : null;
@@ -171,6 +175,9 @@ export async function updatePost(id: string, formData: FormData) {
   const content = requireString(formData, "content");
   const thumbnailUrl = optionalString(formData, "thumbnail_url") || null;
   const status = requireString(formData, "status");
+  if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
+    throw new Error("상태값은 draft 또는 published만 가능합니다.");
+  }
   const publishedAt = status === "published"
     ? optionalString(formData, "published_at") || new Date().toISOString()
     : null;

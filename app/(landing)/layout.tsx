@@ -8,6 +8,8 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
       <Header />
       {children}
       <Footer />
+      {/* pb-16: MobileCTABar 고정 높이만큼 여백 확보 */}
+      <div className="h-16 md:hidden" aria-hidden="true" />
       <MobileCTABar />
     </>
   );

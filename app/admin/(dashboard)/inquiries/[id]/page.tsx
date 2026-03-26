@@ -1,16 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getInquiry } from "@/lib/inquiries";
+import { formatDate } from "@/lib/types";
 import InquiryStatusBadge from "@/components/admin/InquiryStatusBadge";
 import InquiryStatusButtons from "@/components/admin/InquiryStatusButtons";
 
 interface Props {
   params: Promise<{ id: string }>;
-}
-
-function formatDate(raw: string) {
-  const d = new Date(raw);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
 export default async function InquiryDetailPage({ params }: Props) {

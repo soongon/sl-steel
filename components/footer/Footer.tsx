@@ -34,7 +34,7 @@ export default function Footer() {
 
           <div className="mt-4 flex items-center justify-between border-t border-neutral-200 pt-4">
             <p className="text-xs text-neutral-400">© {new Date().getFullYear()} {SITE.brand.en}</p>
-            <a href="#" className="text-xs text-neutral-400 hover:text-neutral-900">개인정보처리방침</a>
+            <span className="text-xs text-neutral-400">개인정보처리방침</span>
           </div>
         </div>
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { supabase } from "./supabase";
 import { createSupabaseAdmin, createSupabaseServer } from "./supabase-server";
+import { VALID_INQUIRY_STATUSES, type InquiryStatus } from "./types";
 
 export interface Inquiry {
   id: string;
@@ -11,30 +12,41 @@ export interface Inquiry {
   phone: string;
   location: string;
   message: string;
-  status: string;
+  status: InquiryStatus;
   created_at: string;
   updated_at: string;
 }
 
 // ── 공개: 문의 제출 ─────────────────────────────────────────────────
 
-export async function submitInquiry(formData: FormData) {
-  const inquiry_type = formData.get("inquiry_type") as string;
-  const name = formData.get("name") as string;
-  const phone = formData.get("phone") as string;
-  const location = (formData.get("location") as string) || "";
-  const message = (formData.get("message") as string) || "";
+const PHONE_PATTERN = /^[\d]{2,4}-[\d]{3,4}-[\d]{4}$/;
 
-  if (!inquiry_type || !name || !phone) {
+export async function submitInquiry(formData: FormData) {
+  const inquiry_type = formData.get("inquiry_type");
+  const name = formData.get("name");
+  const phone = formData.get("phone");
+  const location = formData.get("location");
+  const message = formData.get("message");
+
+  if (typeof inquiry_type !== "string" || !inquiry_type.trim()
+    || typeof name !== "string" || !name.trim()
+    || typeof phone !== "string" || !phone.trim()) {
     throw new Error("필수 항목을 입력해 주세요.");
   }
 
+  if (!PHONE_PATTERN.test(phone.trim())) {
+    throw new Error("전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
+  }
+
+  const safeLocation = typeof location === "string" ? location.trim() : "";
+  const safeMessage = typeof message === "string" ? message.trim() : "";
+
   const { error } = await supabase.from("inquiries").insert({
-    inquiry_type,
-    name,
-    phone,
-    location,
-    message,
+    inquiry_type: inquiry_type.trim(),
+    name: name.trim(),
+    phone: phone.trim(),
+    location: safeLocation,
+    message: safeMessage,
   });
 
   if (error) throw new Error("문의 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.");
@@ -71,10 +83,8 @@ export async function getInquiry(id: string): Promise<Inquiry | null> {
 
 // ── 관리자: 상태 변경 ───────────────────────────────────────────────
 
-const VALID_INQUIRY_STATUSES = ["new", "read", "resolved"] as const;
-
 export async function updateInquiryStatus(id: string, status: string) {
-  if (!VALID_INQUIRY_STATUSES.includes(status as typeof VALID_INQUIRY_STATUSES[number])) {
+  if (!VALID_INQUIRY_STATUSES.includes(status as InquiryStatus)) {
     throw new Error("잘못된 상태값입니다.");
   }
 

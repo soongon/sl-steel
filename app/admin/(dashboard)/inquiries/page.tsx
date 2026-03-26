@@ -1,11 +1,7 @@
 import Link from "next/link";
 import { getInquiries } from "@/lib/inquiries";
+import { formatDate } from "@/lib/types";
 import InquiryStatusBadge from "@/components/admin/InquiryStatusBadge";
-
-function formatDate(raw: string) {
-  const d = new Date(raw);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
-}
 
 export default async function InquiriesPage() {
   const inquiries = await getInquiries();

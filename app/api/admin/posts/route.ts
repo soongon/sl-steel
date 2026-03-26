@@ -34,6 +34,15 @@ export async function POST(request: NextRequest) {
     status?: string;
   };
 
+  // slug 형식 검증
+  const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  if (slug && !SLUG_PATTERN.test(slug)) {
+    return NextResponse.json(
+      { error: "Slug must contain only lowercase letters, numbers, and hyphens" },
+      { status: 400 }
+    );
+  }
+
   // 필수 필드 검사
   const missing = [];
   if (!title) missing.push("title");
@@ -70,7 +79,7 @@ export async function POST(request: NextRequest) {
     .from("posts")
     .select("id")
     .eq("slug", slug)
-    .single();
+    .maybeSingle();
 
   if (existing) {
     return NextResponse.json(

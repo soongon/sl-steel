@@ -6,6 +6,20 @@ import { ui, COLOR } from "@/lib/ui";
 import { scrollToContact } from "@/lib/scroll";
 import SLSteelLogo from "@/components/logo/SLSteelLogo";
 
+function LogoBrand({ fill, gap, textClass, slClass }: {
+  fill: string; gap: string; textClass: string; slClass: string;
+}) {
+  return (
+    <>
+      <SLSteelLogo size={36} fill={fill} gap={gap} />
+      <span className={`text-[1.4rem] font-black leading-none transition-colors ${textClass}`}>
+        <span className={`font-condensed text-[1.1em] tracking-[0.06em] mr-[3px] ${slClass}`}>SL</span>
+        <span className="tracking-[-0.01em]">철강</span>
+      </span>
+    </>
+  );
+}
+
 const NAV_LINKS = [
   { label: "회사소개", href: "#about" },
   { label: "사업영역", href: "#business" },
@@ -49,17 +63,12 @@ export default function Header() {
             aria-label="SL Steel 홈으로"
             className="flex shrink-0 items-center gap-3"
           >
-            <SLSteelLogo
-              size={36}
+            <LogoBrand
               fill={scrolled ? COLOR.primary600 : COLOR.primary400}
               gap={scrolled ? COLOR.white : COLOR.primary900}
+              textClass={scrolled ? "text-neutral-900" : "text-white"}
+              slClass={scrolled ? "text-primary-600" : "text-primary-400"}
             />
-            <span className={`text-[1.4rem] font-black leading-none transition-colors ${scrolled ? "text-neutral-900" : "text-white"}`}>
-              <span className={`font-condensed text-[1.1em] tracking-[0.06em] mr-[3px] ${scrolled ? "text-primary-600" : "text-primary-400"}`}>
-                SL
-              </span>
-              <span className="tracking-[-0.01em]">철강</span>
-            </span>
           </a>
 
           {/* ── 데스크톱 네비게이션 ── */}
@@ -123,11 +132,12 @@ export default function Header() {
           {/* 상단 바 */}
           <div className="flex h-[72px] items-center justify-between px-5">
             <a href="#top" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-              <SLSteelLogo size={36} fill={COLOR.primary400} gap={COLOR.primary900} />
-              <span className="text-[1.4rem] font-black leading-none text-white">
-                <span className="font-condensed text-primary-400 text-[1.1em] tracking-[0.06em] mr-[3px]">SL</span>
-                <span className="tracking-[-0.01em]">철강</span>
-              </span>
+              <LogoBrand
+                fill={COLOR.primary400}
+                gap={COLOR.primary900}
+                textClass="text-white"
+                slClass="text-primary-400"
+              />
             </a>
             <button
               type="button"

@@ -100,6 +100,7 @@ export default function HeroCarousel() {
             role="tab"
             aria-selected={i === active}
             aria-label={slide.label}
+            tabIndex={i === active ? 0 : -1}
             onClick={() => goTo(i)}
             className={[
               "h-1.5 rounded-full transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white",

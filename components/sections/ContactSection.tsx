@@ -16,7 +16,7 @@ function resolveTypeFromHash(): InquiryType {
 }
 
 const inputBase =
-  "h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors focus:border-primary-600 focus:bg-white focus:ring-2 focus:ring-primary-600/20";
+  "h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors focus-visible:border-primary-600 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-primary-600/20";
 
 export default function ContactSection() {
   const { email, kakao, regions } = SITE.footer;
@@ -76,7 +76,7 @@ export default function ContactSection() {
                 <span className="text-xl font-bold text-neutral-900 tabular-nums">{regions[0].phone}</span>
               </a>
               <div className="grid grid-cols-2 gap-3">
-                {(regions.slice(1) as readonly { name: string; phone: string; coverage: string }[]).map((region) => (
+                {regions.slice(1).map((region) => (
                   <a
                     key={region.name}
                     href={`tel:${region.phone}`}
@@ -185,7 +185,7 @@ export default function ContactSection() {
                   name="message"
                   rows={4}
                   placeholder="수량, 규격, 현장 상황 등 자유롭게 적어주세요."
-                  className="w-full resize-none rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-base text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors focus:border-primary-600 focus:bg-white focus:ring-2 focus:ring-primary-600/20"
+                  className="w-full resize-none rounded-md border border-neutral-200 bg-neutral-50 px-4 py-3 text-base text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors focus-visible:border-primary-600 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-primary-600/20"
                 />
               </div>
 

@@ -44,8 +44,12 @@ export default function ProcessSection() {
 
           {/* PC: 가로 타임라인 */}
           <div className="relative hidden sm:block">
-            <div className="absolute top-5 left-[calc(10%)] right-[calc(10%)] h-px bg-neutral-200" />
-            <div className="relative grid grid-cols-5 gap-4">
+            {/* 양끝 원 중심에서 중심까지 연결선: 1/(N*2) ~ 1-1/(N*2) */}
+            <div
+              className="absolute top-5 h-px bg-neutral-200"
+              style={{ left: `${100 / (steps.length * 2)}%`, right: `${100 / (steps.length * 2)}%` }}
+            />
+            <div className={`relative grid gap-4`} style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}>
               {steps.map((step, i) => (
                 <div key={step} className="flex flex-col items-center text-center">
                   <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-900 text-sm font-bold text-white ring-4 ring-white">

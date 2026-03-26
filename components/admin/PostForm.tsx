@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import CloudinaryUpload from "./CloudinaryUpload";
 import MdxPreview from "./MdxPreview";
 import type { AdminPost, Category } from "@/lib/admin";
+import type { PostStatus } from "@/lib/types";
 
 interface Props {
   post?: AdminPost;
@@ -176,7 +177,7 @@ export default function PostForm({ post, categories, action }: Props) {
               <select
                 id="status"
                 value={status}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={(e) => setStatus(e.target.value as PostStatus)}
                 className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
               >
                 <option value="draft">초안</option>
