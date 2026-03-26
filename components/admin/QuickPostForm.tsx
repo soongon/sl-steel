@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPost } from "@/lib/admin";
 import MultiImageUpload from "./MultiImageUpload";
+import { isVideoUrl } from "@/lib/types";
 
 interface ParsedPost {
   title: string;
@@ -13,13 +14,33 @@ interface ParsedPost {
   content: string;
 }
 
-function replaceImageMarkers(content: string, imageUrls: string[]): string {
+function replaceMediaMarkers(content: string, mediaUrls: string[]): string {
   let result = content;
+  const unmatchedVideos: string[] = [];
 
-  imageUrls.forEach((url, i) => {
+  mediaUrls.forEach((url, i) => {
     const marker = `[사진${i + 1}]`;
-    result = result.replace(marker, `![사진 ${i + 1}](${url})`);
+    const hasMarker = result.includes(marker);
+
+    if (isVideoUrl(url)) {
+      const videoTag = `<video src="${url}" controls playsInline preload="metadata" />`;
+      if (hasMarker) {
+        result = result.replace(marker, videoTag);
+      } else {
+        // 마커 없는 동영상 → 나중에 본문 끝에 추가
+        unmatchedVideos.push(videoTag);
+      }
+    } else {
+      if (hasMarker) {
+        result = result.replace(marker, `![사진 ${i + 1}](${url})`);
+      }
+    }
   });
+
+  // 마커에 매칭되지 않은 동영상을 본문 끝에 추가
+  if (unmatchedVideos.length > 0) {
+    result += "\n\n---\n\n## 현장 영상\n\n" + unmatchedVideos.join("\n\n");
+  }
 
   return result;
 }
@@ -75,7 +96,7 @@ export default function QuickPostForm() {
 
     try {
       const thumbnailUrl = images[0] ?? "";
-      const finalContent = replaceImageMarkers(parsed.content, images);
+      const finalContent = replaceMediaMarkers(parsed.content, images);
 
       const formData = new FormData();
       formData.set("title", parsed.title);
@@ -108,7 +129,7 @@ export default function QuickPostForm() {
     <div className="space-y-4">
       {/* 1. 현장 사진 — 항상 표시 */}
       <div className="rounded-xl border border-border bg-card p-4">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">1. 현장 사진</h3>
+        <h3 className="mb-3 text-sm font-semibold text-foreground">1. 현장 사진·동영상</h3>
         <MultiImageUpload images={images} onChange={setImages} />
       </div>
 
@@ -183,10 +204,10 @@ export default function QuickPostForm() {
                     )}
                     {markerCount > 0 && (
                       <div>
-                        <span className="font-medium text-steel">본문 이미지: </span>
+                        <span className="font-medium text-steel">본문 미디어: </span>
                         <span className={images.length >= markerCount ? "text-green-600" : "text-yellow-600"}>
-                          {markerCount}개 마커 / {images.length}장 업로드
-                          {images.length < markerCount && " — 사진을 더 업로드하세요"}
+                          {markerCount}개 마커 / {images.length}개 업로드
+                          {images.length < markerCount && " — 사진/동영상을 더 업로드하세요"}
                         </span>
                       </div>
                     )}

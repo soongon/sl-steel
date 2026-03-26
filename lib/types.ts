@@ -12,3 +12,8 @@ export function formatDate(raw: string): string {
   const d = new Date(raw);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
+
+/** Cloudinary 동영상 URL 판별 */
+export function isVideoUrl(url: string): boolean {
+  return /\/video\/upload\//.test(url) || /\.(mp4|mov|webm|avi)([?#]|$)/i.test(url);
+}

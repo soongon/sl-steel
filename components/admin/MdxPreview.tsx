@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { MDXRemote, type MDXRemoteSerializeResult } from "next-mdx-remote";
+import { mdxComponents } from "@/lib/mdx-components";
 
 interface Props {
   source: string;
@@ -58,7 +59,7 @@ export default function MdxPreview({ source }: Props) {
         {error ? (
           <p className="text-sm text-red-500">{error}</p>
         ) : mdxSource ? (
-          <MDXRemote {...mdxSource} />
+          <MDXRemote {...mdxSource} components={mdxComponents} />
         ) : (
           <p className="text-sm text-muted">내용을 입력하면 미리보기가 표시됩니다.</p>
         )}

@@ -14,7 +14,7 @@ declare global {
     cloudinary?: {
       createUploadWidget: (
         config: Record<string, unknown>,
-        callback: (error: unknown, result: { event: string; info: { secure_url: string } }) => void
+        callback: (error: unknown, result: { event: string; info: { secure_url: string; resource_type: string } }) => void
       ) => { open: () => void };
     };
   }

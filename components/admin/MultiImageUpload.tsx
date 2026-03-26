@@ -3,6 +3,7 @@
 import { useRef, useCallback, useEffect } from "react";
 import Image from "next/image";
 import Script from "next/script";
+import { isVideoUrl } from "@/lib/types";
 
 interface Props {
   images: string[];
@@ -20,13 +21,13 @@ export default function MultiImageUpload({ images, onChange }: Props) {
   }, [images]);
 
   const handleUpload = useCallback(
-    (error: unknown, result: { event: string; info: { secure_url: string } }) => {
+    (error: unknown, result: { event: string; info: { secure_url: string; resource_type: string } }) => {
       if (error) return;
       if (result.event === "success") {
-        const url = result.info.secure_url.replace(
-          "/upload/",
-          "/upload/f_auto,q_auto,w_800/"
-        );
+        const isVideo = result.info.resource_type === "video";
+        const url = isVideo
+          ? result.info.secure_url
+          : result.info.secure_url.replace("/upload/", "/upload/f_auto,q_auto,w_800/");
         onChange([...imagesRef.current, url]);
       }
     },
@@ -47,9 +48,10 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         uploadPreset: process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!,
         folder: "blog",
         sources: ["local", "url", "camera"],
+        resourceType: "auto",
         multiple: true,
         maxFiles: 15,
-        maxFileSize: 10_000_000,
+        maxFileSize: 50_000_000, // 동영상 포함 50MB
         cropping: false,
       },
       handleUpload
@@ -65,6 +67,8 @@ export default function MultiImageUpload({ images, onChange }: Props) {
 
   function setAsThumbnail(index: number) {
     if (index === 0) return;
+    // 동영상은 썸네일로 설정 불가
+    if (isVideoUrl(images[index])) return;
     const reordered = [...images];
     const [moved] = reordered.splice(index, 1);
     reordered.unshift(moved);
@@ -80,44 +84,63 @@ export default function MultiImageUpload({ images, onChange }: Props) {
 
       {images.length > 0 && (
         <div className="mb-3 grid grid-cols-2 gap-2">
-          {images.map((url, i) => (
-            <div key={url} className="group relative">
-              <div className={`relative h-28 overflow-hidden rounded-lg border-2 ${
-                i === 0 ? "border-accent" : "border-border"
-              }`}>
-                <Image
-                  src={url}
-                  alt={`이미지 ${i + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="200px"
-                />
-                {i === 0 && (
-                  <span className="absolute left-1.5 top-1.5 rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-white">
-                    썸네일
-                  </span>
-                )}
-              </div>
-              <div className="mt-1 flex gap-2">
-                {i !== 0 && (
+          {images.map((url, i) => {
+            const video = isVideoUrl(url);
+            return (
+              <div key={url} className="group relative">
+                <div className={`relative h-28 overflow-hidden rounded-lg border-2 ${
+                  i === 0 ? "border-accent" : "border-border"
+                }`}>
+                  {video ? (
+                    <video
+                      src={url}
+                      muted
+                      playsInline
+                      className="h-full w-full object-cover"
+                      onMouseEnter={(e) => e.currentTarget.play()}
+                      onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                    />
+                  ) : (
+                    <Image
+                      src={url}
+                      alt={`미디어 ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="200px"
+                    />
+                  )}
+                  {i === 0 && !video && (
+                    <span className="absolute left-1.5 top-1.5 rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      썸네일
+                    </span>
+                  )}
+                  {video && (
+                    <span className="absolute left-1.5 top-1.5 rounded bg-neutral-800/80 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      동영상
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1 flex gap-2">
+                  {i !== 0 && !video && (
+                    <button
+                      type="button"
+                      onClick={() => setAsThumbnail(i)}
+                      className="text-xs text-accent hover:text-accent-dark"
+                    >
+                      썸네일로
+                    </button>
+                  )}
                   <button
                     type="button"
-                    onClick={() => setAsThumbnail(i)}
-                    className="text-xs text-accent hover:text-accent-dark"
+                    onClick={() => removeImage(i)}
+                    className="text-xs text-red-500 hover:text-red-600"
                   >
-                    썸네일로
+                    삭제
                   </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => removeImage(i)}
-                  className="text-xs text-red-500 hover:text-red-600"
-                >
-                  삭제
-                </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -126,7 +149,7 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         onClick={openWidget}
         className="w-full rounded-lg border-2 border-dashed border-border px-4 py-6 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
       >
-        {images.length > 0 ? "사진 추가" : "현장 사진 업로드 (여러 장 가능)"}
+        {images.length > 0 ? "사진/동영상 추가" : "현장 사진·동영상 업로드 (여러 개 가능)"}
       </button>
 
       {images.length > 0 && (

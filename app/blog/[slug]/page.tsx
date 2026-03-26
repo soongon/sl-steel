@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Sidebar from "@/components/blog/Sidebar";
 import { SITE } from "@/lib/site";
+import { mdxComponents } from "@/lib/mdx-components";
 import type { Metadata } from "next";
 
 interface PostPageProps {
@@ -80,7 +81,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
           {/* Body */}
           <div className="blog-content px-8 py-6">
-            <MDXRemote source={post.content} />
+            <MDXRemote source={post.content} components={mdxComponents} />
           </div>
 
           {/* Post footer CTA */}

@@ -20,8 +20,8 @@ Node.js >=20.9.0 required. No test runner is configured.
 - **TypeScript 5** (strict mode, path alias `@/*` maps to root)
 - **Tailwind CSS v4** — configured via PostCSS; no `tailwind.config` file (v4 uses `@theme` in `globals.css`)
 - **Supabase** — 블로그 DB (posts, categories 테이블), RLS 적용
-- **Cloudinary** — 이미지 저장/최적화 (f_auto, q_auto, w_800)
-- **next-mdx-remote** — 블로그 본문 MDX 렌더링 (RSC)
+- **Cloudinary** — 이미지·동영상 저장/최적화 (이미지: f_auto, q_auto, w_800 / 동영상: 원본 URL)
+- **next-mdx-remote** — 블로그 본문 MDX 렌더링 (RSC), 커스텀 컴포넌트(`lib/mdx-components.tsx`)
 
 ## Architecture
 
@@ -51,11 +51,16 @@ Cloudinary (이미지 원본 + 자동 최적화)
 
 ### Shared libraries
 - `lib/supabase.ts` — Supabase client (env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
+- `lib/supabase-server.ts` — `createSupabaseServer()` (cookie auth) + `createSupabaseAdmin()` (service role), `requireEnv()` 런타임 검증
 - `lib/blog.ts` — async 블로그 데이터 함수 (Supabase 쿼리)
+- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost)
+- `lib/inquiries.ts` — 문의 제출/조회/상태 변경 server actions
+- `lib/types.ts` — 공유 타입(`PostStatus`, `InquiryStatus`), 상수, 유틸(`formatDate`, `isVideoUrl`)
+- `lib/mdx-components.tsx` — MDX 커스텀 컴포넌트 (video 등), 블로그 + 어드민 미리보기 공유
 - `lib/site.ts` — 랜딩 페이지 copy/data (SITE constant, 전화번호 single source of truth)
-- `lib/ui.ts` — shared Tailwind class tokens (landing page only)
+- `lib/ui.ts` — shared Tailwind class tokens (landing page only), COLOR 상수 (SVG prop 용)
 - `lib/scroll.ts` — `scrollToContact(type)` for CTA navigation
-- `app/globals.css` — design tokens (`@theme`) + `.blog-content` MDX prose styles
+- `app/globals.css` — design tokens (`@theme`) + `.blog-content` MDX prose styles (img + video)
 
 ## External services
 
@@ -91,18 +96,27 @@ All colors defined in `globals.css` `@theme` block. Key values:
 - `surface` — alternate section bg (#F1F5F9)
 - `foreground`, `muted`, `steel`, `border`, `card`
 
-## Image conventions
+## Media conventions
 
-- Cloudinary URL format: `https://res.cloudinary.com/dpwpptrhe/image/upload/f_auto,q_auto,w_800/blog/filename.jpg`
+- 이미지 Cloudinary URL: `https://res.cloudinary.com/dpwpptrhe/image/upload/f_auto,q_auto,w_800/blog/filename.jpg`
+- 동영상 Cloudinary URL: `https://res.cloudinary.com/dpwpptrhe/video/upload/blog/filename.mp4` (최적화 파라미터 없음)
 - `next.config.ts` remotePatterns: `res.cloudinary.com`
 - 랜딩 페이지 이미지: `public/images/` (로컬)
 - 블로그 이미지: Cloudinary → DB `thumbnail_url`
+- 블로그 동영상: Cloudinary → MDX `<video>` 태그 (커스텀 컴포넌트로 렌더링)
+- 동영상 판별: `isVideoUrl()` — `/video/upload/` 경로 또는 `.mp4|.mov|.webm|.avi` 확장자
+- 업로드 제한: 최대 15개, 이미지 10MB / 동영상 포함 50MB
+- QuickPostForm: 마커 없는 동영상은 본문 끝 "현장 영상" 섹션에 자동 추가
 
 ## Notes
 
 - `content/blog/*.mdx` — 더 이상 사용하지 않음 (Supabase 전환 완료). 레거시.
+- `gray-matter` — 제거 완료 (레거시 의존성)
 - Tailwind v4: `bg-linear-to-t` 사용 (`bg-gradient-to-t` 아님)
 - 전화번호 변경 시 `lib/site.ts` SITE.footer.regions만 수정하면 전체 반영
+- 환경변수 미설정 시 `requireEnv()`가 명확한 에러 메시지 출력
+- API route 보안: `/api/admin/preview`는 Supabase 세션 인증, `/api/admin/posts`는 Bearer 토큰
+- middleware matcher: `/admin/:path*` + `/api/admin/*` (posts 제외) 보호
 
 
 ## 🎨 디자인시스템 리뉴얼 (v2)

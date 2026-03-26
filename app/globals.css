@@ -145,10 +145,17 @@ body {
   margin: 2rem 0;
 }
 
-.blog-content img {
+.blog-content img,
+.blog-content video {
   width: 100%;
   border-radius: 0.5rem;
   margin: 1rem 0;
+}
+
+.blog-content video {
+  max-height: 500px;
+  object-fit: contain;
+  background-color: #000;
 }
 
 .blog-content h2:first-child,
