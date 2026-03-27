@@ -17,3 +17,14 @@ export function formatDate(raw: string): string {
 export function isVideoUrl(url: string): boolean {
   return /\/video\/upload\//.test(url) || /\.(mp4|mov|webm|avi)([?#]|$)/i.test(url);
 }
+
+/** Cloudinary URL에서 파일명 추출 (확장자 포함) */
+export function extractFilename(url: string): string {
+  try {
+    const pathname = new URL(url).pathname;
+    const segments = pathname.split("/");
+    return segments[segments.length - 1];
+  } catch {
+    return url;
+  }
+}

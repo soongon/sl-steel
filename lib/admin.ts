@@ -15,6 +15,8 @@ export interface AdminPost {
   status: PostStatus;
   published_at: string | null;
   created_at: string;
+  share_token: string | null;
+  share_expires_at: string | null;
 }
 
 export interface Category {
@@ -73,7 +75,7 @@ export async function getAdminPosts(): Promise<AdminPost[]> {
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("posts")
-    .select("id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at")
+    .select("id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at, share_token, share_expires_at")
     .order("created_at", { ascending: false });
 
   if (error || !data) return [];
@@ -84,7 +86,7 @@ export async function getAdminPost(id: string): Promise<AdminPost | null> {
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("posts")
-    .select("id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at")
+    .select("id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at, share_token, share_expires_at")
     .eq("id", id)
     .single();
 
@@ -234,4 +236,29 @@ export async function deletePost(id: string) {
 
   revalidatePath("/blog");
   revalidatePath("/admin");
+}
+
+// ── 공유 링크 ─────────────────────────────────────────────────────────────
+
+export async function generateShareToken(postId: string): Promise<{ token: string; expiresAt: string }> {
+  const supabase = await createSupabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+
+  const admin = createSupabaseAdmin();
+  const token = crypto.randomUUID();
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  const { error } = await admin
+    .from("posts")
+    .update({ share_token: token, share_expires_at: expiresAt })
+    .eq("id", postId);
+
+  if (error) {
+    console.error("Share token generation error:", error.message);
+    throw new Error("공유 링크 생성에 실패했습니다.");
+  }
+
+  revalidatePath("/admin");
+  return { token, expiresAt };
 }
