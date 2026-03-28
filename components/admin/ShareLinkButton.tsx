@@ -36,9 +36,13 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
 
   async function handleCopy() {
     if (!shareUrl) return;
-    await navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      alert("클립보드 복사에 실패했습니다.");
+    }
   }
 
   // 토큰 없거나 만료 → 생성/재생성 버튼
@@ -64,7 +68,7 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
         {copied ? "복사됨!" : "공유 링크 복사"}
       </button>
       <span className="text-xs text-muted">
-        만료: {formatDate(expires!)}
+        만료: {formatDate(expires ?? "")}
       </span>
       <button
         onClick={handleGenerate}

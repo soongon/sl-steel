@@ -11,13 +11,18 @@ interface Props {
 }
 
 async function downloadFile(item: MediaItem) {
-  const res = await fetch(getOriginalUrl(item.url));
-  const blob = await res.blob();
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = item.filename;
-  a.click();
-  URL.revokeObjectURL(a.href);
+  try {
+    const res = await fetch(getOriginalUrl(item.url));
+    if (!res.ok) throw new Error("다운로드 실패");
+    const blob = await res.blob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = item.filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  } catch {
+    alert(`${item.filename} 다운로드에 실패했습니다.`);
+  }
 }
 
 export default function SharePageClient({ title, parsed }: Props) {
@@ -27,9 +32,13 @@ export default function SharePageClient({ title, parsed }: Props) {
   const allMedia = [...parsed.images, ...parsed.videos];
 
   async function copyToClipboard(text: string, type: "title" | "text") {
-    await navigator.clipboard.writeText(text);
-    setCopied(type);
-    setTimeout(() => setCopied(null), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(type);
+      setTimeout(() => setCopied(null), 2000);
+    } catch {
+      alert("클립보드 복사에 실패했습니다.");
+    }
   }
 
   async function downloadAllAsZip() {
@@ -41,6 +50,7 @@ export default function SharePageClient({ title, parsed }: Props) {
       await Promise.all(
         allMedia.map(async (item) => {
           const res = await fetch(getOriginalUrl(item.url));
+          if (!res.ok) throw new Error(`${item.filename} 다운로드 실패`);
           const blob = await res.blob();
           zip.file(item.filename, blob);
         })
