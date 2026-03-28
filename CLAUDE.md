@@ -38,24 +38,37 @@ Two completely separate sections with independent layouts:
 - `app/blog/[slug]/page.tsx` — single post (SSG via `generateStaticParams`)
 - `components/blog/` — BlogNav, BlogHeader, PostCard, Sidebar, Pagination
 
+### Share (콘텐츠 공유) — `app/share/`
+- `app/share/[token]/page.tsx` — 토큰 기반 공유 페이지 (인증 불필요)
+- `app/share/[token]/SharePageClient.tsx` — 제목/본문 복사, 개별·ZIP 다운로드
+- `components/admin/ShareLinkButton.tsx` — 관리자 공유 링크 생성/복사/재생성
+- `lib/share.ts` — `getShareData(token)` 토큰 조회 (만료/미존재 구분)
+- `lib/share-utils.ts` — MDX→순수텍스트 변환, 미디어 추출, 파일명 매핑, 다운로드 URL
+
 ### Data flow
 ```
 Supabase DB (posts/categories)
   → lib/blog.ts (getPosts, getPost, getCategoryCounts, getSlugs)
     → 페이지 컴포넌트 (async/await)
 
-Cloudinary (이미지 원본 + 자동 최적화)
+Cloudinary (이미지·동영상 원본 + 자동 최적화)
   → Supabase DB (thumbnail_url 필드에 Cloudinary URL 저장)
     → next/image (추가 최적화 + lazy loading)
+
+공유 링크 흐름:
+  관리자 포스트 수정 → "공유 링크 생성" → /share/[token]
+  → 담당자가 본문 복사 + 사진/동영상 다운로드 → 네이버 블로그 등 외부 채널 등록
 ```
 
 ### Shared libraries
 - `lib/supabase.ts` — Supabase client (env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
 - `lib/supabase-server.ts` — `createSupabaseServer()` (cookie auth) + `createSupabaseAdmin()` (service role), `requireEnv()` 런타임 검증
 - `lib/blog.ts` — async 블로그 데이터 함수 (Supabase 쿼리)
-- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost)
+- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost, generateShareToken)
 - `lib/inquiries.ts` — 문의 제출/조회/상태 변경 server actions
-- `lib/types.ts` — 공유 타입(`PostStatus`, `InquiryStatus`), 상수, 유틸(`formatDate`, `isVideoUrl`)
+- `lib/types.ts` — 공유 타입(`PostStatus`, `InquiryStatus`), 상수, 유틸(`formatDate`, `isVideoUrl`, `extractFilename`)
+- `lib/share.ts` — 공유 링크 토큰 조회 (만료/미존재 구분)
+- `lib/share-utils.ts` — MDX→텍스트 변환, 미디어 추출, Cloudinary 다운로드 URL 생성
 - `lib/mdx-components.tsx` — MDX 커스텀 컴포넌트 (video 등), 블로그 + 어드민 미리보기 공유
 - `lib/site.ts` — 랜딩 페이지 copy/data (SITE constant, 전화번호 single source of truth)
 - `lib/ui.ts` — shared Tailwind class tokens (landing page only), COLOR 상수 (SVG prop 용)
@@ -66,14 +79,14 @@ Cloudinary (이미지 원본 + 자동 최적화)
 
 | 서비스 | 용도 | 환경변수 |
 |--------|------|----------|
-| Supabase | 블로그 DB + RLS | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
-| Cloudinary | 이미지 CDN | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` (dpwpptrhe) |
+| Supabase | 블로그 DB + RLS | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
+| Cloudinary | 이미지·동영상 CDN | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` |
 | Vercel | 배포 (예정) | — |
 
 ## DB schema
 
 ### `posts` 테이블
-`id (uuid)`, `slug (unique)`, `title`, `categories (text[])`, `excerpt`, `content`, `thumbnail_url`, `status (draft/published)`, `view_count`, `published_at`, `created_at`, `updated_at`
+`id (uuid)`, `slug (unique)`, `title`, `categories (text[])`, `excerpt`, `content`, `thumbnail_url`, `status (draft/published)`, `view_count`, `published_at`, `created_at`, `updated_at`, `share_token (unique, nullable)`, `share_expires_at (timestamptz, nullable)`
 
 ### `categories` 테이블
 `id (serial)`, `name (unique)`, `sort_order`
@@ -83,7 +96,7 @@ Cloudinary (이미지 원본 + 자동 최적화)
 
 ### RLS 정책
 - categories: 누구나 읽기
-- posts: `status = 'published'`만 공개 읽기
+- posts: `status = 'published'`만 공개 읽기 + `share_token IS NOT NULL AND share_expires_at > now()` 공유 링크 읽기
 - inquiries: 누구나 INSERT, 인증된 사용자만 SELECT/UPDATE
 
 마이그레이션 SQL: `supabase/migrations/`
@@ -91,10 +104,11 @@ Cloudinary (이미지 원본 + 자동 최적화)
 ## Design tokens
 
 All colors defined in `globals.css` `@theme` block. Key values:
-- `accent` / `accent-dark` — blue CTA (#3B82F6 / #2563EB)
-- `brand-navy` — dark header/hero (#0F172A)
-- `surface` — alternate section bg (#F1F5F9)
-- `foreground`, `muted`, `steel`, `border`, `card`
+- `primary-600` — Steel Blue (#2C5F8A), 메인 브랜드
+- `accent-600` — Industrial Orange (#D4700E), CTA
+- `primary-900` — 다크 섹션 (#0F2640)
+- `neutral-50` — 교차 배경 (#F7F6F3)
+- 호환 레이어: `accent`, `accent-dark`, `surface`, `foreground`, `muted`, `steel`, `border`, `card`
 
 ## Media conventions
 
