@@ -254,7 +254,7 @@ export async function deletePost(id: string) {
 
 // ── 공유 링크 ─────────────────────────────────────────────────────────────
 
-export async function generateShareToken(postId: string): Promise<{ token: string; expiresAt: string }> {
+export async function generateShareToken(postId: string): Promise<{ token: string; expiresAt: string; draftCreated: boolean }> {
   const supabase = await createSupabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
@@ -274,6 +274,7 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
   }
 
   // 포스트 제목 조회 + Gmail 임시보관함 생성
+  let draftCreated = false;
   const { data: post } = await admin
     .from("posts")
     .select("title")
@@ -286,14 +287,14 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
     const protocol = host.startsWith("localhost") ? "http" : "https";
     const shareUrl = `${protocol}://${host}/share/${token}`;
 
-    // 실패해도 공유 링크 생성 자체는 성공 처리
     try {
-      await createShareDraft({ title: post.title, shareUrl });
+      const draftId = await createShareDraft({ title: post.title, shareUrl });
+      draftCreated = !!draftId;
     } catch (err) {
       console.error("Draft creation failed in generateShareToken:", err);
     }
   }
 
   revalidatePath("/admin");
-  return { token, expiresAt };
+  return { token, expiresAt, draftCreated };
 }
