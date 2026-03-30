@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { generateShareToken } from "@/lib/admin";
+import { generateShareToken, sendShareDraft } from "@/lib/admin";
 import { formatDate } from "@/lib/types";
 import Toast from "./Toast";
 
@@ -45,6 +45,12 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+
+      // 클립보드 복사와 동시에 Gmail 드래프트 생성
+      const result = await sendShareDraft(postId, shareUrl);
+      if (result.draftCreated) {
+        setToast({ message: "Gmail 임시보관함에 메일이 생성되었습니다", type: "success" });
+      }
     } catch {
       alert("클립보드 복사에 실패했습니다.");
     }

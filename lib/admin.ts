@@ -298,3 +298,26 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
   revalidatePath("/admin");
   return { token, expiresAt, draftCreated };
 }
+
+export async function sendShareDraft(postId: string, shareUrl: string): Promise<{ draftCreated: boolean }> {
+  const supabase = await createSupabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { draftCreated: false };
+
+  const admin = createSupabaseAdmin();
+  const { data: post } = await admin
+    .from("posts")
+    .select("title")
+    .eq("id", postId)
+    .single();
+
+  if (!post?.title) return { draftCreated: false };
+
+  try {
+    const draftId = await createShareDraft({ title: post.title, shareUrl });
+    return { draftCreated: !!draftId };
+  } catch (err) {
+    console.error("sendShareDraft failed:", err);
+    return { draftCreated: false };
+  }
+}
