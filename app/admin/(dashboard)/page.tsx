@@ -54,7 +54,7 @@ export default async function AdminDashboardPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={post.status} hasShareToken={!!post.share_token} />
+                    <StatusBadge status={post.status} shareToken={post.share_token} shareExpiresAt={post.share_expires_at} />
                   </td>
                   <td className="hidden px-4 py-3 text-steel md:table-cell">
                     {post.published_at?.slice(0, 10) ?? "—"}
