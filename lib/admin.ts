@@ -107,98 +107,41 @@ export async function getCategories(): Promise<Category[]> {
 
 // ── 생성 ──────────────────────────────────────────────────────────────
 
-export async function createPost(formData: FormData) {
-  const supabase = await createSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+export async function createPost(formData: FormData): Promise<{ error?: string }> {
+  try {
+    const supabase = await createSupabaseServer();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "로그인이 필요합니다." };
 
-  const admin = createSupabaseAdmin();
+    const admin = createSupabaseAdmin();
 
-  const title = requireString(formData, "title");
-  const slug = requireString(formData, "slug");
-  validateSlug(slug);
-  const categories = parseCategories(formData);
-  const excerpt = requireString(formData, "excerpt");
-  const content = requireString(formData, "content");
-  const thumbnailUrl = optionalString(formData, "thumbnail_url") || null;
-  const status = requireString(formData, "status");
-  if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
-    throw new Error("상태값은 draft 또는 published만 가능합니다.");
-  }
-  const publishedAt = status === "published"
-    ? optionalString(formData, "published_at") || new Date().toISOString()
-    : null;
+    const title = requireString(formData, "title");
+    const slug = requireString(formData, "slug");
+    validateSlug(slug);
+    const categories = parseCategories(formData);
+    const excerpt = requireString(formData, "excerpt");
+    const content = requireString(formData, "content");
+    const thumbnailUrl = optionalString(formData, "thumbnail_url") || null;
+    const status = requireString(formData, "status");
+    if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
+      return { error: "상태값은 draft 또는 published만 가능합니다." };
+    }
+    const publishedAt = status === "published"
+      ? optionalString(formData, "published_at") || new Date().toISOString()
+      : null;
 
-  // slug 중복 확인
-  const { data: existing } = await admin
-    .from("posts")
-    .select("id")
-    .eq("slug", slug)
-    .maybeSingle();
+    // slug 중복 확인
+    const { data: existing } = await admin
+      .from("posts")
+      .select("id")
+      .eq("slug", slug)
+      .maybeSingle();
 
-  if (existing) {
-    throw new Error(`슬러그 "${slug}"가 이미 존재합니다.`);
-  }
+    if (existing) {
+      return { error: `슬러그 "${slug}"가 이미 존재합니다.` };
+    }
 
-  const { error } = await admin.from("posts").insert({
-    title,
-    slug,
-    categories,
-    excerpt,
-    content,
-    thumbnail_url: thumbnailUrl,
-    status,
-    published_at: publishedAt,
-  });
-
-  if (error) {
-    console.error("Post creation error:", error.message);
-    throw new Error("글 저장에 실패했습니다. 다시 시도해 주세요.");
-  }
-
-  revalidatePath("/blog");
-  revalidatePath("/admin");
-}
-
-// ── 수정 ──────────────────────────────────────────────────────────────
-
-export async function updatePost(id: string, formData: FormData) {
-  const supabase = await createSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
-
-  const admin = createSupabaseAdmin();
-
-  const title = requireString(formData, "title");
-  const slug = requireString(formData, "slug");
-  validateSlug(slug);
-  const categories = parseCategories(formData);
-  const excerpt = requireString(formData, "excerpt");
-  const content = requireString(formData, "content");
-  const thumbnailUrl = optionalString(formData, "thumbnail_url") || null;
-  const status = requireString(formData, "status");
-  if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
-    throw new Error("상태값은 draft 또는 published만 가능합니다.");
-  }
-  const publishedAt = status === "published"
-    ? optionalString(formData, "published_at") || new Date().toISOString()
-    : null;
-
-  // slug 중복 확인 (자기 자신 제외)
-  const { data: existing } = await admin
-    .from("posts")
-    .select("id")
-    .eq("slug", slug)
-    .neq("id", id)
-    .maybeSingle();
-
-  if (existing) {
-    throw new Error(`슬러그 "${slug}"가 이미 존재합니다.`);
-  }
-
-  const { error } = await admin
-    .from("posts")
-    .update({
+    const { error } = await admin.from("posts").insert({
       title,
       slug,
       categories,
@@ -207,16 +150,85 @@ export async function updatePost(id: string, formData: FormData) {
       thumbnail_url: thumbnailUrl,
       status,
       published_at: publishedAt,
-    })
-    .eq("id", id);
+    });
 
-  if (error) {
-    console.error("Post update error:", error.message);
-    throw new Error("글 수정에 실패했습니다. 다시 시도해 주세요.");
+    if (error) {
+      console.error("Post creation error:", error.message);
+      return { error: "글 저장에 실패했습니다. 다시 시도해 주세요." };
+    }
+
+    revalidatePath("/blog");
+    revalidatePath("/admin");
+    return {};
+  } catch (err) {
+    console.error("createPost unexpected error:", err);
+    return { error: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
   }
+}
 
-  revalidatePath("/blog");
-  revalidatePath("/admin");
+// ── 수정 ──────────────────────────────────────────────────────────────
+
+export async function updatePost(id: string, formData: FormData): Promise<{ error?: string }> {
+  try {
+    const supabase = await createSupabaseServer();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { error: "로그인이 필요합니다." };
+
+    const admin = createSupabaseAdmin();
+
+    const title = requireString(formData, "title");
+    const slug = requireString(formData, "slug");
+    validateSlug(slug);
+    const categories = parseCategories(formData);
+    const excerpt = requireString(formData, "excerpt");
+    const content = requireString(formData, "content");
+    const thumbnailUrl = optionalString(formData, "thumbnail_url") || null;
+    const status = requireString(formData, "status");
+    if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
+      return { error: "상태값은 draft 또는 published만 가능합니다." };
+    }
+    const publishedAt = status === "published"
+      ? optionalString(formData, "published_at") || new Date().toISOString()
+      : null;
+
+    // slug 중복 확인 (자기 자신 제외)
+    const { data: existing } = await admin
+      .from("posts")
+      .select("id")
+      .eq("slug", slug)
+      .neq("id", id)
+      .maybeSingle();
+
+    if (existing) {
+      return { error: `슬러그 "${slug}"가 이미 존재합니다.` };
+    }
+
+    const { error } = await admin
+      .from("posts")
+      .update({
+        title,
+        slug,
+        categories,
+        excerpt,
+        content,
+        thumbnail_url: thumbnailUrl,
+        status,
+        published_at: publishedAt,
+      })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Post update error:", error.message);
+      return { error: "글 수정에 실패했습니다. 다시 시도해 주세요." };
+    }
+
+    revalidatePath("/blog");
+    revalidatePath("/admin");
+    return {};
+  } catch (err) {
+    console.error("updatePost unexpected error:", err);
+    return { error: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+  }
 }
 
 // ── 삭제 ──────────────────────────────────────────────────────────────

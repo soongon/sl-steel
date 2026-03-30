@@ -10,7 +10,7 @@ import type { PostStatus } from "@/lib/types";
 interface Props {
   post?: AdminPost;
   categories: Category[];
-  action: (formData: FormData) => Promise<void>;
+  action: (formData: FormData) => Promise<{ error?: string } | void>;
 }
 
 function toSlug(title: string): string {
@@ -64,7 +64,12 @@ export default function PostForm({ post, categories, action }: Props) {
       formData.set("status", status);
       formData.set("published_at", publishedAt);
 
-      await action(formData);
+      const result = await action(formData);
+      if (result?.error) {
+        setError(result.error);
+        setSubmitting(false);
+        return;
+      }
       router.push("/admin");
       router.refresh();
     } catch (err) {

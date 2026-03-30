@@ -108,7 +108,12 @@ export default function QuickPostForm() {
       formData.set("status", "draft");
       formData.set("published_at", new Date().toISOString().slice(0, 10));
 
-      await createPost(formData);
+      const result = await createPost(formData);
+      if (result?.error) {
+        setSubmitError(result.error);
+        setSubmitting(false);
+        return;
+      }
       router.push("/admin");
       router.refresh();
     } catch (err) {

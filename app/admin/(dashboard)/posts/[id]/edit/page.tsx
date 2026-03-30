@@ -18,7 +18,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 
   async function handleUpdate(formData: FormData) {
     "use server";
-    await updatePost(id, formData);
+    return updatePost(id, formData);
   }
 
   return (
