@@ -10,7 +10,11 @@ function getGmailClient() {
   const refreshToken = process.env.GMAIL_REFRESH_TOKEN;
 
   if (!clientId || !clientSecret || !refreshToken) {
-    console.warn("Gmail API credentials not configured. Skipping draft creation.");
+    console.warn("Gmail credentials missing:", {
+      hasClientId: !!clientId,
+      hasClientSecret: !!clientSecret,
+      hasRefreshToken: !!refreshToken,
+    });
     return null;
   }
 
@@ -31,7 +35,8 @@ export async function createShareDraft({
   recipient?: string;
 }) {
   const gmail = getGmailClient();
-  if (!gmail || !recipient) return null;
+  if (!gmail) { console.warn("Gmail client not available"); return null; }
+  if (!recipient) { console.warn("No recipient configured (SHARE_EMAIL_TO)"); return null; }
 
   const subject = `[SL Steel 블로그] ${title}`;
   const body = [
