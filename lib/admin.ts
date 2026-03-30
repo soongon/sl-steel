@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { createSupabaseAdmin, createSupabaseServer } from "./supabase-server";
 import { VALID_POST_STATUSES, type PostStatus } from "./types";
+import { createShareDraft } from "./gmail";
 
 export interface AdminPost {
   id: string;
@@ -269,6 +271,23 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
   if (error) {
     console.error("Share token generation error:", error.message);
     throw new Error("공유 링크 생성에 실패했습니다.");
+  }
+
+  // 포스트 제목 조회 + Gmail 임시보관함 생성
+  const { data: post } = await admin
+    .from("posts")
+    .select("title")
+    .eq("id", postId)
+    .single();
+
+  if (post?.title) {
+    const headerStore = await headers();
+    const host = headerStore.get("host") || "localhost:3000";
+    const protocol = host.startsWith("localhost") ? "http" : "https";
+    const shareUrl = `${protocol}://${host}/share/${token}`;
+
+    // 실패해도 공유 링크 생성 자체는 성공 처리
+    createShareDraft({ title: post.title, shareUrl }).catch(() => {});
   }
 
   revalidatePath("/admin");
