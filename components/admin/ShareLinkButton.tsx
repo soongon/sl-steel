@@ -84,7 +84,7 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
           onClick={handleCopy}
           className="rounded-lg border border-accent/30 bg-accent/5 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/10"
         >
-          {copied ? "복사됨!" : "공유 링크 복사"}
+          {copied ? "복사됨!" : "링크 다시보내기"}
         </button>
         <span className="text-xs text-muted">
           만료: {formatDate(expires ?? "")}
