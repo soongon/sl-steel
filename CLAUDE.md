@@ -71,7 +71,7 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 - `lib/share-utils.ts` — MDX→텍스트 변환, 미디어 추출, Cloudinary 다운로드 URL 생성
 - `lib/mdx-components.tsx` — MDX 커스텀 컴포넌트 (video 등), 블로그 + 어드민 미리보기 공유
 - `lib/site.ts` — 랜딩 페이지 copy/data (SITE constant, 전화번호 single source of truth)
-- `lib/ui.ts` — shared Tailwind class tokens (landing page only), COLOR 상수 (SVG prop 용)
+- `lib/ui.ts` — shared Tailwind class tokens + `COLOR` 상수 (landing page only)
 - `lib/scroll.ts` — `scrollToContact(type)` for CTA navigation
 - `app/globals.css` — design tokens (`@theme`) + `.blog-content` MDX prose styles (img + video)
 
@@ -101,14 +101,37 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 
 마이그레이션 SQL: `supabase/migrations/`
 
-## Design tokens
+## Design tokens (v2)
 
-All colors defined in `globals.css` `@theme` block. Key values:
-- `primary-600` — Steel Blue (#2C5F8A), 메인 브랜드
-- `accent-600` — Industrial Orange (#D4700E), CTA
-- `primary-900` — 다크 섹션 (#0F2640)
-- `neutral-50` — 교차 배경 (#F7F6F3)
-- 호환 레이어: `accent`, `accent-dark`, `surface`, `foreground`, `muted`, `steel`, `border`, `card`
+All colors defined in `globals.css` `@theme` block. `--color-neutral-*: initial`로 Tailwind 기본 neutral 리셋 후 커스텀 정의.
+
+### 핵심 컬러
+| 토큰 | Hex | 용도 |
+|------|-----|------|
+| primary-600 | #2C5F8A | 메인 브랜드 Steel Blue |
+| primary-900 | #0F2640 | 다크 섹션 배경 (Hero, Why) |
+| accent-600 | #D4700E | CTA 버튼 Industrial Orange |
+| accent-400 | #F28C28 | 강조, 하이라이트 |
+| neutral-50 | #F7F6F3 | 교차 섹션 배경 (Warm Gray) |
+| neutral-900 | #1E1C18 | 제목 텍스트 |
+
+### 호환 레이어 (레거시)
+- `accent` / `accent-dark` — Steel Blue 계열로 재매핑됨 (구 파란색 아님)
+- `brand-navy`, `surface`, `foreground`, `muted`, `steel`, `border`, `card` — 유지
+
+### SVG/인라인 색상
+Tailwind class 사용 불가한 곳(SVG prop 등)은 `lib/ui.ts`의 `COLOR` 상수 사용:
+```ts
+import { COLOR } from "@/lib/ui";
+// COLOR.primary600, COLOR.primary400, COLOR.primary900, COLOR.accent600, COLOR.neutral50, COLOR.white
+```
+
+### ui 토큰 (lib/ui.ts)
+- `ui.label` / `ui.labelDark` — 섹션 라벨 (밝은/다크 배경)
+- `ui.title` / `ui.titleDark` — 섹션 타이틀
+- `ui.desc` / `ui.descDark` — 섹션 설명
+- `ui.btn.primary` / `ui.btn.secondary` — 버튼 스타일
+- `ui.card`, `ui.cardPad`, `ui.chip` — 카드/칩 컴포넌트
 
 ## Media conventions
 
@@ -174,6 +197,7 @@ All colors defined in `globals.css` `@theme` block. Key values:
 ### Tailwind v4 주의
 - 그라데이션: `bg-linear-to-t` (v3의 `bg-gradient-to-t` 아님)
 - @theme 정의 후 `bg-primary-600`, `text-accent-400` 등으로 직접 사용
+- `--color-neutral-*: initial` 필수 — 없으면 Tailwind 기본 neutral 팔레트가 커스텀 값 덮어씀
 - 기존 토큰명(accent, surface 등) 호환 레이어 유지할 것
 
 ### 프로토타입 참조
