@@ -287,9 +287,11 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
     const shareUrl = `${protocol}://${host}/share/${token}`;
 
     // 실패해도 공유 링크 생성 자체는 성공 처리
-    createShareDraft({ title: post.title, shareUrl }).catch((err) => {
+    try {
+      await createShareDraft({ title: post.title, shareUrl });
+    } catch (err) {
       console.error("Draft creation failed in generateShareToken:", err);
-    });
+    }
   }
 
   revalidatePath("/admin");
