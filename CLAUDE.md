@@ -64,7 +64,8 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 - `lib/supabase.ts` — Supabase client (env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
 - `lib/supabase-server.ts` — `createSupabaseServer()` (cookie auth) + `createSupabaseAdmin()` (service role), `requireEnv()` 런타임 검증
 - `lib/blog.ts` — async 블로그 데이터 함수 (Supabase 쿼리)
-- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost, generateShareToken)
+- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost, generateShareToken, sendShareDraft)
+- `lib/gmail.ts` — Gmail API OAuth2 드래프트 생성 (공유 링크 → 임시보관함)
 - `lib/inquiries.ts` — 문의 제출/조회/상태 변경 server actions
 - `lib/types.ts` — 공유 타입(`PostStatus`, `InquiryStatus`), 상수, 유틸(`formatDate`, `isVideoUrl`, `extractFilename`)
 - `lib/share.ts` — 공유 링크 토큰 조회 (만료/미존재 구분)
@@ -81,7 +82,8 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 |--------|------|----------|
 | Supabase | 블로그 DB + RLS | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
 | Cloudinary | 이미지·동영상 CDN | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` |
-| Vercel | 배포 (예정) | — |
+| Gmail API | 공유 링크 드래프트 발송 | `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`, `SHARE_EMAIL_TO` |
+| Vercel | 배포 | — |
 
 ## DB schema
 
@@ -154,6 +156,44 @@ import { COLOR } from "@/lib/ui";
 - 환경변수 미설정 시 `requireEnv()`가 명확한 에러 메시지 출력
 - API route 보안: `/api/admin/preview`는 Supabase 세션 인증, `/api/admin/posts`는 Bearer 토큰
 - middleware matcher: `/admin/:path*` + `/api/admin/*` (posts 제외) 보호
+
+## Admin 기능
+
+### 관리자 페이지 (`/admin`)
+- Supabase Auth 기반 로그인 (`/admin/login`)
+- 블로그 포스트 CRUD (목록, 새 포스트, 수정, 삭제)
+- 빠른 등록 (`/admin/quick-post`) — Claude.ai JSON 붙여넣기 → 초안 저장
+- 문의 관리 (`/admin/inquiries`) — 상태 변경 (new → read → resolved)
+- 대시보드 레이아웃: AdminNav + 새 문의 카운트 배지
+
+### 공유 링크 + Gmail 연동
+- 포스트 수정 페이지에서 "공유 링크 생성" → UUID 토큰 발급 (7일 만료)
+- "링크 다시보내기" → 클립보드 복사 + Gmail 임시보관함에 드래프트 자동 생성
+- 포스트 목록에 공유 상태 배지 (파란색=유효, 회색=만료)
+- 수신자 변경: Vercel `SHARE_EMAIL_TO` 환경변수만 수정
+- Gmail OAuth: 앱 게시(프로덕션) 상태 → Refresh Token 만료 없음
+
+### 서버 액션 에러 처리 패턴
+- 모든 서버 액션(createPost, updatePost, deletePost)은 `{ error?: string }` 반환
+- throw 사용 안 함 (Next.js 프로덕션에서 에러 메시지가 숨겨지므로)
+- 클라이언트에서 `result?.error` 체크 후 UI에 표시
+
+### 파일 구조
+```
+lib/admin.ts          — 포스트 CRUD + 공유 링크 서버 액션
+lib/gmail.ts          — Gmail API 드래프트 생성
+lib/inquiries.ts      — 문의 서버 액션
+lib/types.ts          — PostStatus, InquiryStatus 타입/상수
+components/admin/
+  ├─ Toast.tsx         — 재사용 토스트 (success/error/info)
+  ├─ StatusBadge.tsx   — 발행/초안 + 공유 상태 배지
+  ├─ ShareLinkButton.tsx — 공유 링크 생성/복사/드래프트
+  ├─ PostForm.tsx      — 포스트 생성/수정 폼
+  ├─ QuickPostForm.tsx — 빠른 등록 (JSON 파싱)
+  ├─ DeleteButton.tsx  — 삭제 확인
+  ├─ AdminNav.tsx      — 관리자 네비게이션
+  └─ MultiImageUpload.tsx — Cloudinary 멀티 업로드
+```
 
 
 ## 🎨 디자인시스템 리뉴얼 (v2)

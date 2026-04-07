@@ -35,8 +35,14 @@ export async function createShareDraft({
   recipient?: string;
 }) {
   const gmail = getGmailClient();
-  if (!gmail) { console.warn("Gmail client not available"); return null; }
-  if (!recipient) { console.warn("No recipient configured (SHARE_EMAIL_TO)"); return null; }
+  if (!gmail) {
+    console.warn("Gmail client not available");
+    return null;
+  }
+  if (!recipient) {
+    console.warn("No recipient configured (SHARE_EMAIL_TO)");
+    return null;
+  }
 
   const subject = `[SL Steel 블로그] ${title}`;
   const body = [

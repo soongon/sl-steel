@@ -18,7 +18,12 @@ export default function DeleteButton({ postId, postTitle }: Props) {
 
     setDeleting(true);
     try {
-      await deletePost(postId);
+      const result = await deletePost(postId);
+      if (result?.error) {
+        alert(result.error);
+        setDeleting(false);
+        return;
+      }
       router.refresh();
     } catch {
       alert("삭제에 실패했습니다.");

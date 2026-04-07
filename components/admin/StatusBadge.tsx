@@ -1,5 +1,7 @@
+import type { PostStatus } from "@/lib/types";
+
 interface Props {
-  status: string;
+  status: PostStatus;
   shareToken?: string | null;
   shareExpiresAt?: string | null;
 }

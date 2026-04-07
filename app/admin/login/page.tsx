@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
-          <SLSteelLogo size={40} fill="#3B82F6" gap="#F1F5F9" />
+          <SLSteelLogo size={40} />
           <h1 className="text-lg font-bold text-foreground">관리자 로그인</h1>
         </div>
 
