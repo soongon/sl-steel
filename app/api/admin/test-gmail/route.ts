@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createShareDraft } from "@/lib/gmail";
+import { google } from "googleapis";
 
 export async function GET() {
   const envCheck = {
@@ -9,18 +9,39 @@ export async function GET() {
     SHARE_EMAIL_TO: process.env.SHARE_EMAIL_TO || "(not set)",
   };
 
-  console.log("Gmail env check:", envCheck);
-
   try {
-    const draftId = await createShareDraft({
-      title: "테스트 포스트",
-      shareUrl: "https://example.com/share/test-token",
+    const oauth2 = new google.auth.OAuth2(
+      process.env.GMAIL_CLIENT_ID,
+      process.env.GMAIL_CLIENT_SECRET
+    );
+    oauth2.setCredentials({ refresh_token: process.env.GMAIL_REFRESH_TOKEN });
+
+    const gmail = google.gmail({ version: "v1", auth: oauth2 });
+
+    const subject = "[SL Steel] 테스트";
+    const message = [
+      `To: ${process.env.SHARE_EMAIL_TO}`,
+      `Subject: =?UTF-8?B?${Buffer.from(subject).toString("base64")}?=`,
+      `Content-Type: text/plain; charset=UTF-8`,
+      ``,
+      `Gmail API 연동 테스트입니다.`,
+    ].join("\r\n");
+
+    const raw = Buffer.from(message)
+      .toString("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+
+    const res = await gmail.users.drafts.create({
+      userId: "me",
+      requestBody: { message: { raw } },
     });
 
-    return NextResponse.json({ status: "ok", draftId, envCheck });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("Gmail test failed:", message);
-    return NextResponse.json({ status: "error", error: message, envCheck }, { status: 500 });
+    return NextResponse.json({ status: "ok", draftId: res.data.id, envCheck });
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err.message : String(err);
+    const details = (err as { response?: { data?: unknown } })?.response?.data;
+    return NextResponse.json({ status: "error", error, details, envCheck }, { status: 500 });
   }
 }
