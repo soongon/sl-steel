@@ -22,8 +22,14 @@ export default function Footer() {
         <div className="py-8 sm:hidden">
           <a href="#top" className="flex items-center gap-2.5" aria-label="SL Steel 홈으로">
             <SLSteelLogo size={28} fill={COLOR.primary600} gap={COLOR.neutral50} />
-            <span className="text-base font-bold tracking-tight text-neutral-900">
-              <span className="text-primary-600">SL</span>{" 철강"}
+            <span className="flex flex-col">
+              <span className="text-base font-black leading-none tracking-tight text-neutral-900">
+                <span className="font-condensed text-[1.12em] tracking-[0.07em] mr-[3px] text-primary-600">SL</span>
+                철강
+              </span>
+              <span className="mt-[3px] text-[7.5px] font-bold uppercase leading-none tracking-[0.28em] text-neutral-400">
+                Steel &amp; Rebar
+              </span>
             </span>
           </a>
 
