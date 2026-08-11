@@ -49,7 +49,7 @@ export default function Header() {
             aria-label="신라철강 홈으로"
             className="flex shrink-0 items-center"
           >
-            <Logo white={!scrolled} withEn />
+            <Logo white={!scrolled} withEn size="lg" />
           </a>
 
           {/* ── 데스크톱 네비게이션 ── */}
@@ -113,7 +113,7 @@ export default function Header() {
           {/* 상단 바 */}
           <div className="flex h-[72px] items-center justify-between px-5">
             <a href="#top" className="flex items-center" onClick={() => setMobileOpen(false)}>
-              <Logo white withEn />
+              <Logo white withEn size="lg" />
             </a>
             <button
               type="button"

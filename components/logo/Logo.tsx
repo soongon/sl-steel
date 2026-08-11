@@ -20,18 +20,32 @@ export function LogoSymbol({ className = "h-8 w-auto", white = false }: { classN
   );
 }
 
-export function Logo({ white = false, withEn = false }: { white?: boolean; withEn?: boolean }) {
+const LOGO_SIZES = {
+  md: { symbol: "h-[30px]", text: "text-[17px]", en: "mt-1 text-[9px]" },
+  lg: { symbol: "h-[38px]", text: "text-[21px]", en: "mt-1.5 text-[11px]" },
+} as const;
+
+export function Logo({
+  white = false,
+  withEn = false,
+  size = "md",
+}: {
+  white?: boolean;
+  withEn?: boolean;
+  size?: keyof typeof LOGO_SIZES;
+}) {
+  const s = LOGO_SIZES[size];
   return (
-    <span className="inline-flex items-center gap-2.5">
-      <LogoSymbol className="h-[30px] w-auto" white={white} />
+    <span className={`inline-flex items-center ${size === "lg" ? "gap-3" : "gap-2.5"}`}>
+      <LogoSymbol className={`${s.symbol} w-auto`} white={white} />
       <span className="flex flex-col leading-none">
         <span
-          className={`text-[17px] font-bold tracking-[0.12em] ${white ? "text-white" : "text-brand-steel-900"}`}
+          className={`${s.text} font-bold tracking-[0.12em] ${white ? "text-white" : "text-brand-steel-900"}`}
         >
           신라철강
         </span>
         {withEn && (
-          <span className={`mt-1 text-[9px] font-semibold tracking-[0.46em] ${white ? "text-[#9FB0C2]" : "text-[#66707C]"}`}>
+          <span className={`${s.en} font-semibold tracking-[0.46em] ${white ? "text-[#9FB0C2]" : "text-[#66707C]"}`}>
             SILLA STEEL
           </span>
         )}
