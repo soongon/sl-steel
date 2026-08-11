@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 리브랜딩 DB 백업 (포스트 원문 포함)
+scripts/rebrand-backup-*.json
