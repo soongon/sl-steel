@@ -40,6 +40,11 @@
   --color-success: #1D9E75;
   --color-danger:  #D93025;
 
+  /* === 신라철강 브랜드 (로고 전용 — 버튼·링크 등에 남용 금지) === */
+  --color-brand-steel-700: #1B3A5C;  /* 심볼·주조색 */
+  --color-brand-steel-900: #0F1B29;  /* 워드마크 텍스트·다크 배경 */
+  --color-brand-gold:      #C9A227;  /* 로고 곡옥 포인트 전용 */
+
   /* === 기존 토큰 호환 (블로그 등에서 참조) === */
   --color-accent:      #2C5F8A;
   --color-accent-dark: #1A3D5C;
@@ -59,9 +64,6 @@
 
   /* 헤딩 전용 디스플레이 세리프 (next/font 변수 참조) */
   --font-display: var(--font-noto-serif), "Noto Serif KR", Georgia, serif;
-
-  /* 산업용 압축 볼드 — 로고 영문 전용 */
-  --font-condensed: var(--font-bebas-neue), "Bebas Neue", Impact, sans-serif;
 
   /* === Radius === */
   --radius-sm: 4px;

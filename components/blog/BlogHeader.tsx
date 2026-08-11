@@ -11,7 +11,7 @@ export default function BlogHeader({ categories, activeCategory }: BlogHeaderPro
       <div className="mx-auto max-w-6xl px-6">
         {/* Title */}
         <div className="pt-6 pb-4">
-          <h1 className="text-xl font-bold text-foreground">SL Steel 블로그</h1>
+          <h1 className="text-xl font-bold text-foreground">신라철강 블로그</h1>
           <p className="mt-1 text-sm text-muted">철근 매입·납품 현장 실무 정보</p>
         </div>
 

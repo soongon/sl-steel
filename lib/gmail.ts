@@ -44,7 +44,7 @@ export async function createShareDraft({
     return null;
   }
 
-  const subject = `[SL Steel 블로그] ${title}`;
+  const subject = `[신라철강 블로그] ${title}`;
   const body = [
     `블로그 포스트가 공유되었습니다.`,
     ``,

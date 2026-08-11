@@ -24,7 +24,7 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
   return {
-    title: `${post.title} | SL Steel 블로그`,
+    title: `${post.title} | 신라철강 블로그`,
     description: post.excerpt,
   };
 }

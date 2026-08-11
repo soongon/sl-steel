@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const metadata: Metadata = {
-  title: "공유 콘텐츠 | SL Steel",
+  title: "공유 콘텐츠 | 신라철강",
   robots: { index: false, follow: false },
 };
 

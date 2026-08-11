@@ -74,7 +74,7 @@ export default function SharePageClient({ title, parsed }: Props) {
       <div className="mx-auto max-w-3xl px-4">
         {/* 헤더 */}
         <div className="mb-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted">SL Steel 콘텐츠 공유</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted">신라철강 콘텐츠 공유</p>
         </div>
 
         {/* 제목 */}

@@ -2,28 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { SITE } from "@/lib/site";
-import { ui, COLOR } from "@/lib/ui";
+import { ui } from "@/lib/ui";
 import { scrollToContact } from "@/lib/scroll";
-import SLSteelLogo from "@/components/logo/SLSteelLogo";
-
-function LogoBrand({ fill, gap, textClass, slClass, subClass }: {
-  fill: string; gap: string; textClass: string; slClass: string; subClass: string;
-}) {
-  return (
-    <>
-      <SLSteelLogo size={38} fill={fill} gap={gap} />
-      <span className="flex flex-col justify-center">
-        <span className={`text-[1.35rem] font-black leading-none transition-colors ${textClass}`}>
-          <span className={`font-condensed text-[1.12em] tracking-[0.07em] mr-[4px] ${slClass}`}>SL</span>
-          <span className="tracking-[-0.01em]">철강</span>
-        </span>
-        <span className={`mt-[5px] text-[8.5px] font-bold uppercase leading-none tracking-[0.3em] transition-colors ${subClass}`}>
-          Steel &amp; Rebar
-        </span>
-      </span>
-    </>
-  );
-}
+import Logo from "@/components/logo/Logo";
 
 const NAV_LINKS = [
   { label: "회사소개", href: "#about" },
@@ -65,16 +46,10 @@ export default function Header() {
           {/* ── 로고 ── */}
           <a
             href="#top"
-            aria-label="SL Steel 홈으로"
-            className="flex shrink-0 items-center gap-3"
+            aria-label="신라철강 홈으로"
+            className="flex shrink-0 items-center"
           >
-            <LogoBrand
-              fill={scrolled ? COLOR.primary600 : COLOR.primary400}
-              gap={scrolled ? COLOR.white : COLOR.primary900}
-              textClass={scrolled ? "text-neutral-900" : "text-white"}
-              slClass={scrolled ? "text-primary-600" : "text-primary-400"}
-              subClass={scrolled ? "text-neutral-400" : "text-white/45"}
-            />
+            <Logo white={!scrolled} withEn />
           </a>
 
           {/* ── 데스크톱 네비게이션 ── */}
@@ -137,14 +112,8 @@ export default function Header() {
         <div className="fixed inset-0 z-[60] bg-primary-900 flex flex-col md:hidden">
           {/* 상단 바 */}
           <div className="flex h-[72px] items-center justify-between px-5">
-            <a href="#top" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-              <LogoBrand
-                fill={COLOR.primary400}
-                gap={COLOR.primary900}
-                textClass="text-white"
-                slClass="text-primary-400"
-                subClass="text-white/45"
-              />
+            <a href="#top" className="flex items-center" onClick={() => setMobileOpen(false)}>
+              <Logo white withEn />
             </a>
             <button
               type="button"

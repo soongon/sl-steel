@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowser } from "@/lib/supabase-browser";
-import SLSteelLogo from "@/components/logo/SLSteelLogo";
+import { LogoSymbol } from "@/components/logo/Logo";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
-          <SLSteelLogo size={40} />
+          <LogoSymbol className="h-10 w-auto" />
           <h1 className="text-lg font-bold text-foreground">관리자 로그인</h1>
         </div>
 

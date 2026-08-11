@@ -16,7 +16,7 @@ export default function AboutSection() {
           <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl">
             <Image
               src="/images/workers-on-site.jpg"
-              alt="SL Steel 현장 작업 모습"
+              alt="신라철강 현장 작업 모습"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 38vw"

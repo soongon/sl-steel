@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowser } from "@/lib/supabase-browser";
-import SLSteelLogo from "@/components/logo/SLSteelLogo";
+import Logo from "@/components/logo/Logo";
 
 interface Props {
   newInquiryCount?: number;
@@ -24,8 +24,8 @@ export default function AdminNav({ newInquiryCount = 0 }: Props) {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <div className="flex items-center gap-4">
           <Link href="/admin" className="flex items-center gap-2.5">
-            <SLSteelLogo size={28} fill="#3B82F6" gap="#ffffff" />
-            <span className="font-semibold text-foreground">SL Steel</span>
+            <Logo />
+            <span className="text-sm text-steel">관리자</span>
           </Link>
           <Link
             href="/admin"

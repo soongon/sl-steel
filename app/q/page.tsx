@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import SLSteelLogo from "@/components/logo/SLSteelLogo";
+import { LogoSymbol } from "@/components/logo/Logo";
 import { SITE } from "@/lib/site";
-import { COLOR } from "@/lib/ui";
 
 export const metadata: Metadata = {
   title: "신라철강 QR 문의 | 철근 납품·잔여 철근 수거",
@@ -222,10 +221,10 @@ export default async function QRLandingPage({ searchParams }: QRPageProps) {
           <div className="relative z-10">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2.5">
-                <SLSteelLogo size={34} fill={COLOR.primary400} gap={COLOR.primary900} />
+                <LogoSymbol className="h-[34px] w-auto" white />
                 <div className="leading-none">
                   <p className="text-[15px] font-black">신라철강</p>
-                  <p className="mt-1 text-[10px] font-bold uppercase text-white/50">Steel supply and recovery</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">Silla Steel</p>
                 </div>
               </div>
               <a

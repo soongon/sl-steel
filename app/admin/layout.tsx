@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "관리자 | SL Steel",
+  title: "관리자 | 신라철강",
   robots: { index: false, follow: false },
 };
 

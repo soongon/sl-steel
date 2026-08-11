@@ -13,13 +13,13 @@ export type InquiryType = (typeof INQUIRY_TYPES)[number];
 export const SITE = {
   // 브랜드
   brand: {
-    en: "SL Steel",
-    ko: "SL 철강",
+    en: "Silla Steel",
+    ko: "신라철강",
   },
 
   // SEO 메타
   seo: {
-    title: "SL Steel | 현장 철근 전문 매입",
+    title: "신라철강 | 현장 철근 전문 매입",
     description:
       "녹 발생 철근·4m 이상 절단 철근 합리적 매입. 경북 경주 기반 현장 직수거.",
   },
@@ -28,7 +28,7 @@ export const SITE = {
   hero: {
     h1: "공사 후 남은 철근, 최고가로 매입합니다",
     subcopy:
-      "녹이 슬었거나 절단된 철근도 명확한 기준으로 현장에서 직접 수거합니다.\n공사 후 남은 철근의 가치를 SL Steel이 연결합니다.",
+      "녹이 슬었거나 절단된 철근도 명확한 기준으로 현장에서 직접 수거합니다.\n공사 후 남은 철근의 가치를 신라철강이 연결합니다.",
     badges: ["대형 창고", "야적장", "5톤·25톤 크레인 카고 트럭"] as const,
     cta: {
       primary: "매입 문의" as InquiryType,
@@ -54,8 +54,8 @@ export const SITE = {
 
   // About 섹션
   about: {
-    title: "공사 후 현장에 남은 철근, SL Steel이 가져갑니다",
-    body: "공사 후 현장에 남은 녹슨 철근이나 작업 중 절단된 철근은 일반적으로 처리가 어렵습니다.\nSL Steel은 이러한 공사 후 남은 철근을 최고가에 직접 매입·수거합니다.",
+    title: "공사 후 현장에 남은 철근, 신라철강이 가져갑니다",
+    body: "공사 후 현장에 남은 녹슨 철근이나 작업 중 절단된 철근은 일반적으로 처리가 어렵습니다.\n신라철강은 이러한 공사 후 남은 철근을 최고가에 직접 매입·수거합니다.",
     steps: [
       { label: "전화 한 통",  sub: "연락 즉시 상담" },
       { label: "현장 직방문", sub: "트럭 직접 출동" },

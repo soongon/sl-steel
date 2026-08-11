@@ -3,9 +3,9 @@ import { SITE } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
 const SYSTEM_IMAGES = [
-  { src: "/images/warehouse-rebar.jpg", alt: "SL Steel 창고 내부 철근 재고" },
-  { src: "/images/facility-yard.jpg", alt: "SL Steel 야적장 전경" },
-  { src: "/images/facility-truck-wide.jpg", alt: "SL Steel 크레인 카고 트럭" },
+  { src: "/images/warehouse-rebar.jpg", alt: "신라철강 창고 내부 철근 재고" },
+  { src: "/images/facility-yard.jpg", alt: "신라철강 야적장 전경" },
+  { src: "/images/facility-truck-wide.jpg", alt: "신라철강 크레인 카고 트럭" },
 ];
 
 export default function SystemSection() {
