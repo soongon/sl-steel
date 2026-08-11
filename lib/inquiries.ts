@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { supabase } from "./supabase";
-import { createSupabaseAdmin, createSupabaseServer } from "./supabase-server";
+import { createSupabaseAdmin, requireAuth } from "./supabase-server";
 import { VALID_INQUIRY_STATUSES, type InquiryStatus } from "./types";
 
 export interface Inquiry {
@@ -57,6 +57,8 @@ export async function submitInquiry(formData: FormData) {
 // ── 관리자: 문의 목록 ───────────────────────────────────────────────
 
 export async function getInquiries(): Promise<Inquiry[]> {
+  await requireAuth();
+
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("inquiries")
@@ -70,6 +72,8 @@ export async function getInquiries(): Promise<Inquiry[]> {
 // ── 관리자: 문의 단건 ───────────────────────────────────────────────
 
 export async function getInquiry(id: string): Promise<Inquiry | null> {
+  await requireAuth();
+
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("inquiries")
@@ -88,9 +92,7 @@ export async function updateInquiryStatus(id: string, status: string) {
     throw new Error("잘못된 상태값입니다.");
   }
 
-  const serverSupabase = await createSupabaseServer();
-  const { data: { user } } = await serverSupabase.auth.getUser();
-  if (!user) throw new Error("Unauthorized");
+  await requireAuth();
 
   const admin = createSupabaseAdmin();
   const { error } = await admin
@@ -110,6 +112,8 @@ export async function updateInquiryStatus(id: string, status: string) {
 // ── 관리자: 새 문의 개수 ────────────────────────────────────────────
 
 export async function getNewInquiryCount(): Promise<number> {
+  await requireAuth();
+
   const admin = createSupabaseAdmin();
   const { count, error } = await admin
     .from("inquiries")

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { createSupabaseAdmin, createSupabaseServer } from "./supabase-server";
+import { createSupabaseAdmin, requireAuth } from "./supabase-server";
 import { VALID_POST_STATUSES, type PostStatus } from "./types";
 import { createShareDraft } from "./gmail";
 
@@ -38,15 +38,6 @@ interface PostData {
   thumbnail_url: string | null;
   status: PostStatus;
   published_at: string | null;
-}
-
-// ── 인증 헬퍼 ─────────────────────────────────────────────────────────
-
-async function requireAuth() {
-  const supabase = await createSupabaseServer();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("로그인이 필요합니다.");
-  return user;
 }
 
 // ── 유효성 검사 헬퍼 ─────────────────────────────────────────────────
@@ -115,6 +106,7 @@ const POST_COLUMNS = "id, slug, title, categories, excerpt, content, thumbnail_u
 // ── 조회 ──────────────────────────────────────────────────────────────
 
 export async function getAdminPosts(): Promise<AdminPost[]> {
+  await requireAuth();
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("posts")
@@ -126,6 +118,7 @@ export async function getAdminPosts(): Promise<AdminPost[]> {
 }
 
 export async function getAdminPost(id: string): Promise<AdminPost | null> {
+  await requireAuth();
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("posts")
@@ -138,6 +131,7 @@ export async function getAdminPost(id: string): Promise<AdminPost | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
+  await requireAuth();
   const admin = createSupabaseAdmin();
   const { data, error } = await admin
     .from("categories")

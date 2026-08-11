@@ -25,7 +25,7 @@ Node.js >=20.9.0 required. No test runner is configured.
 
 ## Architecture
 
-Two completely separate sections with independent layouts:
+Independent sections with separate layouts (landing / blog / admin / share / QR):
 
 ### Landing page — `app/(landing)/`
 - `app/(landing)/layout.tsx` — wraps with `<Header>` + `<Footer>`
@@ -45,6 +45,17 @@ Two completely separate sections with independent layouts:
 - `lib/share.ts` — `getShareData(token)` 토큰 조회 (만료/미존재 구분)
 - `lib/share-utils.ts` — MDX→순수텍스트 변환, 미디어 추출, 파일명 매핑, 다운로드 URL
 
+### Admin — `app/admin/`
+- `app/admin/login/page.tsx` — Supabase Auth 이메일/비밀번호 로그인
+- `app/admin/(dashboard)/` — AdminNav 레이아웃, `force-dynamic` (포스트 목록 + 문의 관리)
+- `app/admin/posts/new`, `app/admin/posts/[id]/edit` — 포스트 작성/수정 (+공유 링크 버튼)
+- `app/admin/quick-post` — Claude.ai JSON 붙여넣기 → draft 저장
+
+### QR 랜딩 — `app/q/`
+- `app/q/page.tsx` — QR 코드 전용 모바일 랜딩 (명함·차량·전단·현장), root layout만 사용
+- `?src=card|truck|flyer|site` 유입 경로 구분 — 화이트리스트 정규화, SMS 본문에 `(명함 QR)` 식으로 반영 (전화 문의는 유입 경로 미기록)
+- `robots: noindex`, `tel:`/`sms:` CTA, max-w-[430px] 모바일 퍼스트, 자체 하단 고정 CTA 바
+
 ### Data flow
 ```
 Supabase DB (posts/categories)
@@ -62,11 +73,12 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 
 ### Shared libraries
 - `lib/supabase.ts` — Supabase client (env vars: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
-- `lib/supabase-server.ts` — `createSupabaseServer()` (cookie auth) + `createSupabaseAdmin()` (service role), `requireEnv()` 런타임 검증
+- `lib/supabase-server.ts` — `createSupabaseServer()` (cookie auth) + `createSupabaseAdmin()` (service role), `requireEnv()` 런타임 검증, `requireAuth()` 관리자 인증 가드
+- `lib/supabase-browser.ts` — browser Supabase client (어드민 로그인용)
 - `lib/blog.ts` — async 블로그 데이터 함수 (Supabase 쿼리)
-- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost, generateShareToken, sendShareDraft)
+- `lib/admin.ts` — server actions for admin CRUD (createPost, updatePost, deletePost, generateShareToken, sendShareDraft) — 조회 포함 전 함수 `requireAuth()` 적용
 - `lib/gmail.ts` — Gmail API OAuth2 드래프트 생성 (공유 링크 → 임시보관함)
-- `lib/inquiries.ts` — 문의 제출/조회/상태 변경 server actions
+- `lib/inquiries.ts` — 문의 제출/조회/상태 변경 server actions (관리자 함수는 `requireAuth()` 적용)
 - `lib/types.ts` — 공유 타입(`PostStatus`, `InquiryStatus`), 상수, 유틸(`formatDate`, `isVideoUrl`, `extractFilename`)
 - `lib/share.ts` — 공유 링크 토큰 조회 (만료/미존재 구분)
 - `lib/share-utils.ts` — MDX→텍스트 변환, 미디어 추출, Cloudinary 다운로드 URL 생성
@@ -83,6 +95,7 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 | Supabase | 블로그 DB + RLS | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
 | Cloudinary | 이미지·동영상 CDN | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` |
 | Gmail API | 공유 링크 드래프트 발송 | `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`, `SHARE_EMAIL_TO` |
+| Admin API | `/api/admin/posts` Bearer 토큰 | `ADMIN_API_KEY` |
 | Vercel | 배포 | — |
 
 ## DB schema
@@ -155,6 +168,7 @@ import { COLOR } from "@/lib/ui";
 - 전화번호 변경 시 `lib/site.ts` SITE.footer.regions만 수정하면 전체 반영
 - 환경변수 미설정 시 `requireEnv()`가 명확한 에러 메시지 출력
 - API route 보안: `/api/admin/preview`는 Supabase 세션 인증, `/api/admin/posts`는 Bearer 토큰
+- server action 보안: `"use server"` export는 공개 엔드포인트 — 관리자 함수는 조회/변이 구분 없이 `requireAuth()` 호출 필수
 - middleware matcher: `/admin/:path*` + `/api/admin/*` (posts 제외) 보호
 
 ## Admin 기능
@@ -196,50 +210,12 @@ components/admin/
 ```
 
 
-## 🎨 디자인시스템 리뉴얼 (v2)
+## 🎨 디자인시스템 리뉴얼 (v2) — 완료
 
-### 리뉴얼 목표
-- 브랜드 신뢰감/전문성 강화 (Steel Blue + Industrial Orange)
-- 모바일 사용성 개선 (하단 고정 CTA, 모바일 퍼스트)
-- 디자인시스템 기반 토큰 + 핵심 컴포넌트 체계화
+랜딩 페이지 리뉴얼 완료됨 (Steel Blue + Industrial Orange, Pretendard 폰트, MobileCTABar 하단 고정 CTA, `@theme` 토큰 + `lib/ui.ts` 토큰).
+컬러 토큰은 위 "Design tokens" 섹션 참조. 리뉴얼 당시 참조 문서(`docs/DESIGN_SYSTEM_GUIDE.md`, `docs/sl-steel-redesign.html`)는 삭제되어 저장소에 없음.
 
-### 디자인 가이드 문서
-상세 스펙은 `docs/DESIGN_SYSTEM_GUIDE.md` 참조.
-이 문서에 컬러 팔레트, 타이포그래피, 컴포넌트 스펙, 작업 순서가 모두 정의되어 있다.
-
-### 리뉴얼 범위
-- ✅ `app/(landing)/` — 메인 랜딩 페이지 전체
-- ✅ `components/` (landing 관련) — 컴포넌트 리뉴얼
-- ✅ `lib/ui.ts` — Tailwind class 토큰 업데이트
-- ✅ `app/globals.css` — @theme 블록 토큰 추가
-- ✅ `app/layout.tsx` — 폰트 변경 (Geist → Pretendard)
-- ❌ `app/blog/` — 건드리지 말 것
-- ❌ `components/blog/` — 건드리지 말 것
-- ❌ `lib/blog.ts`, `lib/supabase.ts` — 건드리지 말 것
-
-### 핵심 컬러 토큰 (빠른 참조)
-| 토큰 | Hex | 용도 |
-|------|-----|------|
-| primary-600 | #2C5F8A | 메인 브랜드 (Steel Blue) |
-| primary-900 | #0F2640 | 다크 섹션 배경 |
-| accent-600 | #D4700E | CTA 버튼 (Industrial Orange) |
-| accent-400 | #F28C28 | 강조, 히어로 하이라이트 |
-| neutral-50 | #F7F6F3 | 교차 섹션 배경 |
-| neutral-900 | #1E1C18 | 제목 텍스트 |
-
-### 컴포넌트 변경 체크리스트
-작업 시 아래 순서대로 진행:
-1. `globals.css` @theme 토큰 → 2. `lib/ui.ts` 토큰 → 3. 폰트 교체
-4. Header/Nav → 5. Hero → 6. Stats → 7. About → 8. Services
-9. Criteria → 10. Process → 11. Infra → 12. Why → 13. Contact → 14. Footer
-15. 모바일 하단 CTA 바 (신규) → 16. build 검증
-
-### Tailwind v4 주의
-- 그라데이션: `bg-linear-to-t` (v3의 `bg-gradient-to-t` 아님)
-- @theme 정의 후 `bg-primary-600`, `text-accent-400` 등으로 직접 사용
+랜딩 디자인 변경 시 주의:
+- `app/blog/`, `components/blog/`, `lib/blog.ts`, `lib/supabase.ts` — 건드리지 말 것
 - `--color-neutral-*: initial` 필수 — 없으면 Tailwind 기본 neutral 팔레트가 커스텀 값 덮어씀
 - 기존 토큰명(accent, surface 등) 호환 레이어 유지할 것
-
-### 프로토타입 참조
-`docs/sl-steel-redesign.html` — 브라우저에서 열어서 리뉴얼 최종 형태 확인 가능.
-실제 구현은 이 HTML의 구조/스타일을 React 컴포넌트 + Tailwind로 변환하는 방식.

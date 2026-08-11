@@ -56,10 +56,16 @@ export function parseContentForShare(mdxContent: string): ParsedShareContent {
   return { plainText: text, images, videos };
 }
 
+/**
+ * Cloudinary 변환 세그먼트 판별: "키_값" 쌍의 콤마 목록 (예: f_auto,q_auto,w_800)
+ * 폴더(blog/)나 버전(v1234/) 세그먼트는 매칭하지 않는다.
+ */
+const TRANSFORM_SEGMENT = /\/upload\/[a-z]+_[^,/]+(?:,[a-z]+_[^,/]+)*\//;
+
 /** Cloudinary 다운로드 URL 생성 (fl_attachment + 최적화 제거) */
 export function getDownloadUrl(url: string): string {
   // 이미지: /upload/f_auto,q_auto,w_800/ → /upload/fl_attachment/
-  const replaced = url.replace(/\/upload\/[a-z_,0-9]+\//, "/upload/fl_attachment/");
+  const replaced = url.replace(TRANSFORM_SEGMENT, "/upload/fl_attachment/");
   if (replaced !== url) return replaced;
   // 동영상 등 변환 없는 경우: /upload/ → /upload/fl_attachment/
   return url.replace("/upload/", "/upload/fl_attachment/");
@@ -67,6 +73,6 @@ export function getDownloadUrl(url: string): string {
 
 /** ZIP용 원본 URL (최적화 파라미터 제거) */
 export function getOriginalUrl(url: string): string {
-  const cleaned = url.replace(/\/upload\/[a-z_,0-9]+\//, "/upload/");
+  const cleaned = url.replace(TRANSFORM_SEGMENT, "/upload/");
   return cleaned !== url ? cleaned : url;
 }

@@ -40,3 +40,15 @@ export function createSupabaseAdmin() {
   const serviceRoleKey = requireEnv("SUPABASE_SERVICE_ROLE_KEY");
   return createClient(supabaseUrl, serviceRoleKey);
 }
+
+/**
+ * 관리자 인증 확인. 미인증 시 throw.
+ * "use server" export는 공개 HTTP 엔드포인트가 되므로
+ * 관리자 전용 server action은 조회/변이 구분 없이 모두 이 함수를 호출해야 한다.
+ */
+export async function requireAuth() {
+  const supabase = await createSupabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("로그인이 필요합니다.");
+  return user;
+}
