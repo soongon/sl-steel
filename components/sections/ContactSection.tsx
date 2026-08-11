@@ -19,7 +19,7 @@ const inputBase =
   "h-12 w-full rounded-md border border-neutral-200 bg-neutral-50 px-4 text-base text-neutral-900 placeholder:text-neutral-400 outline-none transition-colors focus-visible:border-primary-600 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-primary-600/20";
 
 export default function ContactSection() {
-  const { email, kakao, regions } = SITE.footer;
+  const { email, kakao, naverPlace, regions } = SITE.footer;
   const { title, subtitle, fields, privacy } = SITE.contact;
 
   const [inquiryType, setInquiryType] = useState<InquiryType>(INQUIRY_TYPES[0]);
@@ -92,16 +92,32 @@ export default function ContactSection() {
               </div>
             </div>
 
-            {kakao && (
-              <div className="mt-4">
-                <a
-                  href={kakao}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-12 items-center gap-2 rounded-md bg-[#FEE500] px-6 text-base font-semibold text-[#3A1D1D] hover:opacity-90 transition-opacity"
-                >
-                  카카오로 문의하기
-                </a>
+            {(kakao || naverPlace) && (
+              <div className="mt-4 flex flex-wrap gap-3">
+                {kakao && (
+                  <a
+                    href={kakao}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-12 items-center gap-2 rounded-md bg-[#FEE500] px-6 text-base font-semibold text-[#3A1D1D] hover:opacity-90 transition-opacity"
+                  >
+                    카카오로 문의하기
+                  </a>
+                )}
+                {naverPlace && (
+                  <a
+                    href={naverPlace}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-12 items-center gap-2 rounded-md bg-[#03C75A] px-6 text-base font-semibold text-white hover:opacity-90 transition-opacity"
+                  >
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                      <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    네이버 플레이스
+                  </a>
+                )}
               </div>
             )}
 

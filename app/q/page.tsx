@@ -384,6 +384,16 @@ export default async function QRLandingPage({ searchParams }: QRPageProps) {
                 사진 문자
               </a>
             </div>
+            {SITE.footer.naverPlace && (
+              <a
+                href={SITE.footer.naverPlace}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 flex h-12 items-center justify-center gap-1.5 rounded-md border border-[#03C75A]/30 bg-white text-sm font-bold text-[#03C75A]"
+              >
+                네이버 플레이스에서 위치·리뷰 보기
+              </a>
+            )}
           </div>
         </section>
 

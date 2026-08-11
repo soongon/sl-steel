@@ -10,7 +10,7 @@ const QUICK_LINKS = [
 ] as const;
 
 export default function Footer() {
-  const { email, regions, tagline } = SITE.footer;
+  const { email, regions, tagline, naverPlace } = SITE.footer;
   const mainPhone = regions[0].phone;
   const hasContact = !!(mainPhone || email);
 
@@ -28,6 +28,17 @@ export default function Footer() {
             <span className="font-medium">{regions[0].name}</span>
             <span className="ml-2">{mainPhone}</span>
           </p>
+
+          {naverPlace && (
+            <a
+              href={naverPlace}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-xs font-medium text-[#03C75A] transition-opacity hover:opacity-70"
+            >
+              네이버 플레이스에서 보기 →
+            </a>
+          )}
 
           <div className="mt-4 flex items-center justify-between border-t border-neutral-200 pt-4">
             <p className="text-xs text-neutral-400">© {new Date().getFullYear()} {SITE.brand.en}</p>
@@ -91,6 +102,16 @@ export default function Footer() {
                   {email && (
                     <a href={`mailto:${email}`} className="block transition-colors hover:text-neutral-900">
                       {email}
+                    </a>
+                  )}
+                  {naverPlace && (
+                    <a
+                      href={naverPlace}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block font-medium text-[#03C75A] transition-opacity hover:opacity-70"
+                    >
+                      네이버 플레이스 →
                     </a>
                   )}
                 </address>

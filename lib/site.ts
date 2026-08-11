@@ -177,6 +177,7 @@ export const SITE = {
     tagline: "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
     email: "sl-steel@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력
+    naverPlace: "https://map.naver.com/p/entry/place/2050283327",
     regions: [
       { name: "대표 전화", phone: "010-9264-3336", coverage: "" },
       { name: "중부권",    phone: "010-5761-0400", coverage: "경기·강원·충청" },
