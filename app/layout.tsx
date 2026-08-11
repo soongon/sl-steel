@@ -13,12 +13,20 @@ const notoSerifKR = Noto_Serif_KR({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sl-steel.co.kr"),
   title: SITE.seo.title,
   description: SITE.seo.description,
   openGraph: {
     siteName: SITE.brand.ko,
     title: SITE.seo.title,
     description: SITE.seo.description,
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "신라철강 — 철근·H빔 납품, 잔여 철근 매입·수거" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.seo.title,
+    description: SITE.seo.description,
+    images: ["/og-image.png"],
   },
   icons: {
     icon: [
