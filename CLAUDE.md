@@ -191,7 +191,7 @@ import { COLOR } from "@/lib/ui";
 - Supabase Auth 기반 로그인 (`/admin/login`)
 - 블로그 포스트 CRUD (목록, 새 포스트, 수정, 삭제)
 - 빠른 등록 (`/admin/quick-post`) — Claude.ai JSON 붙여넣기 → 초안 저장
-- 모바일 포스팅 (`/admin/mobile-post`) — 사진+현장명만으로 AI가 글 생성 후 **자동 발행**. 카테고리는 BLOG_CATEGORIES enum으로 강제, slug 중복 시 -2 접미사, 누락된 이미지 마커는 마무리 섹션 앞에 자동 보충
+- 모바일 포스팅 (`/admin/mobile-post`) — 사진+현장명만으로 AI가 글 생성 후 **자동 발행** → 이어서 공유 토큰 발급 + Gmail 임시보관함 메일 자동 생성(실패해도 발행 유지, `draftCreated`로 UI 표시). 카테고리는 BLOG_CATEGORIES enum으로 강제, slug 중복 시 -2 접미사, 누락된 이미지 마커는 마무리 섹션 앞에 자동 보충
 - 문의 관리 (`/admin/inquiries`) — 상태 변경 (new → read → resolved)
 - 대시보드 레이아웃: AdminNav + 새 문의 카운트 배지
 

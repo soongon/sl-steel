@@ -9,6 +9,7 @@ import { isVideoUrl } from "./types";
 import { BLOG_CATEGORIES } from "./blog";
 import { replaceMediaMarkers } from "./media-markers";
 import { BLOG_SYSTEM_PROMPT, buildUserText } from "./blog-prompt";
+import { generateShareToken } from "./admin";
 
 // ── 결과 타입 ─────────────────────────────────────────────────────────
 
@@ -17,6 +18,8 @@ export interface GenerateResult {
   slug?: string;
   postId?: string;
   title?: string;
+  /** 지메일 임시보관함에 공유 메일이 생성됐는지 (발행은 성공해도 메일은 실패할 수 있음) */
+  draftCreated?: boolean;
 }
 
 // 사이트 카테고리 (BLOG_CATEGORIES에서 "전체" 제외)
@@ -167,7 +170,17 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
     revalidatePath("/blog");
     revalidatePath(`/blog/${slug}`);
     revalidatePath("/admin");
-    return { slug, postId: inserted.id, title: post.title };
+
+    // 5. 공유 링크 발급 + 지메일 임시보관함 메일 생성 (실패해도 발행은 유지)
+    let draftCreated = false;
+    try {
+      const share = await generateShareToken(inserted.id);
+      draftCreated = share.draftCreated;
+    } catch (shareErr) {
+      console.error("share/draft after publish failed:", shareErr);
+    }
+
+    return { slug, postId: inserted.id, title: post.title, draftCreated };
   } catch (err) {
     if (err instanceof Anthropic.RateLimitError) {
       return { error: "AI 사용량 한도에 걸렸습니다. 잠시 후 다시 시도해 주세요." };

@@ -65,6 +65,15 @@ export default function MobilePostForm() {
         <div className="text-4xl">✅</div>
         <p className="text-sm font-semibold text-foreground">블로그에 발행됐습니다</p>
         <p className="text-sm text-steel">{result.title}</p>
+        {result.draftCreated ? (
+          <p className="rounded-lg bg-surface px-3 py-2 text-xs text-steel">
+            ✉️ 지메일 임시보관함에 공유 메일이 생성됐습니다
+          </p>
+        ) : (
+          <p className="rounded-lg bg-surface px-3 py-2 text-xs text-steel">
+            ⚠️ 공유 메일 생성에 실패했습니다 — 수정 페이지의 &quot;링크 다시보내기&quot;로 재시도할 수 있습니다
+          </p>
+        )}
         <div className="flex flex-col gap-2">
           <Link
             href={`/blog/${result.slug}`}
