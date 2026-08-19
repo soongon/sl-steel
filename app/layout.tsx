@@ -12,8 +12,33 @@ const notoSerifKR = Noto_Serif_KR({
   preload: false,
 });
 
+const BASE_URL = "https://sl-steel.co.kr";
+
+// 검색엔진용 구조화 데이터 (LocalBusiness)
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: SITE.brand.ko,
+  alternateName: SITE.brand.en,
+  description: SITE.seo.description,
+  url: BASE_URL,
+  logo: `${BASE_URL}/brand/logo-symbol.svg`,
+  image: `${BASE_URL}/og-image.png`,
+  telephone: SITE.footer.regions[0].phone.replace(/^0/, "+82-"),
+  email: SITE.footer.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: SITE.footer.address.street,
+    addressLocality: SITE.footer.address.locality,
+    addressRegion: SITE.footer.address.region,
+    addressCountry: "KR",
+  },
+  areaServed: ["경상권", "전라권", "경기·강원", "충청권"],
+  sameAs: [SITE.footer.naverPlace],
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sl-steel.co.kr"),
+  metadataBase: new URL(BASE_URL),
   title: SITE.seo.title,
   description: SITE.seo.description,
   openGraph: {
@@ -51,6 +76,10 @@ export default function RootLayout({
           as="style"
           crossOrigin="anonymous"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className={notoSerifKR.variable}>

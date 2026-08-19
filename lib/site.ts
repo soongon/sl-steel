@@ -178,6 +178,12 @@ export const SITE = {
     email: "sl-steel@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력
     naverPlace: "https://map.naver.com/p/entry/place/2050283327",
+    address: {
+      street: "태종로 263-32",
+      locality: "경주시",
+      region: "경상북도",
+      full: "경북 경주시 태종로 263-32",
+    },
     regions: [
       { name: "대표 전화", phone: "010-9264-3336", coverage: "" },
       { name: "중부권",    phone: "010-5761-0400", coverage: "경기·강원·충청" },
