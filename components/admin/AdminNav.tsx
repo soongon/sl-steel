@@ -34,6 +34,12 @@ export default function AdminNav({ newInquiryCount = 0 }: Props) {
             블로그 관리
           </Link>
           <Link
+            href="/admin/mobile-post"
+            className="rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-steel transition-colors hover:bg-surface hover:text-foreground"
+          >
+            모바일 포스팅
+          </Link>
+          <Link
             href="/admin/inquiries"
             className="relative rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-steel transition-colors hover:bg-surface hover:text-foreground"
           >

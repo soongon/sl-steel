@@ -59,6 +59,7 @@ Independent sections with separate layouts (landing / blog / admin / share / QR)
 - `app/admin/(dashboard)/` — AdminNav 레이아웃, `force-dynamic` (포스트 목록 + 문의 관리)
 - `app/admin/posts/new`, `app/admin/posts/[id]/edit` — 포스트 작성/수정 (+공유 링크 버튼)
 - `app/admin/quick-post` — Claude.ai JSON 붙여넣기 → draft 저장
+- `app/admin/(dashboard)/mobile-post` — 모바일 원탭 포스팅: 사진 업로드 + 현장명·칩 입력 → Claude API가 사진 분석·글 생성 → 자동 발행 (`maxDuration = 60`)
 
 ### QR 랜딩 — `app/q/`
 - `app/q/page.tsx` — QR 코드 전용 모바일 랜딩 (명함·차량·전단·현장), root layout만 사용
@@ -92,6 +93,9 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 - `lib/share.ts` — 공유 링크 토큰 조회 (만료/미존재 구분)
 - `lib/share-utils.ts` — MDX→텍스트 변환, 미디어 추출, Cloudinary 다운로드 URL 생성
 - `lib/mdx-components.tsx` — MDX 커스텀 컴포넌트 (video 등), 블로그 + 어드민 미리보기 공유
+- `lib/media-markers.ts` — `replaceMediaMarkers()`: 본문 [사진N] 마커를 이미지/비디오로 치환 (QuickPostForm + generate-post 공유)
+- `lib/blog-prompt.ts` — AI 블로그 생성 시스템 프롬프트 (원본: 노션 "신라철강 블로그 생성 로직" 문서 — 수정 시 동기화)
+- `lib/generate-post.ts` — `generateAndPublishPost()` server action: 사진 URL + 키워드 → Claude API(structured output) → 카테고리·slug 검증 → 자동 발행
 - `lib/site.ts` — 랜딩 페이지 copy/data (SITE constant, 전화번호 single source of truth)
 - `lib/ui.ts` — shared Tailwind class tokens + `COLOR` 상수 (landing page only)
 - `lib/scroll.ts` — `scrollToContact(type)` for CTA navigation
@@ -105,6 +109,7 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 | Cloudinary | 이미지·동영상 CDN | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` |
 | Gmail API | 공유 링크 드래프트 발송 | `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`, `SHARE_EMAIL_TO` |
 | Admin API | `/api/admin/posts` Bearer 토큰 | `ADMIN_API_KEY` |
+| Anthropic API | 모바일 포스팅 AI 글 생성 (기본 모델 `claude-opus-5`, `BLOG_AI_MODEL`로 변경 가능) | `ANTHROPIC_API_KEY` |
 | Vercel | 배포 | — |
 
 ## DB schema
@@ -186,6 +191,7 @@ import { COLOR } from "@/lib/ui";
 - Supabase Auth 기반 로그인 (`/admin/login`)
 - 블로그 포스트 CRUD (목록, 새 포스트, 수정, 삭제)
 - 빠른 등록 (`/admin/quick-post`) — Claude.ai JSON 붙여넣기 → 초안 저장
+- 모바일 포스팅 (`/admin/mobile-post`) — 사진+현장명만으로 AI가 글 생성 후 **자동 발행**. 카테고리는 BLOG_CATEGORIES enum으로 강제, slug 중복 시 -2 접미사, 누락된 이미지 마커는 마무리 섹션 앞에 자동 보충
 - 문의 관리 (`/admin/inquiries`) — 상태 변경 (new → read → resolved)
 - 대시보드 레이아웃: AdminNav + 새 문의 카운트 배지
 

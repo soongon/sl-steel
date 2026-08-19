@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPost } from "@/lib/admin";
 import MultiImageUpload from "./MultiImageUpload";
-import { isVideoUrl } from "@/lib/types";
+import { replaceMediaMarkers } from "@/lib/media-markers";
 
 interface ParsedPost {
   title: string;
@@ -12,37 +12,6 @@ interface ParsedPost {
   categories: string[];
   excerpt: string;
   content: string;
-}
-
-function replaceMediaMarkers(content: string, mediaUrls: string[]): string {
-  let result = content;
-  const unmatchedVideos: string[] = [];
-
-  mediaUrls.forEach((url, i) => {
-    const marker = `[사진${i + 1}]`;
-    const hasMarker = result.includes(marker);
-
-    if (isVideoUrl(url)) {
-      const videoTag = `<video src="${url}" controls playsInline preload="metadata" />`;
-      if (hasMarker) {
-        result = result.replace(marker, videoTag);
-      } else {
-        // 마커 없는 동영상 → 나중에 본문 끝에 추가
-        unmatchedVideos.push(videoTag);
-      }
-    } else {
-      if (hasMarker) {
-        result = result.replace(marker, `![사진 ${i + 1}](${url})`);
-      }
-    }
-  });
-
-  // 마커에 매칭되지 않은 동영상을 본문 끝에 추가
-  if (unmatchedVideos.length > 0) {
-    result += "\n\n---\n\n## 현장 영상\n\n" + unmatchedVideos.join("\n\n");
-  }
-
-  return result;
 }
 
 export default function QuickPostForm() {
