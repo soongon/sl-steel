@@ -130,7 +130,7 @@ export const SITE = {
 
   // Contact 섹션
   contact: {
-    title: "철근 매입 문의",
+    title: "철근 매입·납품 문의",
     subtitle:
       "녹 발생 철근·절단 철근 매입 상담을 바로 도와드립니다. 납품 문의도 함께 받습니다.",
     fields: {

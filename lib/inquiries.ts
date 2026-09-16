@@ -19,7 +19,7 @@ export interface Inquiry {
 
 // ── 공개: 문의 제출 ─────────────────────────────────────────────────
 
-const PHONE_PATTERN = /^[\d]{2,4}-[\d]{3,4}-[\d]{4}$/;
+const PHONE_PATTERN = /^\d{9,12}$/;
 
 export async function submitInquiry(formData: FormData) {
   const inquiry_type = formData.get("inquiry_type");
@@ -34,8 +34,9 @@ export async function submitInquiry(formData: FormData) {
     throw new Error("필수 항목을 입력해 주세요.");
   }
 
-  if (!PHONE_PATTERN.test(phone.trim())) {
-    throw new Error("전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)");
+  const normalizedPhone = phone.trim().replace(/[-\s]/g, "");
+  if (!PHONE_PATTERN.test(normalizedPhone)) {
+    throw new Error("전화번호 형식이 올바르지 않습니다. (예: 01012345678 또는 010-1234-5678)");
   }
 
   const safeLocation = typeof location === "string" ? location.trim() : "";
@@ -44,7 +45,7 @@ export async function submitInquiry(formData: FormData) {
   const { error } = await supabase.from("inquiries").insert({
     inquiry_type: inquiry_type.trim(),
     name: name.trim(),
-    phone: phone.trim(),
+    phone: normalizedPhone,
     location: safeLocation,
     message: safeMessage,
   });

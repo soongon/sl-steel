@@ -41,7 +41,7 @@ export default function Header() {
             : "bg-transparent",
         ].join(" ")}
       >
-        <div className={`${ui.container} grid h-[72px] grid-cols-[auto_1fr_auto] items-center gap-6`}>
+        <div className={`${ui.container} grid h-[72px] grid-cols-[1fr_auto] items-center gap-6 md:grid-cols-[auto_1fr_auto]`}>
 
           {/* ── 로고 ── */}
           <a
@@ -72,13 +72,15 @@ export default function Header() {
 
           {/* ── 우측: CTA + 햄버거 ── */}
           <div className="flex items-center gap-3">
+            <div className="hidden md:block">
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); scrollToContact("매입 문의"); }}
-              className={`${ui.btn.base} ${ui.btn.primary} ${ui.btn.sm} hidden md:inline-flex`}
+              className={`${ui.btn.base} ${ui.btn.primary} ${ui.btn.sm} whitespace-nowrap`}
             >
               매입 문의
             </a>
+            </div>
 
             {/* 햄버거 (모바일) */}
             <button
