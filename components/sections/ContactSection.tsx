@@ -180,7 +180,7 @@ export default function ContactSection() {
                     id="contact-phone"
                     name="phone"
                     type="tel"
-                    placeholder="010-xxxx-xxxx"
+                    placeholder="010-1234-5678"
                     inputMode="tel"
                     onChange={handlePhoneChange}
                     autoComplete="tel"
