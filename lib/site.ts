@@ -175,7 +175,7 @@ export const SITE = {
   // 푸터
   footer: {
     tagline: "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
-    email: "sl-steel@gmail.com",
+    email: "soongon@gmail.com",
     kakao: "",   // 카카오 채널 URL 확정 후 입력
     naverPlace: "https://map.naver.com/p/entry/place/2050283327",
     address: {

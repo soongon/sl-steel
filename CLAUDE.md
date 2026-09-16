@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 로고: `components/logo/Logo.tsx` (`<Logo white? withEn? />` + `<LogoSymbol />`) — B-1 크라운 심볼 + T-2 타이포(Pretendard 700, tracking 0.12em)
 - 브랜드 컬러: `brand-steel-700` #1B3A5C (심볼), `brand-steel-900` #0F1B29 (워드마크), `brand-gold` #C9A227 (곡옥 포인트 전용 — 남용 금지)
 - 브랜드 자산: `public/brand/` (logo-*.svg, profile-512.png), 파비콘 세트 `public/`
-- 유지 항목: 저장소명 `sl-steel`, 이메일 `sl-steel@gmail.com`
+- 유지 항목: 저장소명 `sl-steel`, 이메일 `soongon@gmail.com`
 - 구 `components/logo/SLSteelLogo.tsx`는 미참조 (삭제 보류)
 
 ## Commands
