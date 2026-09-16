@@ -24,6 +24,44 @@ export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const previousPhone = useRef("");
+
+  function handlePhoneChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const input = event.currentTarget;
+    const raw = input.value;
+    const caret = input.selectionStart ?? raw.length;
+    const deleting = (event.nativeEvent as InputEvent).inputType?.startsWith("delete")
+      ?? raw.length < previousPhone.current.length;
+    let digits = raw.replace(/\D/g, "");
+    let digitsBeforeCaret = raw.slice(0, caret).replace(/\D/g, "").length;
+
+    // Backspace over an automatic separator also removes the preceding digit.
+    if (deleting && digits === previousPhone.current.replace(/\D/g, "")) {
+      const forward = (event.nativeEvent as InputEvent).inputType === "deleteContentForward";
+      const index = forward ? digitsBeforeCaret : digitsBeforeCaret - 1;
+      if (index >= 0) {
+        digits = digits.slice(0, index) + digits.slice(index + 1);
+        if (!forward) digitsBeforeCaret--;
+      }
+    }
+    digits = digits.slice(0, 11);
+    let formatted = digits.slice(0, 3);
+    if (digits.length > 3 || (digits.length === 3 && !deleting)) formatted += "-";
+    formatted += digits.slice(3, 7);
+    if (digits.length > 7 || (digits.length === 7 && !deleting)) formatted += "-";
+    formatted += digits.slice(7);
+    input.value = formatted;
+    previousPhone.current = formatted;
+
+    let position = 0;
+    let seen = 0;
+    while (position < formatted.length && seen < digitsBeforeCaret) {
+      if (/\d/.test(formatted[position])) seen++;
+      position++;
+    }
+    if (!deleting && formatted[position] === "-") position++;
+    input.setSelectionRange(position, position);
+  }
 
   useEffect(() => {
     const sync = () =>
@@ -44,6 +82,7 @@ export default function ContactSection() {
       await submitInquiry(formData);
       setSubmitted(true);
       formRef.current?.reset();
+      previousPhone.current = "";
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "문의 접수에 실패했습니다.",
@@ -141,7 +180,9 @@ export default function ContactSection() {
                     id="contact-phone"
                     name="phone"
                     type="tel"
-                    placeholder="01012345678"
+                    placeholder="010-xxxx-xxxx"
+                    inputMode="tel"
+                    onChange={handlePhoneChange}
                     autoComplete="tel"
                     required
                   />
