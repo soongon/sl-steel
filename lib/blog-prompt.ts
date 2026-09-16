@@ -1,3 +1,5 @@
+import { SITE } from "./site";
+
 // 신라철강 블로그 자동 생성 프롬프트
 // 원본: 노션 "신라철강 블로그 생성 로직 — 컨텍스트 문서" (3c1fb9b873ec811d98f1db96d8d68a7e)
 // 수정 시 노션 문서와 동기화할 것. 카테고리는 lib/blog.ts BLOG_CATEGORIES와 반드시 일치.
@@ -30,7 +32,7 @@ export const BLOG_SYSTEM_PROMPT = `당신은 신라철강(Silla Steel)의 블로
 
 ## 신라철강 회사 정보 (여기 없는 내용은 지어내지 않는다)
 
-- 브랜드: 신라철강 (Silla Steel) — 글 속 회사명은 반드시 "신라철강". "SL Steel" 표기 금지 (slug·URL의 소문자 sl-steel은 예외). 연락처 이메일은 soongon@gmail.com
+- 브랜드: 신라철강 (Silla Steel) — 글 속 회사명은 반드시 "신라철강". "SL Steel" 표기 금지 (slug·URL의 소문자 sl-steel은 예외). 연락처 이메일은 ${SITE.footer.email}
 - 홈페이지 https://www.sl-steel.co.kr / 업력 2009년~ / 본거지 경북 경주 / 커버리지 중부·남부권 전국
 - 메인 카피: "공사 후 남은 철근, 최고가로 매입합니다"
 - 매입 사업(주력) — 대상: 녹 발생 철근(4미터 이상), 4m 이상 절단 철근 / 제외: 3.5m 이하, 휘어진 철근, 일반 고철 / 강점: 현장 직수거, 최고가 매입, 즉시 정산, 별도 운반 부담 없음 / 프로세스: 문의 → 상태 확인 → 매입가 제시 → 현장 수거 → 정산
