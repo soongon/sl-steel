@@ -21,10 +21,10 @@ export default function HeroSection() {
         </h1>
         <p>잔여 철근 매입 · 철근·H빔 납품</p>
         <div className="silla-hero-actions">
-          <ContactLink className="silla-button silla-button-white">
+          <ContactLink className="silla-hero-cta silla-hero-cta-primary">
             매입 상담 <ArrowRight size={20} aria-hidden="true" />
           </ContactLink>
-          <ContactLink type="납품 문의" className="silla-text-link">
+          <ContactLink type="납품 문의" className="silla-hero-cta silla-hero-cta-secondary">
             납품 문의 <ArrowRight size={20} aria-hidden="true" />
           </ContactLink>
         </div>

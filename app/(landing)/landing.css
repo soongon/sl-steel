@@ -138,7 +138,7 @@
 .silla-hero-actions {
   display: flex;
   align-items: center;
-  gap: 48px;
+  gap: 16px;
   margin-top: 36px;
 }
 .silla-button {
@@ -886,22 +886,52 @@
     height: calc(64px + env(safe-area-inset-bottom));
   }
 }
-@media (max-width: 359px) {
-  .silla-hero-actions {
-    gap: 20px;
-  }
-  .silla-hero-actions .silla-button {
-    padding-inline: 18px;
-    gap: 14px;
-    font-size: 14px;
-  }
-  .silla-hero-actions .silla-text-link {
-    gap: 10px;
-    font-size: 14px;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   html:has(.silla-landing) {
     scroll-behavior: auto;
+  }
+}
+
+/* Both hero actions stay legible over the photograph. */
+.silla-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 216px;
+  min-height: 60px;
+  padding: 16px 26px;
+  gap: 20px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+.silla-hero-cta svg { flex-shrink: 0; }
+.silla-hero-cta-primary { background: #fff; color: #142638; }
+.silla-hero-cta-primary:hover { background: #e8edf0; }
+.silla-hero-cta-secondary {
+  background: #142638;
+  color: #fff;
+  border-color: #b8c5ce;
+}
+.silla-hero-cta-secondary:hover { background: #294354; border-color: #fff; }
+.silla-hero-actions .silla-hero-cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+@media (max-width: 767px) {
+  .silla-hero-actions { gap: 12px; }
+  .silla-hero-cta {
+    flex: 1;
+    width: auto;
+    max-width: 216px;
+    min-width: 0;
+    min-height: 58px;
+    padding: 16px;
+    gap: 12px;
+    font-size: 16px;
   }
 }
