@@ -1,24 +1,24 @@
 import HeroSection from "@/components/sections/HeroSection";
-import StatsSection from "@/components/sections/StatsSection";
-import AboutSection from "@/components/sections/AboutSection";
-import ProductsSection from "@/components/sections/ProductsSection";
-import BusinessSection from "@/components/sections/BusinessSection";
 import ProcessSection from "@/components/sections/ProcessSection";
-import SystemSection from "@/components/sections/SystemSection";
-import WhySection from "@/components/sections/WhySection";
 import ContactSection from "@/components/sections/ContactSection";
+import {
+  CompanyIntro,
+  BusinessOverview,
+  FieldCases,
+  Facilities,
+} from "@/components/sections/LandingSections";
+import { getPosts } from "@/lib/blog";
 
-export default function Home() {
+export default async function Home() {
+  const posts = (await getPosts()).slice(0, 3);
   return (
-    <main>
+    <main id="main-content">
       <HeroSection />
-      <StatsSection />
-      <AboutSection />
-      <ProductsSection />
-      <BusinessSection />
+      <CompanyIntro />
+      <BusinessOverview />
+      <FieldCases posts={posts} />
+      <Facilities />
       <ProcessSection />
-      <SystemSection />
-      <WhySection />
       <ContactSection />
     </main>
   );

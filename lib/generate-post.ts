@@ -168,6 +168,7 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
     }
 
     revalidatePath("/blog");
+    revalidatePath("/");
     revalidatePath(`/blog/${slug}`);
     revalidatePath("/admin");
 

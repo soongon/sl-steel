@@ -1,134 +1,32 @@
-import { SITE } from "@/lib/site";
-import { ui } from "@/lib/ui";
+import Link from "next/link";
 import Logo from "@/components/logo/Logo";
-
-const QUICK_LINKS = [
-  { label: "회사소개", href: "#about" },
-  { label: "사업영역", href: "#business" },
-  { label: "진행절차", href: "#process" },
-  { label: "문의", href: "#contact" },
-] as const;
-
+import { SITE } from "@/lib/site";
 export default function Footer() {
-  const { email, regions, tagline, naverPlace } = SITE.footer;
-  const mainPhone = regions[0].phone;
-  const hasContact = !!(mainPhone || email);
-
   return (
-    <footer className="border-t border-neutral-200 bg-neutral-50" aria-label="사이트 하단">
-      <div className={ui.container}>
-
-        {/* 모바일 전용 */}
-        <div className="py-8 sm:hidden">
-          <a href="#top" className="flex items-center" aria-label="신라철강 홈으로">
-            <Logo withEn />
+    <footer className="silla-footer" aria-label="사이트 하단">
+      <div className="silla-container">
+        <div className="silla-footer-top">
+          <a href="#top" aria-label="신라철강 홈으로">
+            <Logo white withEn size="lg" />
           </a>
-
-          <p className="mt-3 text-xs text-neutral-400">
-            <span className="font-medium">{regions[0].name}</span>
-            <span className="ml-2">{mainPhone}</span>
-          </p>
-
-          {naverPlace && (
+          <p>현장을 잇고, 가치를 더합니다.</p>
+          <a href={`mailto:${SITE.footer.email}`}>{SITE.footer.email}</a>
+        </div>
+        <div className="silla-footer-bottom">
+          <span>© {new Date().getFullYear()} Silla Steel</span>
+          <span>{SITE.footer.address.full}</span>
+          <nav aria-label="푸터 메뉴">
+            <Link href="/blog">블로그</Link>
+            <a href="#contact">문의하기</a>
             <a
-              href={naverPlace}
+              href={SITE.footer.naverPlace}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-block text-xs font-medium text-[#03C75A] transition-opacity hover:opacity-70"
             >
-              네이버 플레이스에서 보기 →
+              오시는 길
             </a>
-          )}
-
-          <div className="mt-4 flex items-center justify-between border-t border-neutral-200 pt-4">
-            <p className="text-xs text-neutral-400">© {new Date().getFullYear()} {SITE.brand.en}</p>
-            <span className="text-xs text-neutral-400">개인정보처리방침</span>
-          </div>
+          </nav>
         </div>
-
-        {/* 데스크톱 */}
-        <div className="hidden sm:block py-14">
-          <div
-            className={[
-              "grid gap-10",
-              hasContact ? "lg:grid-cols-3 sm:grid-cols-2" : "sm:grid-cols-2",
-            ].join(" ")}
-          >
-            {/* 브랜드 */}
-            <div>
-              <a
-                href="#top"
-                aria-label="신라철강 홈으로"
-                className="inline-flex items-center transition-opacity hover:opacity-80"
-              >
-                <Logo withEn />
-              </a>
-
-              <p className="mt-5 text-sm font-semibold leading-snug text-neutral-900 break-keep">
-                {SITE.hero.h1}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-neutral-400 break-keep">
-                {tagline}
-              </p>
-            </div>
-
-            {/* 빠른 링크 */}
-            <div>
-              <p className="mb-4 text-sm font-semibold text-neutral-900">Quick Links</p>
-              <nav aria-label="푸터 메뉴">
-                <ul className="space-y-2.5">
-                  {QUICK_LINKS.map((link) => (
-                    <li key={link.href}>
-                      <a
-                        href={link.href}
-                        className="text-sm text-neutral-400 transition-colors hover:text-neutral-900"
-                      >
-                        {link.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </div>
-
-            {/* 연락처 */}
-            {hasContact && (
-              <div>
-                <p className="mb-4 text-sm font-semibold text-neutral-900">Contact</p>
-                <address className="not-italic space-y-2.5 text-sm text-neutral-400">
-                  <a href={`tel:${mainPhone}`} className="block transition-colors hover:text-neutral-900">
-                    {mainPhone}
-                  </a>
-                  {email && (
-                    <a href={`mailto:${email}`} className="block transition-colors hover:text-neutral-900">
-                      {email}
-                    </a>
-                  )}
-                  {naverPlace && (
-                    <a
-                      href={naverPlace}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block font-medium text-[#03C75A] transition-opacity hover:opacity-70"
-                    >
-                      네이버 플레이스 →
-                    </a>
-                  )}
-                </address>
-              </div>
-            )}
-          </div>
-
-          <div className="mt-10 flex items-center justify-between border-t border-neutral-200 pt-6">
-            <p className="text-xs text-neutral-400">
-              © {new Date().getFullYear()} {SITE.brand.en}. All rights reserved.
-            </p>
-            <a href="#" className="text-xs text-neutral-400 transition-colors hover:text-neutral-900">
-              개인정보처리방침
-            </a>
-          </div>
-        </div>
-
       </div>
     </footer>
   );

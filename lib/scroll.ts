@@ -17,5 +17,7 @@ export function scrollToContact(type: InquiryType) {
       bubbles: true,
     })
   );
-  document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+  document.getElementById("contact")?.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+  });
 }

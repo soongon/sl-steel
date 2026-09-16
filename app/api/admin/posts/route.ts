@@ -116,6 +116,7 @@ export async function POST(request: NextRequest) {
   }
 
   revalidatePath("/blog");
+  revalidatePath("/");
   revalidatePath("/admin");
 
   return NextResponse.json({ id: data.id, slug: data.slug }, { status: 201 });

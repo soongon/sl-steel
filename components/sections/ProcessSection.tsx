@@ -1,84 +1,39 @@
 "use client";
-
 import { useState } from "react";
 import { SITE } from "@/lib/site";
-import { ui } from "@/lib/ui";
-
-type TabIndex = 0 | 1;
-
-const STEPS = [
-  SITE.process.recovery.steps,
-  SITE.process.delivery.steps,
-] as const;
-
 export default function ProcessSection() {
-  const [active, setActive] = useState<TabIndex>(0);
-  const steps = STEPS[active];
-
+  const [active, setActive] = useState<0 | 1>(0);
+  const steps =
+    active === 0 ? SITE.process.recovery.steps : SITE.process.delivery.steps;
   return (
-    <section id="process" className={ui.sectionAlt}>
-      <div className={ui.container}>
-        <span className={ui.label}>Process</span>
-        <h2 className={ui.title}>진행 절차</h2>
-
-        {/* 탭 버튼 */}
-        <div className="mt-8 inline-flex rounded-md border border-neutral-200 bg-neutral-50 p-1">
-          {SITE.process.tabs.map((tab, i) => (
-            <button
-              key={tab}
-              onClick={() => setActive(i as TabIndex)}
-              className={[
-                "rounded-md px-6 py-2.5 text-sm font-semibold transition-colors",
-                active === i
-                  ? "bg-primary-900 text-white shadow-sm"
-                  : "text-neutral-400 hover:text-neutral-900",
-              ].join(" ")}
-            >
-              {tab}
-            </button>
+    <section id="process" className="silla-section silla-process">
+      <div className="silla-container">
+        <div className="silla-section-heading">
+          <div>
+            <span className="silla-eyebrow">HOW WE WORK</span>
+            <h2>문의부터 현장까지, 명확하게.</h2>
+          </div>
+          <div className="silla-tabs" aria-label="진행 절차 선택">
+            {SITE.process.tabs.map((label, i) => (
+              <button
+                key={label}
+                type="button"
+                aria-pressed={active === i}
+                onClick={() => setActive(i as 0 | 1)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <ol className="silla-process-steps" aria-live="polite">
+          {steps.map((step, i) => (
+            <li key={step}>
+              <span>0{i + 1}</span>
+              <h3>{step}</h3>
+            </li>
           ))}
-        </div>
-
-        {/* 스텝 카드 */}
-        <div className={`${ui.card} mt-6 p-8`}>
-
-          {/* PC: 가로 타임라인 */}
-          <div className="relative hidden sm:block">
-            {/* 양끝 원 중심에서 중심까지 연결선: 1/(N*2) ~ 1-1/(N*2) */}
-            <div
-              className="absolute top-5 h-px bg-neutral-200"
-              style={{ left: `${100 / (steps.length * 2)}%`, right: `${100 / (steps.length * 2)}%` }}
-            />
-            <div className={`relative grid gap-4`} style={{ gridTemplateColumns: `repeat(${steps.length}, minmax(0, 1fr))` }}>
-              {steps.map((step, i) => (
-                <div key={step} className="flex flex-col items-center text-center">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-900 text-sm font-bold text-white ring-4 ring-white">
-                    {i + 1}
-                  </span>
-                  <span className="mt-4 text-base font-bold text-primary-900 leading-snug">
-                    {step}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 모바일: 세로 타임라인 */}
-          <div className="relative sm:hidden">
-            <div className="absolute left-[18px] top-5 bottom-5 w-px bg-neutral-200" />
-            <div className="space-y-6">
-              {steps.map((step, i) => (
-                <div key={step} className="relative flex items-center gap-5 pl-1">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-900 text-sm font-bold text-white ring-4 ring-white">
-                    {i + 1}
-                  </span>
-                  <span className="text-base font-bold text-primary-900">{step}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
+        </ol>
       </div>
     </section>
   );

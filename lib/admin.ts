@@ -168,6 +168,7 @@ export async function createPost(formData: FormData): Promise<{ error?: string }
     }
 
     revalidatePath("/blog");
+    revalidatePath("/");
     revalidatePath("/admin");
     return {};
   } catch (err) {
@@ -203,6 +204,7 @@ export async function updatePost(id: string, formData: FormData): Promise<{ erro
     }
 
     revalidatePath("/blog");
+    revalidatePath("/");
     revalidatePath("/admin");
     return {};
   } catch (err) {
@@ -225,6 +227,7 @@ export async function deletePost(id: string): Promise<{ error?: string }> {
     }
 
     revalidatePath("/blog");
+    revalidatePath("/");
     revalidatePath("/admin");
     return {};
   } catch (err) {
