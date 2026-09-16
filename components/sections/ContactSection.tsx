@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, startTransition } from "react";
 import { SITE, INQUIRY_TYPES, type InquiryType } from "@/lib/site";
+import { Mail, MapPin, ArrowUpRight } from "lucide-react";
 import { submitInquiry } from "@/lib/inquiries";
 
 function resolveTypeFromHash(): InquiryType {
@@ -73,9 +74,15 @@ export default function ContactSection() {
             ))}
           </div>
           <div className="silla-contact-links">
-            <a href={`mailto:${email}`}>{email}</a>
-            <a href={naverPlace} target="_blank" rel="noopener noreferrer">
-              네이버 플레이스
+            <a className="silla-contact-action silla-contact-email" href={`mailto:${email}`}>
+              <Mail size={24} aria-hidden="true" />
+              <span><strong>이메일 문의</strong><small>{email}</small></span>
+              <ArrowUpRight size={20} aria-hidden="true" />
+            </a>
+            <a className="silla-contact-action silla-contact-place" href={naverPlace} target="_blank" rel="noopener noreferrer">
+              <MapPin size={24} aria-hidden="true" />
+              <span><strong>네이버 플레이스</strong><small>위치 · 길찾기 확인</small></span>
+              <ArrowUpRight size={20} aria-hidden="true" />
             </a>
             {kakao && (
               <a href={kakao} target="_blank" rel="noopener noreferrer">

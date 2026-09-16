@@ -478,32 +478,45 @@
   gap: 12px;
   padding-block: 14px;
   border-top: 1px solid var(--silla-line);
-  font-size: 14px;
+  font-size: 16px;
 }
 .silla-region-list small {
   display: inline-block;
   color: var(--silla-muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-left: 10px;
 }
 .silla-region-list strong {
-  font-weight: 500;
+  font-weight: 650;
 }
 .silla-contact-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 28px;
+}
+.silla-contact-action {
   display: flex;
-  flex-wrap: wrap;
-  gap: 14px 24px;
-  margin-top: 30px;
-  font-size: 14px;
+  align-items: center;
+  gap: 16px;
+  min-height: 84px;
+  padding: 18px 22px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: background 0.2s, border-color 0.2s;
 }
-.silla-contact-links a {
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
+.silla-contact-action > svg { flex-shrink: 0; }
+.silla-contact-action > svg:last-child { margin-left: auto; }
+.silla-contact-action span { min-width: 0; }
+.silla-contact-action strong { display: block; font-size: 18px; font-weight: 700; }
+.silla-contact-action small { display: block; margin-top: 4px; font-size: 15px; overflow-wrap: anywhere; }
+.silla-contact-email { background: #142638; color: #fff; }
+.silla-contact-email:hover { background: #294354; }
+.silla-contact-place { background: #edf8f1; color: #155333; border-color: #b0d5bd; }
+.silla-contact-place:hover { background: #dcefe3; border-color: #377b50; }
 .silla-contact-address {
   color: var(--silla-muted);
   margin-top: 22px;
-  font-size: 13px;
+  font-size: 15px;
 }
 .silla-contact-form .silla-tabs {
   margin-bottom: 30px;
@@ -515,9 +528,9 @@
 }
 .silla-contact-form label {
   display: block;
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 10px;
-  font-weight: 500;
+  font-weight: 650;
 }
 .silla-contact-form label span {
   color: #977348;
@@ -525,7 +538,7 @@
 .silla-contact-form :where(input, textarea) {
   width: 100%;
   border: 0;
-  border-bottom: 1px solid #aeb8be;
+  border-bottom: 1px solid #82919c;
   padding: 12px 0;
   background: transparent;
   font-size: 16px;
@@ -533,8 +546,8 @@
   line-height: 1.5;
 }
 .silla-contact-form :where(input, textarea)::placeholder {
-  color: #7b858b;
-  font-size: 14px;
+  color: #626f79;
+  font-size: 15px;
 }
 .silla-contact-form form > div {
   margin-bottom: 24px;
@@ -934,4 +947,10 @@
     gap: 12px;
     font-size: 16px;
   }
+}
+
+@media (max-width: 767px) {
+  .silla-contact-action { padding: 16px; gap: 12px; }
+  .silla-contact-action strong { font-size: 17px; }
+  .silla-contact-action small { font-size: 14px; }
 }
