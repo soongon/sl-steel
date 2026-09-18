@@ -8,6 +8,7 @@ import { getDownloadUrl, getOriginalUrl } from "@/lib/share-utils";
 interface Props {
   title: string;
   parsed: ParsedShareContent;
+  naverHtml: string;
 }
 
 async function downloadFile(item: MediaItem) {
@@ -25,8 +26,8 @@ async function downloadFile(item: MediaItem) {
   }
 }
 
-export default function SharePageClient({ title, parsed }: Props) {
-  const [copied, setCopied] = useState<"title" | "text" | null>(null);
+export default function SharePageClient({ title, parsed, naverHtml }: Props) {
+  const [copied, setCopied] = useState<"title" | "text" | "naver" | null>(null);
   const [zipping, setZipping] = useState(false);
 
   const allMedia = [...parsed.images, ...parsed.videos];
@@ -38,6 +39,41 @@ export default function SharePageClient({ title, parsed }: Props) {
       setTimeout(() => setCopied(null), 2000);
     } catch {
       alert("클립보드 복사에 실패했습니다.");
+    }
+  }
+
+  /** 서식+이미지 포함 HTML을 클립보드에 복사 — 네이버 에디터 붙여넣기용 */
+  async function copyNaverHtml() {
+    try {
+      const html = new Blob([naverHtml], { type: "text/html" });
+      const text = new Blob([parsed.plainText], { type: "text/plain" });
+      await navigator.clipboard.write([
+        new ClipboardItem({ "text/html": html, "text/plain": text }),
+      ]);
+      setCopied("naver");
+      setTimeout(() => setCopied(null), 3000);
+    } catch {
+      // 구형 브라우저 폴백: 숨김 영역 선택 후 execCommand
+      try {
+        const div = document.createElement("div");
+        div.contentEditable = "true";
+        div.style.position = "fixed";
+        div.style.opacity = "0";
+        div.innerHTML = naverHtml;
+        document.body.appendChild(div);
+        const range = document.createRange();
+        range.selectNodeContents(div);
+        const sel = window.getSelection();
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+        document.execCommand("copy");
+        sel?.removeAllRanges();
+        div.remove();
+        setCopied("naver");
+        setTimeout(() => setCopied(null), 3000);
+      } catch {
+        alert("복사에 실패했습니다. '전체 복사'로 텍스트만 복사해 주세요.");
+      }
     }
   }
 
@@ -88,6 +124,33 @@ export default function SharePageClient({ title, parsed }: Props) {
               {copied === "title" ? "복사됨!" : "제목 복사"}
             </button>
           </div>
+        </div>
+
+        {/* 네이버 붙여넣기용 복사 */}
+        <div className="mt-4 rounded-xl border-2 border-accent/40 bg-card p-5">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-bold text-foreground">네이버 블로그 등록</h2>
+              <p className="mt-0.5 text-xs text-muted">사진 포함 서식을 통째로 복사합니다</p>
+            </div>
+            <button
+              onClick={copyNaverHtml}
+              className="shrink-0 rounded-lg bg-accent px-4 py-2.5 text-sm font-bold text-white hover:bg-accent-dark"
+            >
+              {copied === "naver" ? "복사됨! 네이버에 붙여넣으세요" : "네이버용 복사 (사진 포함)"}
+            </button>
+          </div>
+          <ol className="mt-3 list-decimal space-y-0.5 pl-5 text-xs leading-relaxed text-muted">
+            <li>위 버튼 클릭 → 네이버 블로그 글쓰기 열기</li>
+            <li>제목은 &quot;제목 복사&quot;로 따로 붙여넣기</li>
+            <li>본문 영역 클릭 후 붙여넣기(Ctrl+V) — 사진이 자동으로 올라갑니다</li>
+            <li>안 올라간 사진이 있으면 아래에서 다운로드해 넣어주세요</li>
+            {parsed.videos.length > 0 && (
+              <li className="font-medium text-foreground">
+                동영상 {parsed.videos.length}개는 붙여넣기에 포함되지 않습니다 — 아래에서 다운로드 후 표시된 위치에 업로드해 주세요
+              </li>
+            )}
+          </ol>
         </div>
 
         {/* 본문 텍스트 */}

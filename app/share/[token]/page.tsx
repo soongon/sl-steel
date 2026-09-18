@@ -1,5 +1,5 @@
 import { getShareData } from "@/lib/share";
-import { parseContentForShare } from "@/lib/share-utils";
+import { parseContentForShare, mdxToNaverHtml } from "@/lib/share-utils";
 import SharePageClient from "./SharePageClient";
 import type { Metadata } from "next";
 
@@ -56,6 +56,7 @@ export default async function SharePage({ params }: Props) {
 
   const { post } = result;
   const parsed = parseContentForShare(post.content);
+  const naverHtml = mdxToNaverHtml(post.content);
 
-  return <SharePageClient title={post.title} parsed={parsed} />;
+  return <SharePageClient title={post.title} parsed={parsed} naverHtml={naverHtml} />;
 }
