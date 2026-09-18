@@ -80,7 +80,12 @@ export function getOriginalUrl(url: string): string {
 // ── 네이버 블로그 붙여넣기용 HTML 변환 ──────────────────────────────────
 
 function escapeHtml(text: string): string {
-  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 /** 인라인 마크다운 → HTML (escape 이후에 호출) */

@@ -62,9 +62,6 @@
   /* === Typography === */
   --font-sans: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
 
-  /* 헤딩 전용 디스플레이 세리프 (next/font 변수 참조) */
-  --font-display: var(--font-noto-serif), "Noto Serif KR", Georgia, serif;
-
   /* === Radius === */
   --radius-sm: 4px;
   --radius-md: 8px;

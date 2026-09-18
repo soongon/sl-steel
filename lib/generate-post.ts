@@ -98,6 +98,15 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
     } catch {
       return { error: "입력 형식이 올바르지 않습니다." };
     }
+    if (
+      !Array.isArray(materials) || !materials.every((m) => typeof m === "string") ||
+      !Array.isArray(mediaUrls) || !mediaUrls.every((u) => typeof u === "string")
+    ) {
+      return { error: "입력 형식이 올바르지 않습니다." };
+    }
+    if (!mediaUrls.every((u) => u.startsWith("https://res.cloudinary.com/"))) {
+      return { error: "허용되지 않은 미디어 URL이 포함되어 있습니다." };
+    }
 
     if (!siteName) return { error: "현장명을 입력해 주세요." };
     const imageUrls = mediaUrls.filter((u) => !isVideoUrl(u));

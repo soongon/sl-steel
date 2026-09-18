@@ -8,8 +8,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 로고: `components/logo/Logo.tsx` (`<Logo white? withEn? />` + `<LogoSymbol />`) — B-1 크라운 심볼 + T-2 타이포(Pretendard 700, tracking 0.12em)
 - 브랜드 컬러: `brand-steel-700` #1B3A5C (심볼), `brand-steel-900` #0F1B29 (워드마크), `brand-gold` #C9A227 (곡옥 포인트 전용 — 남용 금지)
 - 브랜드 자산: `public/brand/` (logo-*.svg, profile-512.png), 파비콘 세트 `public/`
-- 유지 항목: 저장소명 `sl-steel`, 이메일 `soongon@gmail.com`
-- 구 `components/logo/SLSteelLogo.tsx`는 미참조 (삭제 보류)
+- 유지 항목: 저장소명 `sl-steel` / 연락 이메일은 `soongon@gmail.com` (SITE.footer.email)
+- 구 `components/logo/SLSteelLogo.tsx`는 삭제 완료
 
 ## Commands
 
@@ -31,15 +31,19 @@ Node.js >=20.9.0 required. No test runner is configured.
 - **Supabase** — 블로그 DB (posts, categories 테이블), RLS 적용
 - **Cloudinary** — 이미지·동영상 저장/최적화 (이미지: f_auto, q_auto, w_800 / 동영상: 원본 URL)
 - **next-mdx-remote** — 블로그 본문 MDX 렌더링 (RSC), 커스텀 컴포넌트(`lib/mdx-components.tsx`)
+- **lucide-react** — 랜딩 아이콘
+- **zod** + **@anthropic-ai/sdk** — 모바일 포스팅 AI 글 생성 (structured output)
 
 ## Architecture
 
 Independent sections with separate layouts (landing / blog / admin / share / QR):
 
-### Landing page — `app/(landing)/`
-- `app/(landing)/layout.tsx` — wraps with `<Header>` + `<Footer>`
-- `app/(landing)/page.tsx` — serves `/`, all 9 sections
-- `app/layout.tsx` — root layout (fonts + html/body only, no shared UI)
+### Landing page — `app/(landing)/` (2026-09 미니멀 리디자인 "v3")
+- `app/(landing)/layout.tsx` — `<Header>` + `<Footer>` + `div#top.silla-landing` 래퍼, `landing.css` import, `silla-mobile-clearance` 스페이서
+- `app/(landing)/page.tsx` — serves `/`, **async** — `getPosts()`로 최신 포스트 3개를 FieldCases에 노출 (랜딩이 `lib/blog.ts`에 의존)
+- 섹션 7개: HeroSection(드론 사진) + CompanyIntro·BusinessOverview·FieldCases·Facilities(`components/sections/LandingSections.tsx`에 통합) + ProcessSection + ContactSection
+- 스타일: `app/(landing)/landing.css`의 **`silla-*` 클래스 체계** (자체 CSS 변수 `--silla-ink` 등) — Tailwind @theme 토큰 미사용
+- `app/layout.tsx` — root layout (fonts + html/body + JSON-LD + metadata)
 
 ### Blog — `app/blog/`
 - `app/blog/layout.tsx` — BlogNav + simple footer, no landing page components
@@ -49,7 +53,7 @@ Independent sections with separate layouts (landing / blog / admin / share / QR)
 
 ### Share (콘텐츠 공유) — `app/share/`
 - `app/share/[token]/page.tsx` — 토큰 기반 공유 페이지 (인증 불필요)
-- `app/share/[token]/SharePageClient.tsx` — 제목/본문 복사, 개별·ZIP 다운로드
+- `app/share/[token]/SharePageClient.tsx` — 제목/본문 복사, "네이버용 복사(사진 포함)" — ClipboardItem(text/html)로 서식+이미지 통째 복사, 개별·ZIP 다운로드
 - `components/admin/ShareLinkButton.tsx` — 관리자 공유 링크 생성/복사/재생성
 - `lib/share.ts` — `getShareData(token)` 토큰 조회 (만료/미존재 구분)
 - `lib/share-utils.ts` — MDX→순수텍스트 변환, 미디어 추출, 파일명 매핑, 다운로드 URL
@@ -91,13 +95,13 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 - `lib/inquiries.ts` — 문의 제출/조회/상태 변경 server actions (관리자 함수는 `requireAuth()` 적용)
 - `lib/types.ts` — 공유 타입(`PostStatus`, `InquiryStatus`), 상수, 유틸(`formatDate`, `isVideoUrl`, `extractFilename`)
 - `lib/share.ts` — 공유 링크 토큰 조회 (만료/미존재 구분)
-- `lib/share-utils.ts` — MDX→텍스트 변환, 미디어 추출, Cloudinary 다운로드 URL 생성
+- `lib/share-utils.ts` — MDX→텍스트 변환, `mdxToNaverHtml()`(네이버 에디터용 리치 HTML), 미디어 추출, Cloudinary 다운로드 URL 생성
 - `lib/mdx-components.tsx` — MDX 커스텀 컴포넌트 (video 등), 블로그 + 어드민 미리보기 공유
 - `lib/media-markers.ts` — `replaceMediaMarkers()`: 본문 [사진N] 마커를 이미지/비디오로 치환 (QuickPostForm + generate-post 공유)
 - `lib/blog-prompt.ts` — AI 블로그 생성 시스템 프롬프트 (원본: 노션 "신라철강 블로그 생성 로직" 문서 — 수정 시 동기화)
 - `lib/generate-post.ts` — `generateAndPublishPost()` server action: 사진 URL + 키워드 → Claude API(structured output) → 카테고리·slug 검증 → 자동 발행
 - `lib/site.ts` — 랜딩 페이지 copy/data (SITE constant, 전화번호 single source of truth)
-- `lib/ui.ts` — shared Tailwind class tokens + `COLOR` 상수 (landing page only)
+- `lib/ui.ts` — `COLOR` 상수 (Logo 등 SVG prop용, globals.css @theme와 동기화)
 - `lib/scroll.ts` — `scrollToContact(type)` for CTA navigation
 - `app/globals.css` — design tokens (`@theme`) + `.blog-content` MDX prose styles (img + video)
 
@@ -130,37 +134,16 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 
 마이그레이션 SQL: `supabase/migrations/`
 
-## Design tokens (v2)
+## Design system
 
-All colors defined in `globals.css` `@theme` block. `--color-neutral-*: initial`로 Tailwind 기본 neutral 리셋 후 커스텀 정의.
+### 랜딩 (v3 — 현행, 2026-09 미니멀 리디자인)
+- 스타일 소스: `app/(landing)/landing.css` — **`silla-*` 클래스 체계** + 자체 CSS 변수(`--silla-ink #142638`, `--silla-muted`, `--silla-line`, `--silla-soft`)
+- 히어로: 드론 사진 `public/images/silla-drone.webp`, 아이콘: lucide-react
+- 랜딩은 Tailwind `@theme` 토큰·`lib/ui.ts` `ui` 토큰을 **사용하지 않음**
 
-### 핵심 컬러
-| 토큰 | Hex | 용도 |
-|------|-----|------|
-| primary-600 | #2C5F8A | 메인 브랜드 Steel Blue |
-| primary-900 | #0F2640 | 다크 섹션 배경 (Hero, Why) |
-| accent-600 | #D4700E | CTA 버튼 Industrial Orange |
-| accent-400 | #F28C28 | 강조, 하이라이트 |
-| neutral-50 | #F7F6F3 | 교차 섹션 배경 (Warm Gray) |
-| neutral-900 | #1E1C18 | 제목 텍스트 |
-
-### 호환 레이어 (레거시)
-- `accent` / `accent-dark` — Steel Blue 계열로 재매핑됨 (구 파란색 아님)
-- `brand-navy`, `surface`, `foreground`, `muted`, `steel`, `border`, `card` — 유지
-
-### SVG/인라인 색상
-Tailwind class 사용 불가한 곳(SVG prop 등)은 `lib/ui.ts`의 `COLOR` 상수 사용:
-```ts
-import { COLOR } from "@/lib/ui";
-// COLOR.primary600, COLOR.primary400, COLOR.primary900, COLOR.accent600, COLOR.neutral50, COLOR.white
-```
-
-### ui 토큰 (lib/ui.ts)
-- `ui.label` / `ui.labelDark` — 섹션 라벨 (밝은/다크 배경)
-- `ui.title` / `ui.titleDark` — 섹션 타이틀
-- `ui.desc` / `ui.descDark` — 섹션 설명
-- `ui.btn.primary` / `ui.btn.secondary` — 버튼 스타일
-- `ui.card`, `ui.cardPad`, `ui.chip` — 카드/칩 컴포넌트
+### 블로그·어드민 (`@theme` 토큰 — 유지)
+`globals.css` `@theme` 블록 — 블로그/어드민/호환 레이어(`accent`, `surface`, `foreground`, `muted`, `steel`, `border`, `card` 등)에서 사용. `--color-neutral-*: initial` 필수 (없으면 Tailwind 기본 neutral이 커스텀 값 덮어씀).
+브랜드 컬러: `brand-steel-700/900`, `brand-gold` (로고 전용). SVG prop 등은 `lib/ui.ts`의 `COLOR` 상수 사용.
 
 ## Media conventions
 
@@ -177,6 +160,7 @@ import { COLOR } from "@/lib/ui";
 ## Notes
 
 - `content/blog/*.mdx` — 더 이상 사용하지 않음 (Supabase 전환 완료). 레거시.
+- v2 리디자인 잔재(구 섹션 컴포넌트 7개, `ui` 토큰 객체, Noto Serif KR 폰트, 미사용 이미지 6장)는 2026-09-18 삭제 완료. `components/sections/`는 현재 4개(Hero·LandingSections·Process·Contact)
 - `gray-matter` — 제거 완료 (레거시 의존성)
 - Tailwind v4: `bg-linear-to-t` 사용 (`bg-gradient-to-t` 아님)
 - 전화번호 변경 시 `lib/site.ts` SITE.footer.regions만 수정하면 전체 반영
@@ -225,12 +209,12 @@ components/admin/
 ```
 
 
-## 🎨 디자인시스템 리뉴얼 (v2) — 완료
+## 🎨 랜딩 디자인 이력
 
-랜딩 페이지 리뉴얼 완료됨 (Steel Blue + Industrial Orange, Pretendard 폰트, MobileCTABar 하단 고정 CTA, `@theme` 토큰 + `lib/ui.ts` 토큰).
-컬러 토큰은 위 "Design tokens" 섹션 참조. 리뉴얼 당시 참조 문서(`docs/DESIGN_SYSTEM_GUIDE.md`, `docs/sl-steel-redesign.html`)는 삭제되어 저장소에 없음.
+- **v2** (2026-08): Steel Blue + Industrial Orange, Pretendard, `@theme` 토큰 + `lib/ui.ts` — **v3로 대체됨**
+- **v3** (2026-09, 현행): 드론 사진 + 미니멀 레이아웃, `silla-*` CSS 클래스 (위 "Design system" 참조)
 
 랜딩 디자인 변경 시 주의:
 - `app/blog/`, `components/blog/`, `lib/blog.ts`, `lib/supabase.ts` — 건드리지 말 것
-- `--color-neutral-*: initial` 필수 — 없으면 Tailwind 기본 neutral 팔레트가 커스텀 값 덮어씀
-- 기존 토큰명(accent, surface 등) 호환 레이어 유지할 것
+- 랜딩 스타일은 `app/(landing)/landing.css`에서 수정 (Tailwind 토큰 아님)
+- 블로그·어드민용 `@theme` 호환 토큰(accent, surface 등)은 유지할 것

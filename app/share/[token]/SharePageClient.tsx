@@ -95,7 +95,7 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
       const zipBlob = await zip.generateAsync({ type: "blob" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(zipBlob);
-      a.download = `${title}.zip`;
+      a.download = `${title.replace(/[\\/:*?"<>|]/g, "_")}.zip`;
       a.click();
       URL.revokeObjectURL(a.href);
     } catch {

@@ -287,9 +287,20 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
   return { token, expiresAt, draftCreated };
 }
 
-export async function sendShareDraft(postId: string, shareUrl: string): Promise<{ draftCreated: boolean }> {
+export async function sendShareDraft(postId: string): Promise<{ draftCreated: boolean }> {
   try {
     await requireAuth();
+
+    // 공유 URL은 클라이언트 입력 대신 서버가 보유한 토큰으로 재구성 (임의 링크 삽입 방지)
+    const admin = createSupabaseAdmin();
+    const { data: post } = await admin
+      .from("posts")
+      .select("share_token")
+      .eq("id", postId)
+      .single();
+    if (!post?.share_token) return { draftCreated: false };
+
+    const shareUrl = await getShareUrl(post.share_token);
     const draftCreated = await createDraftForPost(postId, shareUrl);
     return { draftCreated };
   } catch {

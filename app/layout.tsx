@@ -1,16 +1,6 @@
 import type { Metadata } from "next";
-import { Noto_Serif_KR } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
-
-// 헤딩 전용 디스플레이 세리프
-const notoSerifKR = Noto_Serif_KR({
-  variable: "--font-noto-serif",
-  subsets: ["latin"],
-  weight: ["700"],
-  display: "swap",
-  preload: false,
-});
 
 const BASE_URL = "https://sl-steel.co.kr";
 
@@ -82,7 +72,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={notoSerifKR.variable}>
+      <body>
         {children}
       </body>
     </html>
