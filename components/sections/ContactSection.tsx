@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, startTransition } from "react";
 import { SITE, INQUIRY_TYPES, type InquiryType } from "@/lib/site";
-import { Mail, MapPin, ArrowUpRight } from "lucide-react";
+import { Mail, MapPin, ArrowUpRight, ArrowRight, PackageCheck, Truck, Check, ShieldCheck } from "lucide-react";
 import { submitInquiry } from "@/lib/inquiries";
 
 function resolveTypeFromHash(): InquiryType {
@@ -132,6 +132,11 @@ export default function ContactSection() {
           <p className="silla-contact-address">{SITE.footer.address.full}</p>
         </div>
         <div className="silla-contact-form">
+          <div className="silla-form-heading">
+            <span className="silla-form-kicker">ONLINE INQUIRY</span>
+            <h3>어떤 도움이 필요하신가요?</h3>
+            <p>문의 유형을 선택하고 연락처를 남겨주세요.</p>
+          </div>
           {submitted ? (
             <div className="silla-form-success" role="status">
               <h3>문의가 접수되었습니다</h3>
@@ -146,7 +151,7 @@ export default function ContactSection() {
             </div>
           ) : (
             <form ref={formRef} onSubmit={handleSubmit}>
-              <div className="silla-tabs" aria-label="문의 구분">
+              <div className="silla-inquiry-options" role="group" aria-label="문의 구분">
                 {INQUIRY_TYPES.map((type) => (
                   <button
                     key={type}
@@ -154,10 +159,13 @@ export default function ContactSection() {
                     aria-pressed={inquiryType === type}
                     onClick={() => setInquiryType(type)}
                   >
-                    {type}
+                    {type === INQUIRY_TYPES[0] ? <PackageCheck size={25} aria-hidden="true" /> : <Truck size={25} aria-hidden="true" />}
+                    <span><strong>{type}</strong><small>{type === INQUIRY_TYPES[0] ? "남은 철근을 판매하고 싶어요" : "필요한 자재를 주문하고 싶어요"}</small></span>
+                    {inquiryType === type && <Check className="silla-option-check" size={18} aria-hidden="true" />}
                   </button>
                 ))}
               </div>
+              <p className="silla-required-note"><span>*</span> 표시는 필수 입력 항목입니다.</p>
               <div className="silla-form-row">
                 <div>
                   <label htmlFor="contact-name">
@@ -189,7 +197,7 @@ export default function ContactSection() {
                 </div>
               </div>
               <div>
-                <label htmlFor="contact-location">{fields.location}</label>
+                <label htmlFor="contact-location">{fields.location} <small>선택</small></label>
                 <input
                   id="contact-location"
                   name="location"
@@ -198,15 +206,15 @@ export default function ContactSection() {
                 />
               </div>
               <div>
-                <label htmlFor="contact-message">{fields.message}</label>
+                <label htmlFor="contact-message">{fields.message} <small>선택</small></label>
                 <textarea
                   id="contact-message"
                   name="message"
                   rows={4}
-                  placeholder="수량, 규격, 현장 상황 등을 알려주세요."
+                  placeholder={inquiryType === INQUIRY_TYPES[0] ? "예) 경주 현장 잔여 철근 5톤, 수거 일정과 매입가가 궁금합니다." : "예) 철근 D13 3톤, 경주 현장 납품 일정과 견적을 알고 싶습니다."}
                 />
               </div>
-              <p className="silla-privacy">{privacy}</p>
+              <p className="silla-privacy"><ShieldCheck size={16} aria-hidden="true" />{privacy}</p>
               {error && (
                 <p className="silla-form-error" role="alert">
                   {error}
@@ -217,7 +225,8 @@ export default function ContactSection() {
                 disabled={submitting}
                 className="silla-button silla-submit"
               >
-                {submitting ? "접수 중..." : "문의 보내기"}
+                {submitting ? "접수 중..." : `${inquiryType} 보내기`}
+                <ArrowRight size={22} aria-hidden="true" />
               </button>
             </form>
           )}
