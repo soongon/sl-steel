@@ -25,7 +25,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
   const pagePosts = filtered.slice(
     (page - 1) * POSTS_PER_PAGE,
-    page * POSTS_PER_PAGE
+    page * POSTS_PER_PAGE,
   );
   const recentPosts = allPosts.slice(0, 4);
 
@@ -40,9 +40,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
           {/* Post list */}
           <div className="flex flex-col gap-3">
-            {featured && (
-              <PostCard post={featured} featured={showFeatured} />
-            )}
+            {featured && <PostCard post={featured} featured={showFeatured} />}
             {rest.map((post) => (
               <PostCard key={post.slug} post={post} />
             ))}

@@ -6,7 +6,10 @@ import { isVideoUrl } from "./types";
  * - 동영상: `<video>` 태그로 치환, 마커가 없으면 본문 끝 "현장 영상" 섹션에 자동 추가
  * QuickPostForm(수동 붙여넣기)과 generate-post(모바일 자동 생성)가 공유한다.
  */
-export function replaceMediaMarkers(content: string, mediaUrls: string[]): string {
+export function replaceMediaMarkers(
+  content: string,
+  mediaUrls: string[],
+): string {
   let result = content;
   const unmatchedVideos: string[] = [];
 

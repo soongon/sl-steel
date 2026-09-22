@@ -33,9 +33,15 @@ export default async function InquiriesPage() {
               </tr>
             ) : (
               inquiries.map((inq) => (
-                <tr key={inq.id} className="border-b border-border last:border-0">
+                <tr
+                  key={inq.id}
+                  className="border-b border-border last:border-0"
+                >
                   <td className="px-4 py-3 font-medium text-foreground">
-                    <Link href={`/admin/inquiries/${inq.id}`} className="hover:text-accent">
+                    <Link
+                      href={`/admin/inquiries/${inq.id}`}
+                      className="hover:text-accent"
+                    >
                       {inq.name}
                     </Link>
                   </td>

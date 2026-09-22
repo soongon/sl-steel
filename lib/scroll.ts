@@ -8,16 +8,18 @@ import type { InquiryType } from "@/lib/site";
  */
 export function scrollToContact(type: InquiryType) {
   const newHash = `contact?type=${encodeURIComponent(type)}`;
-  const oldURL = window.location.href;                       // replaceState 전에 캡처
+  const oldURL = window.location.href; // replaceState 전에 캡처
   history.replaceState(null, "", `#${newHash}`);
   window.dispatchEvent(
     new HashChangeEvent("hashchange", {
       oldURL,
       newURL: `${window.location.origin}${window.location.pathname}#${newHash}`,
       bubbles: true,
-    })
+    }),
   );
   document.getElementById("contact")?.scrollIntoView({
-    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth",
   });
 }

@@ -68,7 +68,10 @@ export default async function PostPage({ params }: PostPageProps) {
             </Link>
             <div className="flex flex-wrap gap-1.5">
               {post.categories.map((cat) => (
-                <span key={cat} className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
+                <span
+                  key={cat}
+                  className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent"
+                >
                   {cat}
                 </span>
               ))}

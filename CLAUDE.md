@@ -20,7 +20,7 @@ npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
 
-Node.js >=20.9.0 required. No test runner is configured.
+Node.js >=20.9.0 required. Regression tests use the Node.js built-in runner (`npm test`, Node >=22.6).
 
 ## Stack
 
@@ -216,5 +216,5 @@ components/admin/
 
 랜딩 디자인 변경 시 주의:
 - `app/blog/`, `components/blog/`, `lib/blog.ts`, `lib/supabase.ts` — 건드리지 말 것
-- 랜딩 스타일은 `app/(landing)/landing.css`에서 수정 (Tailwind 토큰 아님)
+- 랜딩 스타일은 `app/(landing)/landing.css`에서 import하는 `styles/` 기능별 파일에서 수정 (Tailwind 토큰 아님)
 - 블로그·어드민용 `@theme` 호환 토큰(accent, surface 등)은 유지할 것

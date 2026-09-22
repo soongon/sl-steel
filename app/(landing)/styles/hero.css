@@ -1,0 +1,148 @@
+/* hero: preserve source order within base and responsive rules. */
+
+.silla-hero {
+  position: relative;
+  height: 58.4vw;
+  min-height: 660px;
+  max-height: 960px;
+  background: #142638;
+  overflow: hidden;
+  color: #fff;
+}
+.silla-hero .silla-hero-image {
+  object-fit: cover;
+  object-position: center 52%;
+}
+.silla-hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 23, 35, 0.83),
+      rgba(10, 23, 35, 0.42) 37%,
+      rgba(10, 23, 35, 0.05) 74%
+    ),
+    linear-gradient(180deg, rgba(10, 23, 35, 0.25), transparent 35%);
+}
+.silla-hero-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-bottom: 7%;
+}
+.silla-hero h1 {
+  color: white;
+  font-size: clamp(52px, 5.8vw, 88px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+.silla-hero-content > p {
+  margin-top: 22px;
+  font-size: clamp(19px, 1.9vw, 28px);
+  line-height: 1.5;
+  font-weight: 400;
+}
+.silla-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 36px;
+}
+@media (max-width: 767px) {
+  .silla-hero {
+    height: min(760px, calc(100svh - 64px));
+    min-height: 640px;
+    max-height: none;
+  }
+  .silla-hero .silla-hero-image {
+    height: 72% !important;
+    object-position: 63% center;
+  }
+  .silla-hero-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(10, 23, 35, 0.35),
+      rgba(10, 23, 35, 0.02) 28%,
+      rgba(20, 38, 56, 0.08) 42%,
+      #142638 72%
+    );
+  }
+  .silla-hero-content {
+    padding-bottom: 54px;
+  }
+  .silla-hero h1 {
+    font-size: clamp(36px, 10.7vw, 58px);
+    line-height: 1.24;
+    letter-spacing: -0.045em;
+  }
+  .silla-hero-content > p {
+    font-size: 17px;
+    margin-top: 18px;
+  }
+  .silla-hero-actions {
+    gap: 28px;
+    margin-top: 28px;
+  }
+}
+.silla-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 216px;
+  min-height: 60px;
+  padding: 16px 26px;
+  gap: 20px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.silla-hero-cta svg {
+  flex-shrink: 0;
+}
+.silla-hero-cta-primary {
+  background: #fff;
+  color: #142638;
+}
+.silla-hero-cta-primary:hover {
+  background: #e8edf0;
+}
+.silla-hero-cta-secondary {
+  background: #142638;
+  color: #fff;
+  border-color: #b8c5ce;
+}
+.silla-hero-cta-secondary:hover {
+  background: #294354;
+  border-color: #fff;
+}
+.silla-hero-actions .silla-hero-cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+@media (max-width: 767px) {
+  .silla-hero-actions {
+    gap: 12px;
+  }
+  .silla-hero-cta {
+    flex: 1;
+    width: auto;
+    max-width: 216px;
+    min-width: 0;
+    min-height: 58px;
+    padding: 16px;
+    gap: 12px;
+    font-size: 16px;
+  }
+}

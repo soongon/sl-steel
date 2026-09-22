@@ -28,14 +28,14 @@ export default function PostForm({ post, categories, action }: Props) {
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugManual, setSlugManual] = useState(!!post);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    post?.categories ?? (categories[0] ? [categories[0].name] : [])
+    post?.categories ?? (categories[0] ? [categories[0].name] : []),
   );
   const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
   const [content, setContent] = useState(post?.content ?? "");
   const [thumbnailUrl, setThumbnailUrl] = useState(post?.thumbnail_url ?? "");
   const [status, setStatus] = useState(post?.status ?? "draft");
   const [publishedAt, setPublishedAt] = useState(
-    post?.published_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10)
+    post?.published_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
   );
   const [showPreview, setShowPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -85,7 +85,10 @@ export default function PostForm({ post, categories, action }: Props) {
         <div className="space-y-4">
           {/* 제목 */}
           <div>
-            <label htmlFor="title" className="mb-1 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="title"
+              className="mb-1 block text-sm font-medium text-foreground"
+            >
               제목
             </label>
             <input
@@ -101,7 +104,10 @@ export default function PostForm({ post, categories, action }: Props) {
 
           {/* 슬러그 */}
           <div>
-            <label htmlFor="slug" className="mb-1 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="slug"
+              className="mb-1 block text-sm font-medium text-foreground"
+            >
               슬러그
             </label>
             <input
@@ -120,7 +126,10 @@ export default function PostForm({ post, categories, action }: Props) {
 
           {/* 요약 */}
           <div>
-            <label htmlFor="excerpt" className="mb-1 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="excerpt"
+              className="mb-1 block text-sm font-medium text-foreground"
+            >
               요약
             </label>
             <textarea
@@ -144,7 +153,10 @@ export default function PostForm({ post, categories, action }: Props) {
           {/* MDX 에디터 */}
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <label htmlFor="content" className="text-sm font-medium text-foreground">
+              <label
+                htmlFor="content"
+                className="text-sm font-medium text-foreground"
+              >
                 본문 (MDX)
               </label>
               <button
@@ -172,11 +184,16 @@ export default function PostForm({ post, categories, action }: Props) {
         {/* 오른쪽: 사이드바 */}
         <div className="space-y-4">
           <div className="rounded-xl border border-border bg-card p-4">
-            <h3 className="mb-3 text-sm font-semibold text-foreground">게시 설정</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">
+              게시 설정
+            </h3>
 
             {/* 상태 */}
             <div className="mb-3">
-              <label htmlFor="status" className="mb-1 block text-xs font-medium text-steel">
+              <label
+                htmlFor="status"
+                className="mb-1 block text-xs font-medium text-steel"
+              >
                 상태
               </label>
               <select
@@ -197,7 +214,10 @@ export default function PostForm({ post, categories, action }: Props) {
               </label>
               <div className="space-y-1.5 rounded-lg border border-border bg-card px-3 py-2">
                 {categories.map((cat) => (
-                  <label key={cat.id} className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
+                  <label
+                    key={cat.id}
+                    className="flex items-center gap-2 text-sm text-foreground cursor-pointer"
+                  >
                     <input
                       type="checkbox"
                       checked={selectedCategories.includes(cat.name)}
@@ -205,7 +225,7 @@ export default function PostForm({ post, categories, action }: Props) {
                         setSelectedCategories((prev) =>
                           e.target.checked
                             ? [...prev, cat.name]
-                            : prev.filter((c) => c !== cat.name)
+                            : prev.filter((c) => c !== cat.name),
                         );
                       }}
                       className="rounded border-border text-accent focus:ring-accent/20"
@@ -215,13 +235,18 @@ export default function PostForm({ post, categories, action }: Props) {
                 ))}
               </div>
               {selectedCategories.length === 0 && (
-                <p className="mt-1 text-xs text-red-500">카테고리를 1개 이상 선택하세요</p>
+                <p className="mt-1 text-xs text-red-500">
+                  카테고리를 1개 이상 선택하세요
+                </p>
               )}
             </div>
 
             {/* 발행일 */}
             <div className="mb-4">
-              <label htmlFor="published_at" className="mb-1 block text-xs font-medium text-steel">
+              <label
+                htmlFor="published_at"
+                className="mb-1 block text-xs font-medium text-steel"
+              >
                 발행일
               </label>
               <input
@@ -233,9 +258,7 @@ export default function PostForm({ post, categories, action }: Props) {
               />
             </div>
 
-            {error && (
-              <p className="mb-3 text-sm text-red-500">{error}</p>
-            )}
+            {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
 
             <button
               type="submit"

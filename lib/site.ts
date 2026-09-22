@@ -57,9 +57,9 @@ export const SITE = {
     title: "공사 후 현장에 남은 철근, 신라철강이 가져갑니다",
     body: "공사 후 현장에 남은 녹슨 철근이나 작업 중 절단된 철근은 일반적으로 처리가 어렵습니다.\n신라철강은 이러한 공사 후 남은 철근을 최고가에 직접 매입·수거합니다.",
     steps: [
-      { label: "전화 한 통",  sub: "연락 즉시 상담" },
+      { label: "전화 한 통", sub: "연락 즉시 상담" },
       { label: "현장 직방문", sub: "트럭 직접 출동" },
-      { label: "즉시 정산",   sub: "현장에서 바로"  },
+      { label: "즉시 정산", sub: "현장에서 바로" },
     ] as const,
   },
 
@@ -83,7 +83,12 @@ export const SITE = {
     },
     delivery: {
       title: "철근·H빔 납품",
-      bullets: ["대량 재고 보유", "현장 직납", "긴급 대응", "안정 공급"] as const,
+      bullets: [
+        "대량 재고 보유",
+        "현장 직납",
+        "긴급 대응",
+        "안정 공급",
+      ] as const,
       cta: "납품 문의" as InquiryType,
     },
   },
@@ -111,10 +116,45 @@ export const SITE = {
   process: {
     tabs: ["매입 프로세스", "납품 프로세스"] as const,
     recovery: {
-      steps: ["문의", "상태 확인", "매입가 제시", "현장 수거", "정산"] as const,
+      guide: "남은 철근의 매입, 이렇게 진행합니다.",
+      steps: [
+        { title: "문의", description: "철근 수량과 현장 위치를 알려주세요." },
+        {
+          title: "상태 확인",
+          description: "규격과 길이, 철근 상태를 확인합니다.",
+        },
+        {
+          title: "매입가 제시",
+          description: "확인한 자재를 기준으로 매입가를 안내합니다.",
+        },
+        {
+          title: "현장 수거",
+          description: "일정을 협의하고 현장에서 수거합니다.",
+        },
+        {
+          title: "정산",
+          description: "수거한 물량과 거래 내용을 확인해 정산합니다.",
+        },
+      ] as const,
     },
     delivery: {
-      steps: ["문의", "견적/일정", "출고", "현장 납품", "사후 대응"] as const,
+      guide: "필요한 자재의 납품, 이렇게 진행합니다.",
+      steps: [
+        { title: "문의", description: "필요한 규격과 수량을 알려주세요." },
+        {
+          title: "견적/일정",
+          description: "견적과 납품 가능 일정을 안내합니다.",
+        },
+        { title: "출고", description: "주문한 자재를 확인하고 출고합니다." },
+        {
+          title: "현장 납품",
+          description: "협의한 일정에 맞춰 현장에 납품합니다.",
+        },
+        {
+          title: "사후 대응",
+          description: "납품 후 확인 사항과 추가 문의를 안내합니다.",
+        },
+      ] as const,
     },
   },
 
@@ -174,9 +214,10 @@ export const SITE = {
 
   // 푸터
   footer: {
-    tagline: "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
+    tagline:
+      "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
     email: "soongon@gmail.com",
-    kakao: "",   // 카카오 채널 URL 확정 후 입력
+    kakao: "", // 카카오 채널 URL 확정 후 입력
     naverPlace: "https://map.naver.com/p/entry/place/2050283327",
     address: {
       street: "태종로 263-32",
@@ -186,8 +227,8 @@ export const SITE = {
     },
     regions: [
       { name: "대표 전화", phone: "010-9264-3336", coverage: "" },
-      { name: "중부권",    phone: "010-5761-0400", coverage: "경기·강원·충청" },
-      { name: "남부권",    phone: "010-9264-3336", coverage: "경상·전라" },
+      { name: "중부권", phone: "010-5761-0400", coverage: "경기·강원·충청" },
+      { name: "남부권", phone: "010-9264-3336", coverage: "경상·전라" },
     ] as const,
   },
 } as const;

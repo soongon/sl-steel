@@ -1,5 +1,7 @@
 "use server";
 
+import { SLUG_PATTERN } from "@/lib/post-validation";
+import { revalidatePostPages } from "@/lib/revalidate-posts";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { createSupabaseAdmin, requireAuth } from "./supabase-server";
@@ -73,11 +75,11 @@ function parseCategories(formData: FormData): string[] {
   return parsed as string[];
 }
 
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
 function validateSlug(slug: string): void {
   if (!SLUG_PATTERN.test(slug)) {
-    throw new Error("슬러그는 영문 소문자, 숫자, 하이픈(-)만 사용할 수 있습니다.");
+    throw new Error(
+      "슬러그는 영문 소문자, 숫자, 하이픈(-)만 사용할 수 있습니다.",
+    );
   }
 }
 
@@ -94,14 +96,25 @@ function parsePostData(formData: FormData): PostData {
   if (!VALID_POST_STATUSES.includes(status as PostStatus)) {
     throw new Error("상태값은 draft 또는 published만 가능합니다.");
   }
-  const publishedAt = status === "published"
-    ? optionalString(formData, "published_at") || new Date().toISOString()
-    : null;
+  const publishedAt =
+    status === "published"
+      ? optionalString(formData, "published_at") || new Date().toISOString()
+      : null;
 
-  return { title, slug, categories, excerpt, content, thumbnail_url: thumbnailUrl, status: status as PostStatus, published_at: publishedAt };
+  return {
+    title,
+    slug,
+    categories,
+    excerpt,
+    content,
+    thumbnail_url: thumbnailUrl,
+    status: status as PostStatus,
+    published_at: publishedAt,
+  };
 }
 
-const POST_COLUMNS = "id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at, share_token, share_expires_at";
+const POST_COLUMNS =
+  "id, slug, title, categories, excerpt, content, thumbnail_url, status, published_at, created_at, share_token, share_expires_at";
 
 // ── 조회 ──────────────────────────────────────────────────────────────
 
@@ -144,7 +157,9 @@ export async function getCategories(): Promise<Category[]> {
 
 // ── 생성 ──────────────────────────────────────────────────────────────
 
-export async function createPost(formData: FormData): Promise<{ error?: string }> {
+export async function createPost(
+  formData: FormData,
+): Promise<{ error?: string }> {
   try {
     await requireAuth();
     const admin = createSupabaseAdmin();
@@ -167,19 +182,23 @@ export async function createPost(formData: FormData): Promise<{ error?: string }
       return { error: "글 저장에 실패했습니다. 다시 시도해 주세요." };
     }
 
-    revalidatePath("/blog");
-    revalidatePath("/");
-    revalidatePath("/admin");
+    revalidatePostPages();
     return {};
   } catch (err) {
     console.error("createPost error:", err);
-    return { error: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+    return {
+      error:
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.",
+    };
   }
 }
 
 // ── 수정 ──────────────────────────────────────────────────────────────
 
-export async function updatePost(id: string, formData: FormData): Promise<{ error?: string }> {
+export async function updatePost(
+  id: string,
+  formData: FormData,
+): Promise<{ error?: string }> {
   try {
     await requireAuth();
     const admin = createSupabaseAdmin();
@@ -203,13 +222,14 @@ export async function updatePost(id: string, formData: FormData): Promise<{ erro
       return { error: "글 수정에 실패했습니다. 다시 시도해 주세요." };
     }
 
-    revalidatePath("/blog");
-    revalidatePath("/");
-    revalidatePath("/admin");
+    revalidatePostPages();
     return {};
   } catch (err) {
     console.error("updatePost error:", err);
-    return { error: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+    return {
+      error:
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.",
+    };
   }
 }
 
@@ -226,13 +246,14 @@ export async function deletePost(id: string): Promise<{ error?: string }> {
       return { error: "글 삭제에 실패했습니다. 다시 시도해 주세요." };
     }
 
-    revalidatePath("/blog");
-    revalidatePath("/");
-    revalidatePath("/admin");
+    revalidatePostPages();
     return {};
   } catch (err) {
     console.error("deletePost error:", err);
-    return { error: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+    return {
+      error:
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.",
+    };
   }
 }
 
@@ -245,7 +266,10 @@ async function getShareUrl(token: string): Promise<string> {
   return `${protocol}://${host}/share/${token}`;
 }
 
-async function createDraftForPost(postId: string, shareUrl: string): Promise<boolean> {
+async function createDraftForPost(
+  postId: string,
+  shareUrl: string,
+): Promise<boolean> {
   const admin = createSupabaseAdmin();
   const { data: post } = await admin
     .from("posts")
@@ -264,11 +288,15 @@ async function createDraftForPost(postId: string, shareUrl: string): Promise<boo
   }
 }
 
-export async function generateShareToken(postId: string): Promise<{ token: string; expiresAt: string; draftCreated: boolean }> {
+export async function generateShareToken(
+  postId: string,
+): Promise<{ token: string; expiresAt: string; draftCreated: boolean }> {
   await requireAuth();
   const admin = createSupabaseAdmin();
   const token = crypto.randomUUID();
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+  const expiresAt = new Date(
+    Date.now() + 7 * 24 * 60 * 60 * 1000,
+  ).toISOString();
 
   const { error } = await admin
     .from("posts")
@@ -287,7 +315,9 @@ export async function generateShareToken(postId: string): Promise<{ token: strin
   return { token, expiresAt, draftCreated };
 }
 
-export async function sendShareDraft(postId: string): Promise<{ draftCreated: boolean }> {
+export async function sendShareDraft(
+  postId: string,
+): Promise<{ draftCreated: boolean }> {
   try {
     await requireAuth();
 

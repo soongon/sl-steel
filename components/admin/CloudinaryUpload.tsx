@@ -3,25 +3,15 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Script from "next/script";
+import { optimizedUploadUrl, type UploadWidget } from "@/lib/cloudinary";
 
 interface Props {
   value: string;
   onChange: (url: string) => void;
 }
 
-declare global {
-  interface Window {
-    cloudinary?: {
-      createUploadWidget: (
-        config: Record<string, unknown>,
-        callback: (error: unknown, result: { event: string; info: { secure_url: string; resource_type: string } }) => void
-      ) => { open: () => void };
-    };
-  }
-}
-
 export default function CloudinaryUpload({ value, onChange }: Props) {
-  const widgetRef = useRef<{ open: () => void } | null>(null);
+  const widgetRef = useRef<UploadWidget | null>(null);
 
   useEffect(() => {
     return () => {
@@ -50,13 +40,10 @@ export default function CloudinaryUpload({ value, onChange }: Props) {
       (error, result) => {
         if (error) return;
         if (result.event === "success") {
-          const url = result.info.secure_url.replace(
-            "/upload/",
-            "/upload/f_auto,q_auto,w_800/"
-          );
+          const url = optimizedUploadUrl(result.info);
           onChange(url);
         }
-      }
+      },
     );
 
     widgetRef.current = widget;

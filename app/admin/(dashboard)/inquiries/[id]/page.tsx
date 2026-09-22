@@ -30,27 +30,38 @@ export default async function InquiryDetailPage({ params }: Props) {
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <span className="text-xs font-medium text-steel">이름</span>
-            <p className="mt-1 text-base font-semibold text-foreground">{inquiry.name}</p>
+            <p className="mt-1 text-base font-semibold text-foreground">
+              {inquiry.name}
+            </p>
           </div>
           <div>
             <span className="text-xs font-medium text-steel">연락처</span>
             <p className="mt-1 text-base font-semibold text-foreground">
-              <a href={`tel:${inquiry.phone}`} className="text-accent hover:text-accent-dark">
+              <a
+                href={`tel:${inquiry.phone}`}
+                className="text-accent hover:text-accent-dark"
+              >
                 {inquiry.phone}
               </a>
             </p>
           </div>
           <div>
             <span className="text-xs font-medium text-steel">문의 유형</span>
-            <p className="mt-1 text-base text-foreground">{inquiry.inquiry_type}</p>
+            <p className="mt-1 text-base text-foreground">
+              {inquiry.inquiry_type}
+            </p>
           </div>
           <div>
             <span className="text-xs font-medium text-steel">현장/지역</span>
-            <p className="mt-1 text-base text-foreground">{inquiry.location || "—"}</p>
+            <p className="mt-1 text-base text-foreground">
+              {inquiry.location || "—"}
+            </p>
           </div>
           <div>
             <span className="text-xs font-medium text-steel">접수일</span>
-            <p className="mt-1 text-base text-foreground">{formatDate(inquiry.created_at)}</p>
+            <p className="mt-1 text-base text-foreground">
+              {formatDate(inquiry.created_at)}
+            </p>
           </div>
           <div>
             <span className="text-xs font-medium text-steel">상태</span>
@@ -70,8 +81,13 @@ export default async function InquiryDetailPage({ params }: Props) {
         )}
 
         <div className="mt-6 border-t border-border pt-4">
-          <span className="mb-2 block text-xs font-medium text-steel">상태 변경</span>
-          <InquiryStatusButtons id={inquiry.id} currentStatus={inquiry.status} />
+          <span className="mb-2 block text-xs font-medium text-steel">
+            상태 변경
+          </span>
+          <InquiryStatusButtons
+            id={inquiry.id}
+            currentStatus={inquiry.status}
+          />
         </div>
       </div>
     </div>

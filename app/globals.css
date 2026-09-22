@@ -10,54 +10,54 @@
   --color-neutral-*: initial;
 
   /* === Brand Colors (Steel Blue) === */
-  --color-primary-50:  #E8EEF4;
-  --color-primary-100: #C5D4E5;
-  --color-primary-200: #9FB8D4;
-  --color-primary-400: #5A8AB8;
-  --color-primary-600: #2C5F8A;   /* 메인 브랜드 컬러 */
-  --color-primary-800: #1A3D5C;
-  --color-primary-900: #0F2640;
+  --color-primary-50: #e8eef4;
+  --color-primary-100: #c5d4e5;
+  --color-primary-200: #9fb8d4;
+  --color-primary-400: #5a8ab8;
+  --color-primary-600: #2c5f8a; /* 메인 브랜드 컬러 */
+  --color-primary-800: #1a3d5c;
+  --color-primary-900: #0f2640;
 
   /* === Accent Colors (Industrial Orange) === */
-  --color-accent-50:  #FFF3E8;
-  --color-accent-100: #FFD9B3;
-  --color-accent-200: #FFBE7D;
-  --color-accent-400: #F28C28;
-  --color-accent-600: #D4700E;    /* CTA 컬러 (매입 문의) */
-  --color-accent-800: #8C4A09;
+  --color-accent-50: #fff3e8;
+  --color-accent-100: #ffd9b3;
+  --color-accent-200: #ffbe7d;
+  --color-accent-400: #f28c28;
+  --color-accent-600: #d4700e; /* CTA 컬러 (매입 문의) */
+  --color-accent-800: #8c4a09;
 
   /* === Neutral (Warm Gray) === */
-  --color-neutral-0:   #FFFFFF;
-  --color-neutral-50:  #F7F6F3;
-  --color-neutral-100: #EDEBE6;
-  --color-neutral-200: #D9D6CF;
-  --color-neutral-400: #A8A49B;
-  --color-neutral-600: #6B675F;
-  --color-neutral-800: #3D3A34;
-  --color-neutral-900: #1E1C18;
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f7f6f3;
+  --color-neutral-100: #edebe6;
+  --color-neutral-200: #d9d6cf;
+  --color-neutral-400: #a8a49b;
+  --color-neutral-600: #6b675f;
+  --color-neutral-800: #3d3a34;
+  --color-neutral-900: #1e1c18;
 
   /* === Semantic === */
-  --color-success: #1D9E75;
-  --color-danger:  #D93025;
+  --color-success: #1d9e75;
+  --color-danger: #d93025;
 
   /* === 신라철강 브랜드 (로고 전용 — 버튼·링크 등에 남용 금지) === */
-  --color-brand-steel-700: #1B3A5C;  /* 심볼·주조색 */
-  --color-brand-steel-900: #0F1B29;  /* 워드마크 텍스트·다크 배경 */
-  --color-brand-gold:      #C9A227;  /* 로고 곡옥 포인트 전용 */
+  --color-brand-steel-700: #1b3a5c; /* 심볼·주조색 */
+  --color-brand-steel-900: #0f1b29; /* 워드마크 텍스트·다크 배경 */
+  --color-brand-gold: #c9a227; /* 로고 곡옥 포인트 전용 */
 
   /* === 기존 토큰 호환 (블로그 등에서 참조) === */
-  --color-accent:      #2C5F8A;
-  --color-accent-dark: #1A3D5C;
-  --color-brand-navy:  #0F2640;
-  --color-brand-light: #1A3D5C;
-  --color-steel:       #6B675F;
-  --color-surface:     #F7F6F3;
-  --color-foreground:  #1E1C18;
-  --color-muted:       #6B675F;
-  --color-border:      #D9D6CF;
-  --color-card:        #FFFFFF;
-  --color-notice:      #2C5F8A;
-  --color-notice-bg:   #E8EEF4;
+  --color-accent: #2c5f8a;
+  --color-accent-dark: #1a3d5c;
+  --color-brand-navy: #0f2640;
+  --color-brand-light: #1a3d5c;
+  --color-steel: #6b675f;
+  --color-surface: #f7f6f3;
+  --color-foreground: #1e1c18;
+  --color-muted: #6b675f;
+  --color-border: #d9d6cf;
+  --color-card: #ffffff;
+  --color-notice: #2c5f8a;
+  --color-notice-bg: #e8eef4;
 
   /* === Typography === */
   --font-sans: "Pretendard Variable", "Pretendard", system-ui, sans-serif;
@@ -69,11 +69,11 @@
   --radius-xl: 16px;
 
   /* === Shadow === */
-  --shadow-card:  0 1px 3px 0 rgb(15 30 46 / 0.06),
-                  0 4px 16px 0 rgb(15 30 46 / 0.05);
-  --shadow-lift:  0 4px 24px 0 rgb(15 30 46 / 0.10);
-  --shadow-blue:  0 0 0 1px rgb(44 95 138 / 0.15),
-                  0 4px 16px 0 rgb(44 95 138 / 0.10);
+  --shadow-card:
+    0 1px 3px 0 rgb(15 30 46 / 0.06), 0 4px 16px 0 rgb(15 30 46 / 0.05);
+  --shadow-lift: 0 4px 24px 0 rgb(15 30 46 / 0.1);
+  --shadow-blue:
+    0 0 0 1px rgb(44 95 138 / 0.15), 0 4px 16px 0 rgb(44 95 138 / 0.1);
 }
 
 /* ─── 베이스 ────────────────────────────────────────────────────────────────── */

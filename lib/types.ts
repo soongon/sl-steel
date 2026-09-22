@@ -1,10 +1,17 @@
 // ── 공유 타입 & 상수 ──────────────────────────────────────────────────────
 
 export type PostStatus = "draft" | "published";
-export const VALID_POST_STATUSES: readonly PostStatus[] = ["draft", "published"];
+export const VALID_POST_STATUSES: readonly PostStatus[] = [
+  "draft",
+  "published",
+];
 
 export type InquiryStatus = "new" | "read" | "resolved";
-export const VALID_INQUIRY_STATUSES: readonly InquiryStatus[] = ["new", "read", "resolved"];
+export const VALID_INQUIRY_STATUSES: readonly InquiryStatus[] = [
+  "new",
+  "read",
+  "resolved",
+];
 
 // ── 유틸 함수 ─────────────────────────────────────────────────────────────
 
@@ -15,7 +22,9 @@ export function formatDate(raw: string): string {
 
 /** Cloudinary 동영상 URL 판별 */
 export function isVideoUrl(url: string): boolean {
-  return /\/video\/upload\//.test(url) || /\.(mp4|mov|webm|avi)([?#]|$)/i.test(url);
+  return (
+    /\/video\/upload\//.test(url) || /\.(mp4|mov|webm|avi)([?#]|$)/i.test(url)
+  );
 }
 
 /** Cloudinary URL에서 파일명 추출 (확장자 포함) */

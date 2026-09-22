@@ -35,7 +35,14 @@ export const metadata: Metadata = {
     siteName: SITE.brand.ko,
     title: SITE.seo.title,
     description: SITE.seo.description,
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "신라철강 — 철근·H빔 납품, 잔여 철근 매입·수거" }],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "신라철강 — 철근·H빔 납품, 잔여 철근 매입·수거",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -72,9 +79,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

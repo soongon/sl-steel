@@ -28,15 +28,22 @@ export async function submitInquiry(formData: FormData) {
   const location = formData.get("location");
   const message = formData.get("message");
 
-  if (typeof inquiry_type !== "string" || !inquiry_type.trim()
-    || typeof name !== "string" || !name.trim()
-    || typeof phone !== "string" || !phone.trim()) {
+  if (
+    typeof inquiry_type !== "string" ||
+    !inquiry_type.trim() ||
+    typeof name !== "string" ||
+    !name.trim() ||
+    typeof phone !== "string" ||
+    !phone.trim()
+  ) {
     throw new Error("필수 항목을 입력해 주세요.");
   }
 
   const normalizedPhone = phone.trim().replace(/[-\s]/g, "");
   if (!PHONE_PATTERN.test(normalizedPhone)) {
-    throw new Error("전화번호 형식이 올바르지 않습니다. (예: 01012345678 또는 010-1234-5678)");
+    throw new Error(
+      "전화번호 형식이 올바르지 않습니다. (예: 01012345678 또는 010-1234-5678)",
+    );
   }
 
   const safeLocation = typeof location === "string" ? location.trim() : "";
@@ -50,7 +57,8 @@ export async function submitInquiry(formData: FormData) {
     message: safeMessage,
   });
 
-  if (error) throw new Error("문의 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+  if (error)
+    throw new Error("문의 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.");
 
   revalidatePath("/admin/inquiries");
 }

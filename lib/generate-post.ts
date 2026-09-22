@@ -1,9 +1,10 @@
 "use server";
 
+import { SLUG_PATTERN } from "@/lib/post-validation";
+import { revalidatePostPages } from "@/lib/revalidate-posts";
 import Anthropic from "@anthropic-ai/sdk";
 import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-import { revalidatePath } from "next/cache";
 import { createSupabaseAdmin, requireAuth } from "./supabase-server";
 import { isVideoUrl } from "./types";
 import { BLOG_CATEGORIES } from "./blog";
@@ -23,14 +24,14 @@ export interface GenerateResult {
 }
 
 // 사이트 카테고리 (BLOG_CATEGORIES에서 "전체" 제외)
-const POST_CATEGORIES = BLOG_CATEGORIES.filter((c) => c !== "전체") as [string, ...string[]];
+const POST_CATEGORIES = BLOG_CATEGORIES.filter((c) => c !== "전체") as [
+  string,
+  ...string[],
+];
 
 const PostSchema = z.object({
   title: z.string().describe("'{현장명} {작업내용} — {부제목}' 형식"),
-  slug: z
-    .string()
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .describe("영문 소문자와 하이픈"),
+  slug: z.string().regex(SLUG_PATTERN).describe("영문 소문자와 하이픈"),
   categories: z.array(z.enum(POST_CATEGORIES)).min(2).max(3),
   excerpt: z.string().describe("1~2문장 요약, 회사명 미포함"),
   content: z.string().describe("마크다운 본문, [사진N] 마커 포함"),
@@ -41,7 +42,9 @@ const MODEL = process.env.BLOG_AI_MODEL || "claude-opus-5";
 function requireApiKey(): string {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) {
-    throw new Error("환경변수 ANTHROPIC_API_KEY가 설정되지 않았습니다. Vercel/로컬 env에 추가해 주세요.");
+    throw new Error(
+      "환경변수 ANTHROPIC_API_KEY가 설정되지 않았습니다. Vercel/로컬 env에 추가해 주세요.",
+    );
   }
   return key;
 }
@@ -53,7 +56,11 @@ async function ensureUniqueSlug(slug: string): Promise<string> {
   const admin = createSupabaseAdmin();
   let candidate = slug;
   for (let i = 2; i <= 20; i++) {
-    const { data } = await admin.from("posts").select("id").eq("slug", candidate).maybeSingle();
+    const { data } = await admin
+      .from("posts")
+      .select("id")
+      .eq("slug", candidate)
+      .maybeSingle();
     if (!data) return candidate;
     candidate = `${slug}-${i}`;
   }
@@ -81,7 +88,9 @@ function ensureImageMarkers(content: string, mediaUrls: string[]): string {
 
 // ── 메인 서버 액션 ────────────────────────────────────────────────────
 
-export async function generateAndPublishPost(formData: FormData): Promise<GenerateResult> {
+export async function generateAndPublishPost(
+  formData: FormData,
+): Promise<GenerateResult> {
   try {
     await requireAuth();
 
@@ -99,8 +108,10 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
       return { error: "입력 형식이 올바르지 않습니다." };
     }
     if (
-      !Array.isArray(materials) || !materials.every((m) => typeof m === "string") ||
-      !Array.isArray(mediaUrls) || !mediaUrls.every((u) => typeof u === "string")
+      !Array.isArray(materials) ||
+      !materials.every((m) => typeof m === "string") ||
+      !Array.isArray(mediaUrls) ||
+      !mediaUrls.every((u) => typeof u === "string")
     ) {
       return { error: "입력 형식이 올바르지 않습니다." };
     }
@@ -110,7 +121,8 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
 
     if (!siteName) return { error: "현장명을 입력해 주세요." };
     const imageUrls = mediaUrls.filter((u) => !isVideoUrl(u));
-    if (imageUrls.length === 0) return { error: "사진을 1장 이상 올려 주세요." };
+    if (imageUrls.length === 0)
+      return { error: "사진을 1장 이상 올려 주세요." };
 
     // 2. Claude API 호출 — 사진 분석 + 블로그 JSON 생성
     const client = new Anthropic({ apiKey: requireApiKey() });
@@ -142,16 +154,24 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
     });
 
     if (response.stop_reason === "refusal") {
-      return { error: "AI가 이 요청의 처리를 거절했습니다. 사진과 키워드를 확인 후 다시 시도해 주세요." };
+      return {
+        error:
+          "AI가 이 요청의 처리를 거절했습니다. 사진과 키워드를 확인 후 다시 시도해 주세요.",
+      };
     }
     const post = response.parsed_output;
     if (!post) {
-      return { error: "글 생성 결과를 해석하지 못했습니다. 다시 시도해 주세요." };
+      return {
+        error: "글 생성 결과를 해석하지 못했습니다. 다시 시도해 주세요.",
+      };
     }
 
     // 3. 후처리 — slug 고유화, 마커 보정, 미디어 치환
     const slug = await ensureUniqueSlug(post.slug);
-    const finalContent = replaceMediaMarkers(ensureImageMarkers(post.content, mediaUrls), mediaUrls);
+    const finalContent = replaceMediaMarkers(
+      ensureImageMarkers(post.content, mediaUrls),
+      mediaUrls,
+    );
     const thumbnailUrl = imageUrls[0] ?? mediaUrls[0] ?? null;
 
     // 4. 저장 (자동 발행)
@@ -172,14 +192,14 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
       .single();
 
     if (insertError || !inserted) {
-      console.error("generateAndPublishPost insert error:", insertError?.message);
+      console.error(
+        "generateAndPublishPost insert error:",
+        insertError?.message,
+      );
       return { error: "글 저장에 실패했습니다. 다시 시도해 주세요." };
     }
 
-    revalidatePath("/blog");
-    revalidatePath("/");
-    revalidatePath(`/blog/${slug}`);
-    revalidatePath("/admin");
+    revalidatePostPages(slug);
 
     // 5. 공유 링크 발급 + 지메일 임시보관함 메일 생성 (실패해도 발행은 유지)
     let draftCreated = false;
@@ -193,16 +213,26 @@ export async function generateAndPublishPost(formData: FormData): Promise<Genera
     return { slug, postId: inserted.id, title: post.title, draftCreated };
   } catch (err) {
     if (err instanceof Anthropic.RateLimitError) {
-      return { error: "AI 사용량 한도에 걸렸습니다. 잠시 후 다시 시도해 주세요." };
+      return {
+        error: "AI 사용량 한도에 걸렸습니다. 잠시 후 다시 시도해 주세요.",
+      };
     }
     if (err instanceof Anthropic.APIConnectionError) {
-      return { error: "AI 서버에 연결하지 못했습니다. 네트워크 확인 후 다시 시도해 주세요." };
+      return {
+        error:
+          "AI 서버에 연결하지 못했습니다. 네트워크 확인 후 다시 시도해 주세요.",
+      };
     }
     if (err instanceof Anthropic.APIError) {
       console.error("Anthropic API error:", err.status, err.message);
-      return { error: `AI 호출에 실패했습니다 (${err.status ?? "오류"}). 잠시 후 다시 시도해 주세요.` };
+      return {
+        error: `AI 호출에 실패했습니다 (${err.status ?? "오류"}). 잠시 후 다시 시도해 주세요.`,
+      };
     }
     console.error("generateAndPublishPost error:", err);
-    return { error: err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다." };
+    return {
+      error:
+        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.",
+    };
   }
 }

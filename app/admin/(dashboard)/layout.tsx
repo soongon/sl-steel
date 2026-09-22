@@ -3,7 +3,11 @@ import { getNewInquiryCount } from "@/lib/inquiries";
 
 export const dynamic = "force-dynamic";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const newInquiryCount = await getNewInquiryCount();
 
   return (

@@ -41,8 +41,16 @@ export default function QuickPostForm() {
           ? [data.category]
           : [];
 
-      if (!data.title || !data.slug || cats.length === 0 || !data.excerpt || !data.content) {
-        setParseError("필수 필드가 누락되었습니다: title, slug, categories, excerpt, content");
+      if (
+        !data.title ||
+        !data.slug ||
+        cats.length === 0 ||
+        !data.excerpt ||
+        !data.content
+      ) {
+        setParseError(
+          "필수 필드가 누락되었습니다: title, slug, categories, excerpt, content",
+        );
         return;
       }
 
@@ -54,7 +62,9 @@ export default function QuickPostForm() {
         content: data.content,
       });
     } catch {
-      setParseError("JSON 파싱에 실패했습니다. Claude.ai 출력을 그대로 붙여넣어 주세요.");
+      setParseError(
+        "JSON 파싱에 실패했습니다. Claude.ai 출력을 그대로 붙여넣어 주세요.",
+      );
     }
   }
 
@@ -86,7 +96,9 @@ export default function QuickPostForm() {
       router.push("/admin");
       router.refresh();
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "저장에 실패했습니다.");
+      setSubmitError(
+        err instanceof Error ? err.message : "저장에 실패했습니다.",
+      );
       setSubmitting(false);
     }
   }
@@ -103,20 +115,26 @@ export default function QuickPostForm() {
     <div className="space-y-4">
       {/* 1. 현장 사진 — 항상 표시 */}
       <div className="rounded-xl border border-border bg-card p-4">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">1. 현장 사진·동영상</h3>
+        <h3 className="mb-3 text-sm font-semibold text-foreground">
+          1. 현장 사진·동영상
+        </h3>
         <MultiImageUpload images={images} onChange={setImages} />
       </div>
 
       {/* 2. JSON 입력 */}
       <div className="rounded-xl border border-border bg-card p-4">
-        <h3 className="mb-3 text-sm font-semibold text-foreground">2. Claude.ai 출력 붙여넣기</h3>
+        <h3 className="mb-3 text-sm font-semibold text-foreground">
+          2. Claude.ai 출력 붙여넣기
+        </h3>
         <textarea
           id="raw-json"
           value={raw}
           onChange={(e) => setRaw(e.target.value)}
           rows={10}
           className="w-full resize-y rounded-lg border border-border bg-surface px-4 py-3 font-mono text-sm text-foreground outline-none focus:border-accent focus:ring-2 focus:ring-accent/20"
-          placeholder={'{\n  "title": "포스트 제목",\n  "slug": "post-slug",\n  "categories": ["수거 사례", "현장 실무"],\n  "excerpt": "요약",\n  "content": "## 본문..."\n}'}
+          placeholder={
+            '{\n  "title": "포스트 제목",\n  "slug": "post-slug",\n  "categories": ["수거 사례", "현장 실무"],\n  "excerpt": "요약",\n  "content": "## 본문..."\n}'
+          }
         />
 
         {parseError && (
@@ -138,7 +156,9 @@ export default function QuickPostForm() {
       {parsed && (
         <>
           <div className="rounded-xl border border-border bg-card p-4">
-            <h3 className="mb-3 text-sm font-semibold text-foreground">3. 미리보기</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">
+              3. 미리보기
+            </h3>
             <div className="space-y-2 text-sm">
               <div>
                 <span className="font-medium text-steel">제목: </span>
@@ -152,7 +172,10 @@ export default function QuickPostForm() {
                 <span className="font-medium text-steel">카테고리: </span>
                 <span className="inline-flex flex-wrap gap-1">
                   {parsed.categories.map((cat) => (
-                    <span key={cat} className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
+                    <span
+                      key={cat}
+                      className="inline-block rounded bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent"
+                    >
                       {cat}
                     </span>
                   ))}
@@ -167,7 +190,8 @@ export default function QuickPostForm() {
                 <span className="text-muted">{parsed.content.length}자</span>
               </div>
               {(() => {
-                const markerCount = (parsed.content.match(/\[사진\d+\]/g) || []).length;
+                const markerCount = (parsed.content.match(/\[사진\d+\]/g) || [])
+                  .length;
                 return (
                   <>
                     {images.length > 0 && (
@@ -178,10 +202,19 @@ export default function QuickPostForm() {
                     )}
                     {markerCount > 0 && (
                       <div>
-                        <span className="font-medium text-steel">본문 미디어: </span>
-                        <span className={images.length >= markerCount ? "text-green-600" : "text-yellow-600"}>
+                        <span className="font-medium text-steel">
+                          본문 미디어:{" "}
+                        </span>
+                        <span
+                          className={
+                            images.length >= markerCount
+                              ? "text-green-600"
+                              : "text-yellow-600"
+                          }
+                        >
                           {markerCount}개 마커 / {images.length}개 업로드
-                          {images.length < markerCount && " — 사진/동영상을 더 업로드하세요"}
+                          {images.length < markerCount &&
+                            " — 사진/동영상을 더 업로드하세요"}
                         </span>
                       </div>
                     )}
@@ -191,9 +224,7 @@ export default function QuickPostForm() {
             </div>
           </div>
 
-          {submitError && (
-            <p className="text-sm text-red-500">{submitError}</p>
-          )}
+          {submitError && <p className="text-sm text-red-500">{submitError}</p>}
 
           <div className="flex gap-3">
             <button

@@ -3,7 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import MultiImageUpload from "./MultiImageUpload";
-import { generateAndPublishPost, type GenerateResult } from "@/lib/generate-post";
+import {
+  generateAndPublishPost,
+  type GenerateResult,
+} from "@/lib/generate-post";
 
 const WORK_TYPES = ["납품", "매입·수거", "가공", "기타"] as const;
 const MATERIALS = ["철근", "C형강", "각관", "H빔", "유로폼·거푸집"] as const;
@@ -34,7 +37,9 @@ export default function MobilePostForm() {
   }, [submitting]);
 
   function toggleMaterial(m: string) {
-    setMaterials((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
+    setMaterials((prev) =>
+      prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m],
+    );
   }
 
   async function handleSubmit() {
@@ -50,20 +55,25 @@ export default function MobilePostForm() {
       const res = await generateAndPublishPost(formData);
       setResult(res);
     } catch (err) {
-      setResult({ error: err instanceof Error ? err.message : "요청에 실패했습니다." });
+      setResult({
+        error: err instanceof Error ? err.message : "요청에 실패했습니다.",
+      });
     } finally {
       setSubmitting(false);
     }
   }
 
-  const canSubmit = !submitting && siteName.trim().length > 0 && media.length > 0;
+  const canSubmit =
+    !submitting && siteName.trim().length > 0 && media.length > 0;
 
   // ── 완료 화면 ──────────────────────────────────────────────────────
   if (result?.slug) {
     return (
       <div className="space-y-4 rounded-xl border border-border bg-card p-5 text-center">
         <div className="text-4xl">✅</div>
-        <p className="text-sm font-semibold text-foreground">블로그에 발행됐습니다</p>
+        <p className="text-sm font-semibold text-foreground">
+          블로그에 발행됐습니다
+        </p>
         <p className="text-sm text-steel">{result.title}</p>
         {result.draftCreated ? (
           <p className="rounded-lg bg-surface px-3 py-2 text-xs text-steel">
@@ -71,7 +81,8 @@ export default function MobilePostForm() {
           </p>
         ) : (
           <p className="rounded-lg bg-surface px-3 py-2 text-xs text-steel">
-            ⚠️ 공유 메일 생성에 실패했습니다 — 수정 페이지의 &quot;링크 다시보내기&quot;로 재시도할 수 있습니다
+            ⚠️ 공유 메일 생성에 실패했습니다 — 수정 페이지의 &quot;링크
+            다시보내기&quot;로 재시도할 수 있습니다
           </p>
         )}
         <div className="flex flex-col gap-2">
@@ -107,15 +118,22 @@ export default function MobilePostForm() {
     <div className="space-y-4">
       {/* 1. 사진 */}
       <div className="rounded-xl border border-border bg-card p-4">
-        <h3 className="mb-1 text-sm font-semibold text-foreground">1. 현장 사진·동영상</h3>
-        <p className="mb-3 text-xs text-steel">작업 흐름 순서(상차→운송→하역)로 올리면 글 순서가 맞습니다</p>
+        <h3 className="mb-1 text-sm font-semibold text-foreground">
+          1. 현장 사진·동영상
+        </h3>
+        <p className="mb-3 text-xs text-steel">
+          작업 흐름 순서(상차→운송→하역)로 올리면 글 순서가 맞습니다
+        </p>
         <MultiImageUpload images={media} onChange={setMedia} />
       </div>
 
       {/* 2. 현장 정보 */}
       <div className="space-y-4 rounded-xl border border-border bg-card p-4">
         <div>
-          <label htmlFor="site-name" className="mb-1.5 block text-sm font-semibold text-foreground">
+          <label
+            htmlFor="site-name"
+            className="mb-1.5 block text-sm font-semibold text-foreground"
+          >
             2. 현장명 <span className="text-red-500">*</span>
           </label>
           <input
@@ -129,7 +147,9 @@ export default function MobilePostForm() {
         </div>
 
         <div>
-          <p className="mb-1.5 text-sm font-semibold text-foreground">작업 종류</p>
+          <p className="mb-1.5 text-sm font-semibold text-foreground">
+            작업 종류
+          </p>
           <div className="flex flex-wrap gap-2">
             {WORK_TYPES.map((t) => (
               <button
@@ -149,7 +169,9 @@ export default function MobilePostForm() {
         </div>
 
         <div>
-          <p className="mb-1.5 text-sm font-semibold text-foreground">자재 (복수 선택)</p>
+          <p className="mb-1.5 text-sm font-semibold text-foreground">
+            자재 (복수 선택)
+          </p>
           <div className="flex flex-wrap gap-2">
             {MATERIALS.map((m) => (
               <button
@@ -169,7 +191,10 @@ export default function MobilePostForm() {
         </div>
 
         <div>
-          <label htmlFor="memo" className="mb-1.5 block text-sm font-semibold text-foreground">
+          <label
+            htmlFor="memo"
+            className="mb-1.5 block text-sm font-semibold text-foreground"
+          >
             현장 메모 <span className="font-normal text-steel">(선택)</span>
           </label>
           <input
@@ -185,18 +210,23 @@ export default function MobilePostForm() {
 
       {/* 3. 실행 */}
       {result?.error && (
-        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{result.error}</p>
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+          {result.error}
+        </p>
       )}
       <button
         onClick={handleSubmit}
         disabled={!canSubmit}
         className="w-full rounded-xl bg-accent px-4 py-4 text-base font-bold text-white transition-opacity disabled:opacity-40"
       >
-        {submitting ? `글 생성 중… ${elapsed}초 (30초 안팎 걸립니다)` : "사진 분석 → 글 생성 → 바로 발행"}
+        {submitting
+          ? `글 생성 중… ${elapsed}초 (30초 안팎 걸립니다)`
+          : "사진 분석 → 글 생성 → 바로 발행"}
       </button>
       {!submitting && (
         <p className="text-center text-xs text-steel">
-          AI가 사진을 분석해 글을 쓰고 블로그에 바로 게시합니다. 발행 후 수정할 수 있습니다.
+          AI가 사진을 분석해 글을 쓰고 블로그에 바로 게시합니다. 발행 후 수정할
+          수 있습니다.
         </p>
       )}
     </div>

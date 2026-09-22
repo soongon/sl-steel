@@ -43,7 +43,10 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="email"
+              className="mb-1 block text-sm font-medium text-foreground"
+            >
               이메일
             </label>
             <input
@@ -58,7 +61,10 @@ export default function AdminLoginPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-foreground">
+            <label
+              htmlFor="password"
+              className="mb-1 block text-sm font-medium text-foreground"
+            >
               비밀번호
             </label>
             <input
@@ -71,9 +77,7 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-red-500">{error}</p>
-          )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"

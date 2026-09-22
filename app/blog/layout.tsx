@@ -7,7 +7,11 @@ export const metadata: Metadata = {
     "건설 현장 철근 매입·납품 실무 정보. 매입 기준, 현장 준비사항, 시세 정보를 정리합니다.",
 };
 
-export default function BlogLayout({ children }: { children: React.ReactNode }) {
+export default function BlogLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="min-h-screen bg-surface">
       <BlogNav />

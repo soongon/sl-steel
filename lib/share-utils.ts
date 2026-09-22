@@ -106,10 +106,13 @@ function inlineToHtml(text: string): string {
  */
 export function mdxToNaverHtml(mdxContent: string): string {
   // 1. 동영상 태그 → 안내 문구 (escape 전에 처리)
-  let src = mdxContent.replace(/<video\s+[^>]*src="([^"]+)"[^>]*\/?>/g, (_, url) => {
-    const filename = extractFilename(url);
-    return `▶ 현장 영상 (${filename}) — 공유 페이지에서 다운로드 후 이 위치에 업로드해 주세요`;
-  });
+  let src = mdxContent.replace(
+    /<video\s+[^>]*src="([^"]+)"[^>]*\/?>/g,
+    (_, url) => {
+      const filename = extractFilename(url);
+      return `▶ 현장 영상 (${filename}) — 공유 페이지에서 다운로드 후 이 위치에 업로드해 주세요`;
+    },
+  );
 
   // 2. HTML 특수문자 이스케이프
   src = escapeHtml(src);
@@ -120,9 +123,12 @@ export function mdxToNaverHtml(mdxContent: string): string {
     .map((block) => {
       const b = block.trim();
       if (!b) return "";
-      if (/^###\s+/.test(b)) return `<h3>${inlineToHtml(b.replace(/^###\s+/, ""))}</h3>`;
-      if (/^##\s+/.test(b)) return `<h2>${inlineToHtml(b.replace(/^##\s+/, ""))}</h2>`;
-      if (/^#\s+/.test(b)) return `<h2>${inlineToHtml(b.replace(/^#\s+/, ""))}</h2>`;
+      if (/^###\s+/.test(b))
+        return `<h3>${inlineToHtml(b.replace(/^###\s+/, ""))}</h3>`;
+      if (/^##\s+/.test(b))
+        return `<h2>${inlineToHtml(b.replace(/^##\s+/, ""))}</h2>`;
+      if (/^#\s+/.test(b))
+        return `<h2>${inlineToHtml(b.replace(/^#\s+/, ""))}</h2>`;
       if (/^---+$/.test(b)) return "<hr>";
       if (/^[-*+]\s+/m.test(b)) {
         const items = b

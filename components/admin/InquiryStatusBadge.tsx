@@ -12,7 +12,9 @@ const labels: Record<string, string> = {
 
 export default function InquiryStatusBadge({ status }: { status: string }) {
   return (
-    <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${styles[status] ?? "bg-gray-100 text-gray-600"}`}>
+    <span
+      className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${styles[status] ?? "bg-gray-100 text-gray-600"}`}
+    >
       {labels[status] ?? status}
     </span>
   );

@@ -14,7 +14,11 @@ function pageHref(p: number, category: string) {
   return `/blog${qs ? `?${qs}` : ""}`;
 }
 
-export default function Pagination({ page, totalPages, category }: PaginationProps) {
+export default function Pagination({
+  page,
+  totalPages,
+  category,
+}: PaginationProps) {
   if (totalPages <= 1) return null;
 
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);

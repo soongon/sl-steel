@@ -89,7 +89,7 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
           if (!res.ok) throw new Error(`${item.filename} 다운로드 실패`);
           const blob = await res.blob();
           zip.file(item.filename, blob);
-        })
+        }),
       );
 
       const zipBlob = await zip.generateAsync({ type: "blob" });
@@ -110,7 +110,9 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
       <div className="mx-auto max-w-3xl px-4">
         {/* 헤더 */}
         <div className="mb-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted">신라철강 콘텐츠 공유</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted">
+            신라철강 콘텐츠 공유
+          </p>
         </div>
 
         {/* 제목 */}
@@ -130,24 +132,33 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
         <div className="mt-4 rounded-xl border-2 border-accent/40 bg-card p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h2 className="text-sm font-bold text-foreground">네이버 블로그 등록</h2>
-              <p className="mt-0.5 text-xs text-muted">사진 포함 서식을 통째로 복사합니다</p>
+              <h2 className="text-sm font-bold text-foreground">
+                네이버 블로그 등록
+              </h2>
+              <p className="mt-0.5 text-xs text-muted">
+                사진 포함 서식을 통째로 복사합니다
+              </p>
             </div>
             <button
               onClick={copyNaverHtml}
               className="shrink-0 rounded-lg bg-accent px-4 py-2.5 text-sm font-bold text-white hover:bg-accent-dark"
             >
-              {copied === "naver" ? "복사됨! 네이버에 붙여넣으세요" : "네이버용 복사 (사진 포함)"}
+              {copied === "naver"
+                ? "복사됨! 네이버에 붙여넣으세요"
+                : "네이버용 복사 (사진 포함)"}
             </button>
           </div>
           <ol className="mt-3 list-decimal space-y-0.5 pl-5 text-xs leading-relaxed text-muted">
             <li>위 버튼 클릭 → 네이버 블로그 글쓰기 열기</li>
             <li>제목은 &quot;제목 복사&quot;로 따로 붙여넣기</li>
-            <li>본문 영역 클릭 후 붙여넣기(Ctrl+V) — 사진이 자동으로 올라갑니다</li>
+            <li>
+              본문 영역 클릭 후 붙여넣기(Ctrl+V) — 사진이 자동으로 올라갑니다
+            </li>
             <li>안 올라간 사진이 있으면 아래에서 다운로드해 넣어주세요</li>
             {parsed.videos.length > 0 && (
               <li className="font-medium text-foreground">
-                동영상 {parsed.videos.length}개는 붙여넣기에 포함되지 않습니다 — 아래에서 다운로드 후 표시된 위치에 업로드해 주세요
+                동영상 {parsed.videos.length}개는 붙여넣기에 포함되지 않습니다 —
+                아래에서 다운로드 후 표시된 위치에 업로드해 주세요
               </li>
             )}
           </ol>
@@ -180,7 +191,10 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
             </h2>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {parsed.images.map((img, i) => (
-                <div key={i} className="overflow-hidden rounded-lg border border-border">
+                <div
+                  key={i}
+                  className="overflow-hidden rounded-lg border border-border"
+                >
                   <div className="relative aspect-[4/3]">
                     <Image
                       src={img.url}
@@ -191,7 +205,9 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
                     />
                   </div>
                   <div className="flex items-center justify-between bg-card px-3 py-2">
-                    <span className="truncate text-xs font-medium text-foreground">{img.filename}</span>
+                    <span className="truncate text-xs font-medium text-foreground">
+                      {img.filename}
+                    </span>
                     <a
                       href={getDownloadUrl(img.url)}
                       className="shrink-0 rounded bg-accent px-2.5 py-1 text-xs font-semibold text-white hover:bg-accent-dark"
@@ -213,7 +229,10 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
             </h2>
             <div className="space-y-3">
               {parsed.videos.map((vid, i) => (
-                <div key={i} className="overflow-hidden rounded-lg border border-border">
+                <div
+                  key={i}
+                  className="overflow-hidden rounded-lg border border-border"
+                >
                   <video
                     src={vid.url}
                     controls
@@ -222,7 +241,9 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
                     className="w-full"
                   />
                   <div className="flex items-center justify-between bg-card px-3 py-2">
-                    <span className="truncate text-xs font-medium text-foreground">{vid.filename}</span>
+                    <span className="truncate text-xs font-medium text-foreground">
+                      {vid.filename}
+                    </span>
                     <button
                       onClick={() => downloadFile(vid)}
                       className="shrink-0 rounded bg-accent px-2.5 py-1 text-xs font-semibold text-white hover:bg-accent-dark"
@@ -244,7 +265,9 @@ export default function SharePageClient({ title, parsed, naverHtml }: Props) {
               disabled={zipping}
               className="w-full rounded-xl border border-border bg-card py-4 text-sm font-semibold text-foreground transition-colors hover:bg-surface disabled:opacity-50"
             >
-              {zipping ? "ZIP 생성 중..." : `전체 다운로드 (${allMedia.length}개 파일)`}
+              {zipping
+                ? "ZIP 생성 중..."
+                : `전체 다운로드 (${allMedia.length}개 파일)`}
             </button>
           </div>
         )}

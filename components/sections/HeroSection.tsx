@@ -24,7 +24,10 @@ export default function HeroSection() {
           <ContactLink className="silla-hero-cta silla-hero-cta-primary">
             매입 상담 <ArrowRight size={20} aria-hidden="true" />
           </ContactLink>
-          <ContactLink type="납품 문의" className="silla-hero-cta silla-hero-cta-secondary">
+          <ContactLink
+            type="납품 문의"
+            className="silla-hero-cta silla-hero-cta-secondary"
+          >
             납품 문의 <ArrowRight size={20} aria-hidden="true" />
           </ContactLink>
         </div>

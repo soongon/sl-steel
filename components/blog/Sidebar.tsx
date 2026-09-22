@@ -21,7 +21,11 @@ interface SidebarProps {
   activeCategory: string;
 }
 
-export default function Sidebar({ categories, recentPosts, activeCategory }: SidebarProps) {
+export default function Sidebar({
+  categories,
+  recentPosts,
+  activeCategory,
+}: SidebarProps) {
   const mainPhone = SITE.footer.regions[0].phone;
 
   return (

@@ -5,11 +5,11 @@ export const COLOR = {
   primary400: "#5A8AB8",
   primary600: "#2C5F8A",
   primary900: "#0F2640",
-  accent600:  "#D4700E",
-  neutral50:  "#F7F6F3",
-  white:      "#FFFFFF",
+  accent600: "#D4700E",
+  neutral50: "#F7F6F3",
+  white: "#FFFFFF",
   // 신라철강 브랜드 (로고 전용)
   brandSteel700: "#1B3A5C",
   brandSteel900: "#0F1B29",
-  brandGold:     "#C9A227",
+  brandGold: "#C9A227",
 } as const;

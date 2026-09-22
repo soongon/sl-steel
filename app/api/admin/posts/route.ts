@@ -1,5 +1,6 @@
+import { SLUG_PATTERN } from "@/lib/post-validation";
+import { revalidatePostPages } from "@/lib/revalidate-posts";
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 import { createSupabaseAdmin } from "@/lib/supabase-server";
 
 export async function POST(request: NextRequest) {
@@ -7,7 +8,10 @@ export async function POST(request: NextRequest) {
   const apiKey = process.env.ADMIN_API_KEY;
   if (!apiKey) {
     console.error("ADMIN_API_KEY is not configured");
-    return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Server configuration error" },
+      { status: 500 },
+    );
   }
 
   const authHeader = request.headers.get("authorization");
@@ -24,22 +28,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { title, slug, categories, excerpt, content, thumbnail_url, status } = body as {
-    title?: string;
-    slug?: string;
-    categories?: string[];
-    excerpt?: string;
-    content?: string;
-    thumbnail_url?: string;
-    status?: string;
-  };
+  const { title, slug, categories, excerpt, content, thumbnail_url, status } =
+    body as {
+      title?: string;
+      slug?: string;
+      categories?: string[];
+      excerpt?: string;
+      content?: string;
+      thumbnail_url?: string;
+      status?: string;
+    };
 
   // slug 형식 검증
-  const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
   if (slug && !SLUG_PATTERN.test(slug)) {
     return NextResponse.json(
-      { error: "Slug must contain only lowercase letters, numbers, and hyphens" },
-      { status: 400 }
+      {
+        error: "Slug must contain only lowercase letters, numbers, and hyphens",
+      },
+      { status: 400 },
     );
   }
 
@@ -47,13 +54,14 @@ export async function POST(request: NextRequest) {
   const missing = [];
   if (!title) missing.push("title");
   if (!slug) missing.push("slug");
-  if (!categories || !Array.isArray(categories) || categories.length === 0) missing.push("categories");
+  if (!categories || !Array.isArray(categories) || categories.length === 0)
+    missing.push("categories");
   if (!excerpt) missing.push("excerpt");
   if (!content) missing.push("content");
   if (missing.length > 0) {
     return NextResponse.json(
       { error: `Missing required fields: ${missing.join(", ")}` },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -70,7 +78,7 @@ export async function POST(request: NextRequest) {
   if (invalid.length > 0) {
     return NextResponse.json(
       { error: `Invalid categories: ${invalid.join(", ")}` },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -84,13 +92,14 @@ export async function POST(request: NextRequest) {
   if (existing) {
     return NextResponse.json(
       { error: `Slug "${slug}" already exists` },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   // 포스트 생성
   const postStatus = status === "published" ? "published" : "draft";
-  const publishedAt = postStatus === "published" ? new Date().toISOString() : null;
+  const publishedAt =
+    postStatus === "published" ? new Date().toISOString() : null;
 
   const { data, error } = await supabase
     .from("posts")
@@ -111,13 +120,11 @@ export async function POST(request: NextRequest) {
     console.error("Post creation error:", error.message);
     return NextResponse.json(
       { error: "글 저장에 실패했습니다. 다시 시도해 주세요." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
-  revalidatePath("/blog");
-  revalidatePath("/");
-  revalidatePath("/admin");
+  revalidatePostPages();
 
   return NextResponse.json({ id: data.id, slug: data.slug }, { status: 201 });
 }

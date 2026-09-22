@@ -8,7 +8,9 @@ export interface SharePost {
   share_expires_at: string;
 }
 
-export async function getShareData(token: string): Promise<
+export async function getShareData(
+  token: string,
+): Promise<
   | { status: "valid"; post: SharePost }
   | { status: "expired" }
   | { status: "not_found" }

@@ -10,10 +10,14 @@ interface Props {
   onChange: (images: string[]) => void;
 }
 
-// Window.cloudinary 타입은 CloudinaryUpload.tsx에서 선언됨
+import {
+  optimizedUploadUrl,
+  type UploadWidget,
+  type UploadResult,
+} from "@/lib/cloudinary";
 
 export default function MultiImageUpload({ images, onChange }: Props) {
-  const widgetRef = useRef<{ open: () => void } | null>(null);
+  const widgetRef = useRef<UploadWidget | null>(null);
   // 클로저 문제 해결: ref로 최신 images 참조
   const imagesRef = useRef(images);
   useEffect(() => {
@@ -21,17 +25,16 @@ export default function MultiImageUpload({ images, onChange }: Props) {
   }, [images]);
 
   const handleUpload = useCallback(
-    (error: unknown, result: { event: string; info: { secure_url: string; resource_type: string } }) => {
+    (error: unknown, result: UploadResult) => {
       if (error) return;
       if (result.event === "success") {
-        const isVideo = result.info.resource_type === "video";
-        const url = isVideo
-          ? result.info.secure_url
-          : result.info.secure_url.replace("/upload/", "/upload/f_auto,q_auto,w_800/");
-        onChange([...imagesRef.current, url]);
+        const url = optimizedUploadUrl(result.info);
+        const nextImages = [...imagesRef.current, url];
+        imagesRef.current = nextImages;
+        onChange(nextImages);
       }
     },
-    [onChange]
+    [onChange],
   );
 
   function openWidget() {
@@ -54,7 +57,7 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         maxFileSize: 50_000_000, // 동영상 포함 50MB
         cropping: false,
       },
-      handleUpload
+      handleUpload,
     );
 
     widgetRef.current = widget;
@@ -88,9 +91,11 @@ export default function MultiImageUpload({ images, onChange }: Props) {
             const video = isVideoUrl(url);
             return (
               <div key={url} className="group relative">
-                <div className={`relative h-28 overflow-hidden rounded-lg border-2 ${
-                  i === 0 ? "border-accent" : "border-border"
-                }`}>
+                <div
+                  className={`relative h-28 overflow-hidden rounded-lg border-2 ${
+                    i === 0 ? "border-accent" : "border-border"
+                  }`}
+                >
                   {video ? (
                     <video
                       src={url}
@@ -98,7 +103,10 @@ export default function MultiImageUpload({ images, onChange }: Props) {
                       playsInline
                       className="h-full w-full object-cover"
                       onMouseEnter={(e) => e.currentTarget.play()}
-                      onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.pause();
+                        e.currentTarget.currentTime = 0;
+                      }}
                     />
                   ) : (
                     <Image
@@ -149,7 +157,9 @@ export default function MultiImageUpload({ images, onChange }: Props) {
         onClick={openWidget}
         className="w-full rounded-lg border-2 border-dashed border-border px-4 py-6 text-sm text-muted transition-colors hover:border-accent hover:text-accent"
       >
-        {images.length > 0 ? "사진/동영상 추가" : "현장 사진·동영상 업로드 (여러 개 가능)"}
+        {images.length > 0
+          ? "사진/동영상 추가"
+          : "현장 사진·동영상 업로드 (여러 개 가능)"}
       </button>
 
       {images.length > 0 && (

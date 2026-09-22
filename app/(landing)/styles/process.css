@@ -1,0 +1,215 @@
+/* process: preserve source order within base and responsive rules. */
+
+.silla-process {
+  background: var(--silla-soft);
+}
+.silla-process-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin-top: 60px;
+}
+.silla-process-steps li {
+  border-top: 1px solid #9daab4;
+  padding: 24px;
+  border-right: 1px solid var(--silla-line);
+}
+.silla-process-steps li:first-child {
+  padding-left: 0;
+}
+.silla-process-steps li:last-child {
+  border-right: 0;
+}
+.silla-process-steps span {
+  font-size: 13px;
+  color: #77848d;
+}
+.silla-process-steps h3 {
+  margin-top: 26px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+@media (max-width: 767px) {
+  .silla-process-steps {
+    grid-template-columns: 1fr;
+    margin-top: 32px;
+  }
+  .silla-process-steps li {
+    border-right: 0;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .silla-process-steps li:first-child {
+    border-right: 0;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .silla-process-steps h3 {
+    margin: 0;
+    font-size: 20px;
+  }
+}
+.silla-process {
+  background: #fff;
+}
+.silla-process .silla-section-heading {
+  margin-bottom: 0;
+}
+.silla-process-switch {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: #edf1f4;
+  border: 1px solid #d8e0e6;
+  border-radius: 10px;
+}
+.silla-process-switch button {
+  padding: 13px 22px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 650;
+  color: #445669;
+  white-space: nowrap;
+}
+.silla-process-switch button:hover {
+  background: #dfe7ed;
+}
+.silla-process-switch button[aria-pressed="true"] {
+  background: #142638;
+  color: #fff;
+  box-shadow: 0 3px 8px rgb(20 38 56 / 14%);
+}
+.silla-process-guide {
+  margin-top: 28px;
+  color: #4c6071;
+  font-size: 18px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+.silla-process-steps {
+  gap: 14px;
+  margin-top: 28px;
+}
+.silla-process-steps li {
+  display: block;
+  padding: 26px 22px;
+  border: 1px solid #d6dfe6;
+  border-radius: 12px;
+  background: #f7f9fb;
+}
+.silla-process-steps li:first-child {
+  display: block;
+  padding: 26px 22px;
+  border: 1px solid #d6dfe6;
+  border-radius: 12px;
+  background: #f7f9fb;
+}
+.silla-process-steps li:last-child {
+  display: block;
+  padding: 26px 22px;
+  border: 1px solid #d6dfe6;
+  border-radius: 12px;
+  background: #f7f9fb;
+}
+.silla-process-steps li:first-child {
+  background: #142638;
+  border-color: #142638;
+  color: #fff;
+}
+.silla-process-steps .silla-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e3ebf1;
+  color: #23445e;
+  font-size: 20px;
+  font-weight: 750;
+}
+.silla-process-steps li:first-child .silla-step-number {
+  background: #fff;
+  color: #142638;
+}
+.silla-process-steps h3 {
+  margin-top: 24px;
+  font-size: 23px;
+  font-weight: 750;
+}
+.silla-process-steps p {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: #526575;
+  word-break: keep-all;
+}
+.silla-process-steps li:first-child p {
+  color: #e0e8ee;
+}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .silla-process-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .silla-process .silla-section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+@media (max-width: 767px) {
+  .silla-process-switch {
+    width: 100%;
+    margin-top: 18px;
+  }
+  .silla-process-switch button {
+    flex: 1;
+    padding: 12px 10px;
+    font-size: 15px;
+  }
+  .silla-process-guide {
+    font-size: 16px;
+    margin-top: 24px;
+  }
+  .silla-process-steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .silla-process-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px 18px;
+  }
+  .silla-process-steps li:first-child {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px 18px;
+  }
+  .silla-process-steps li:last-child {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 22px 18px;
+  }
+  .silla-process-steps .silla-step-number {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+  .silla-process-steps h3 {
+    margin: 0;
+    font-size: 20px;
+  }
+  .silla-process-steps p {
+    margin-top: 8px;
+    font-size: 15px;
+  }
+}

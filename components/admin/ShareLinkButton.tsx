@@ -11,17 +11,25 @@ interface Props {
   expiresAt: string | null;
 }
 
-export default function ShareLinkButton({ postId, existingToken, expiresAt }: Props) {
+export default function ShareLinkButton({
+  postId,
+  existingToken,
+  expiresAt,
+}: Props) {
   const [token, setToken] = useState(existingToken);
   const [expires, setExpires] = useState(expiresAt);
   const [generating, setGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
   const isExpired = expires ? new Date(expires) < new Date() : true;
-  const shareUrl = token && typeof window !== "undefined"
-    ? `${window.location.origin}/share/${token}`
-    : null;
+  const shareUrl =
+    token && typeof window !== "undefined"
+      ? `${window.location.origin}/share/${token}`
+      : null;
 
   async function handleGenerate() {
     setGenerating(true);
@@ -30,7 +38,10 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
       setToken(result.token);
       setExpires(result.expiresAt);
       if (result.draftCreated) {
-        setToast({ message: "Gmail 임시보관함에 메일이 생성되었습니다", type: "success" });
+        setToast({
+          message: "Gmail 임시보관함에 메일이 생성되었습니다",
+          type: "success",
+        });
       }
     } catch {
       alert("공유 링크 생성에 실패했습니다.");
@@ -49,7 +60,10 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
       // 클립보드 복사와 동시에 Gmail 드래프트 생성
       const result = await sendShareDraft(postId);
       if (result.draftCreated) {
-        setToast({ message: "Gmail 임시보관함에 메일이 생성되었습니다", type: "success" });
+        setToast({
+          message: "Gmail 임시보관함에 메일이 생성되었습니다",
+          type: "success",
+        });
       }
     } catch {
       alert("클립보드 복사에 실패했습니다.");
@@ -57,7 +71,11 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
   }
 
   const toastEl = toast && (
-    <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+    <Toast
+      message={toast.message}
+      type={toast.type}
+      onClose={() => setToast(null)}
+    />
   );
 
   // 토큰 없거나 만료 → 생성/재생성 버튼
@@ -69,7 +87,11 @@ export default function ShareLinkButton({ postId, existingToken, expiresAt }: Pr
           disabled={generating}
           className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-muted transition-colors hover:bg-surface hover:text-foreground disabled:opacity-50"
         >
-          {generating ? "생성 중..." : token ? "공유 링크 재생성" : "공유 링크 생성"}
+          {generating
+            ? "생성 중..."
+            : token
+              ? "공유 링크 재생성"
+              : "공유 링크 생성"}
         </button>
         {toastEl}
       </>

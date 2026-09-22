@@ -53,7 +53,9 @@ export async function getPosts(): Promise<PostMeta[]> {
 export async function getPost(slug: string): Promise<Post | null> {
   const { data, error } = await supabase
     .from("posts")
-    .select("slug, title, categories, excerpt, content, published_at, thumbnail_url")
+    .select(
+      "slug, title, categories, excerpt, content, published_at, thumbnail_url",
+    )
     .eq("slug", slug)
     .eq("status", "published")
     .single();
@@ -72,7 +74,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 }
 
 export async function getCategoryCounts(
-  posts: PostMeta[]
+  posts: PostMeta[],
 ): Promise<{ name: string; count: number }[]> {
   const counts = posts.reduce<Record<string, number>>((acc, post) => {
     for (const cat of post.categories) {

@@ -38,23 +38,36 @@ export default async function AdminDashboardPage() {
               </tr>
             ) : (
               posts.map((post) => (
-                <tr key={post.id} className="border-b border-border last:border-0">
+                <tr
+                  key={post.id}
+                  className="border-b border-border last:border-0"
+                >
                   <td className="px-4 py-3 font-medium text-foreground">
-                    <Link href={`/admin/posts/${post.id}/edit`} className="hover:text-accent">
+                    <Link
+                      href={`/admin/posts/${post.id}/edit`}
+                      className="hover:text-accent"
+                    >
                       {post.title}
                     </Link>
                   </td>
                   <td className="hidden px-4 py-3 sm:table-cell">
                     <div className="flex flex-wrap gap-1">
                       {post.categories.map((cat) => (
-                        <span key={cat} className="inline-block rounded bg-accent/10 px-1.5 py-0.5 text-xs font-semibold text-accent">
+                        <span
+                          key={cat}
+                          className="inline-block rounded bg-accent/10 px-1.5 py-0.5 text-xs font-semibold text-accent"
+                        >
                           {cat}
                         </span>
                       ))}
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <StatusBadge status={post.status} shareToken={post.share_token} shareExpiresAt={post.share_expires_at} />
+                    <StatusBadge
+                      status={post.status}
+                      shareToken={post.share_token}
+                      shareExpiresAt={post.share_expires_at}
+                    />
                   </td>
                   <td className="hidden px-4 py-3 text-steel md:table-cell">
                     {post.published_at?.slice(0, 10) ?? "—"}

@@ -78,10 +78,10 @@ export const BLOG_SYSTEM_PROMPT = `당신은 신라철강(Silla Steel)의 블로
 📞 중부권 010-5761-0400`;
 
 export interface BlogPromptInput {
-  siteName: string;       // 현장명 (필수)
-  workType: string;       // 작업 종류 (납품 / 매입·수거 / 가공 / 기타)
-  materials: string[];    // 자재
-  memo?: string;          // 현장 메모 (선택)
+  siteName: string; // 현장명 (필수)
+  workType: string; // 작업 종류 (납품 / 매입·수거 / 가공 / 기타)
+  materials: string[]; // 자재
+  memo?: string; // 현장 메모 (선택)
   imageCount: number;
   videoCount: number;
 }
@@ -94,13 +94,17 @@ export function buildUserText(input: BlogPromptInput): string {
     `- 현장명: ${input.siteName}`,
     `- 작업 종류: ${input.workType}`,
   ];
-  if (input.materials.length > 0) lines.push(`- 자재: ${input.materials.join(", ")}`);
+  if (input.materials.length > 0)
+    lines.push(`- 자재: ${input.materials.join(", ")}`);
   if (input.memo?.trim()) lines.push(`- 현장 메모: ${input.memo.trim()}`);
   if (input.videoCount > 0) {
     lines.push(
-      `- 동영상 ${input.videoCount}개가 별도로 있다 (내용 분석 불가). 동영상 마커는 만들지 말 것 — 시스템이 본문 끝에 자동 배치한다.`
+      `- 동영상 ${input.videoCount}개가 별도로 있다 (내용 분석 불가). 동영상 마커는 만들지 말 것 — 시스템이 본문 끝에 자동 배치한다.`,
     );
   }
-  lines.push(``, `각 사진 앞에 표기된 번호가 [사진N] 마커의 N이다. 모든 사진 마커를 본문에 사용할 것.`);
+  lines.push(
+    ``,
+    `각 사진 앞에 표기된 번호가 [사진N] 마커의 N이다. 모든 사진 마커를 본문에 사용할 것.`,
+  );
   return lines.join("\n");
 }

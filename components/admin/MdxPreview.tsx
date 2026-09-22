@@ -9,7 +9,9 @@ interface Props {
 }
 
 export default function MdxPreview({ source }: Props) {
-  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null);
+  const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(
+    null,
+  );
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -61,7 +63,9 @@ export default function MdxPreview({ source }: Props) {
         ) : mdxSource ? (
           <MDXRemote {...mdxSource} components={mdxComponents} />
         ) : (
-          <p className="text-sm text-muted">내용을 입력하면 미리보기가 표시됩니다.</p>
+          <p className="text-sm text-muted">
+            내용을 입력하면 미리보기가 표시됩니다.
+          </p>
         )}
       </div>
     </div>
