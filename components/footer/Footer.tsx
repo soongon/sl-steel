@@ -19,7 +19,7 @@ export default function Footer() {
             <Link href="/blog">블로그</Link>
             <a href="#contact">문의하기</a>
             <a
-              href={SITE.footer.naverPlace}
+              href={SITE.footer.naverPlaceHome}
               target="_blank"
               rel="noopener noreferrer"
             >

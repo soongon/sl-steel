@@ -218,7 +218,8 @@ export const SITE = {
       "녹슨 철근·절단 철근 합리적 매입. 현장 직수거로 빠르게 처리합니다.",
     email: "soongon@gmail.com",
     kakao: "", // 카카오 채널 URL 확정 후 입력
-    naverPlace: "https://map.naver.com/p/entry/place/2050283327",
+    naverPlace: "https://map.naver.com/p/entry/place/2050283327", // 지도·길찾기(문의 섹션 카드, JSON-LD sameAs)
+    naverPlaceHome: "https://m.place.naver.com/place/2050283327/home", // 플레이스 홈(리뷰·사진) — 푸터 '오시는 길'
     address: {
       street: "태종로 263-32",
       locality: "경주시",
