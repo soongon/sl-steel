@@ -226,7 +226,7 @@ export const SITE = {
       full: "경북 경주시 태종로 263-32",
     },
     regions: [
-      { name: "대표 전화", phone: "010-9264-3336", coverage: "" },
+      { name: "대표 전화", phone: "010-5761-0400", coverage: "" }, // 2026-10-16 변경(구 010-9264-3336)
       { name: "중부권", phone: "010-5761-0400", coverage: "경기·강원·충청" },
       { name: "남부권", phone: "010-9264-3336", coverage: "경상·전라" },
     ] as const,
