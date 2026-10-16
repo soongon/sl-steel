@@ -143,7 +143,7 @@ export async function submitInquiry(formData: FormData) {
 
   // ── 알림: 응답을 보낸 뒤 실행(사용자는 기다리지 않는다) ──
   after(async () => {
-    const channel = await notifyNewInquiry({
+    const sent = await notifyNewInquiry({
       id,
       inquiryType: safeType,
       name: safeName,
@@ -152,12 +152,12 @@ export async function submitInquiry(formData: FormData) {
       message: safeMessage,
       source,
     });
-    if (channel) {
-      console.log("inquiry notified:", id, "via", channel);
+    if (sent) {
+      console.log("inquiry notified by email:", id);
       const { error } = await admin.from("inquiries").update({ notified_at: new Date().toISOString() }).eq("id", id);
       if (error && !/column|schema cache/i.test(error.message)) console.warn("notified_at update failed:", error.message);
     } else {
-      console.warn("inquiry notification not sent (no channel configured or all failed):", id);
+      console.warn("inquiry notification email not sent:", id);
     }
   });
 

@@ -117,7 +117,7 @@ export function describeSource(src: InquirySource): string {
   return parts.join(" · ");
 }
 
-/** 카카오워크·메일 알림 본문. 전화는 숫자만 저장되므로 하이픈을 넣어 보여 준다. */
+/** 알림 메일 본문. 전화는 숫자만 저장되므로 하이픈을 넣어 보여 준다. */
 export function formatPhoneDisplay(digits: string): string {
   const d = digits.replace(/\D/g, "");
   if (d.length === 11) return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;

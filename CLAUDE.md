@@ -14,7 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Inquiries (문의 폼) — 2026-10 P0
 
 - 제출: `lib/inquiries.ts submitInquiry` — **서비스 롤** insert(anon INSERT 정책은 007 에서 제거). honeypot(`company_website`)·3초 미만 제출은 조용히 버림, IP 해시 분당 3회, 같은 번호·구분 10분 내 재제출은 합침(`submit_count`). 순수 가드는 `lib/inquiry-guard.ts`(테스트 `tests/inquiry-guard.test.mjs`).
-- 알림: `lib/notify.ts` — 카카오워크 webhook → 실패 시 Gmail send. `after()` 로 응답 뒤 실행. env: `KAKAOWORK_WEBHOOK_URL`, `INQUIRY_EMAIL_TO`(없으면 `SHARE_EMAIL_TO`), `NEXT_PUBLIC_SITE_URL`.
+- 알림: `lib/notify.ts` — Gmail send(`lib/gmail.ts sendMail`, `gmail.compose` 스코프). `after()` 로 응답 뒤 실행. env: `INQUIRY_EMAIL_TO`(없으면 `SHARE_EMAIL_TO`), `GMAIL_CLIENT_ID/SECRET/REFRESH_TOKEN`, `NEXT_PUBLIC_SITE_URL`.
 - 유입 캡처: `components/SourceCapture.tsx`(root layout) → sessionStorage → 폼 hidden `src_*` → `inquiries.source` jsonb. 어드민(bk-steel-admin) lead_source 매핑은 `guessLeadSource`.
 - 마이그레이션 `supabase/migrations/007_inquiry_source_guard.sql` 은 **새 코드 배포 후** SQL 에디터에서 실행(코드는 컬럼 없어도 기본 컬럼으로 재시도).
 
