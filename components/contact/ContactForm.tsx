@@ -10,6 +10,7 @@ import {
 import { SITE, INQUIRY_TYPES, type InquiryType } from "@/lib/site";
 import { submitInquiry } from "@/lib/inquiries";
 import PhoneInput from "./PhoneInput";
+import { readCapturedSource, type CapturedSource } from "@/lib/source-capture";
 
 function resolveTypeFromHash(): InquiryType {
   if (typeof window === "undefined") return INQUIRY_TYPES[0];
@@ -33,6 +34,18 @@ export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  // 봇 가드·유입 캡처용 hidden 값 — 마운트 후 채운다(SSR 에서는 비어 있음).
+  const [formTs, setFormTs] = useState("");
+  const [source, setSource] = useState<CapturedSource>({});
+  useEffect(() => {
+    // 폼이 그려진 시각 + 세션에 남겨 둔 유입 정보(SourceCapture)
+    const t = String(Date.now());
+    const s = readCapturedSource();
+    startTransition(() => {
+      setFormTs(t);
+      setSource(s);
+    });
+  }, []);
 
   useEffect(() => {
     const sync = () =>
@@ -50,6 +63,7 @@ export default function ContactForm() {
     try {
       const formData = new FormData(e.currentTarget);
       formData.set("inquiry_type", inquiryType);
+      formData.set("src_page_type", inquiryType);
       await submitInquiry(formData);
       setSubmitted(true);
       formRef.current?.reset();
@@ -83,6 +97,26 @@ export default function ContactForm() {
         </div>
       ) : (
         <form ref={formRef} onSubmit={handleSubmit}>
+          {/* 봇 가드: 사람은 볼 수 없는 칸(값이 있으면 서버가 조용히 버림) + 폼이 그려진 시각 */}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, overflow: "hidden" }}
+          >
+            <label htmlFor="contact-company-website">회사 웹사이트</label>
+            <input
+              id="contact-company-website"
+              name="company_website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              defaultValue=""
+            />
+          </div>
+          <input type="hidden" name="form_ts" value={formTs} />
+          {/* 유입 캡처(utm·referrer·랜딩·QR) — lib/source-capture */}
+          {(Object.entries(source) as [string, string | undefined][]).map(([k, v]) =>
+            v ? <input key={k} type="hidden" name={`src_${k}`} value={v} /> : null,
+          )}
           <div
             className="silla-inquiry-options"
             role="group"

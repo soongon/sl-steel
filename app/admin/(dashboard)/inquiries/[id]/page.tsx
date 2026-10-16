@@ -4,6 +4,7 @@ import { getInquiry } from "@/lib/inquiries";
 import { formatDate } from "@/lib/types";
 import InquiryStatusBadge from "@/components/admin/InquiryStatusBadge";
 import InquiryStatusButtons from "@/components/admin/InquiryStatusButtons";
+import { describeSource } from "@/lib/inquiry-guard";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -67,6 +68,31 @@ export default async function InquiryDetailPage({ params }: Props) {
             <span className="text-xs font-medium text-steel">상태</span>
             <p className="mt-1">
               <InquiryStatusBadge status={inquiry.status} />
+            </p>
+          </div>
+        </div>
+
+        {/* 유입·중복·알림 (007) — 마이그레이션 전 DB 는 비어 있다 */}
+        <div className="mt-6 grid gap-4 border-t border-border pt-4 sm:grid-cols-3">
+          <div>
+            <span className="text-xs font-medium text-steel">유입</span>
+            <p className="mt-1 text-sm text-foreground">
+              {inquiry.source && Object.keys(inquiry.source).length > 0 ? describeSource(inquiry.source) : "—"}
+            </p>
+            {inquiry.source?.landing_path && (
+              <p className="mt-0.5 break-all text-xs text-muted">{inquiry.source.landing_path}</p>
+            )}
+          </div>
+          <div>
+            <span className="text-xs font-medium text-steel">제출 횟수</span>
+            <p className="mt-1 text-sm text-foreground">
+              {inquiry.submit_count && inquiry.submit_count > 1 ? `${inquiry.submit_count}회 (중복 합침)` : "1회"}
+            </p>
+          </div>
+          <div>
+            <span className="text-xs font-medium text-steel">알림</span>
+            <p className="mt-1 text-sm text-foreground">
+              {inquiry.notified_at ? `발송 ${formatDate(inquiry.notified_at)}` : "미발송"}
             </p>
           </div>
         </div>

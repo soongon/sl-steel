@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SITE } from "@/lib/site";
+import SourceCapture from "@/components/SourceCapture";
 
 const BASE_URL = "https://sl-steel.co.kr";
 
@@ -79,7 +80,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <SourceCapture />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,9 +1,22 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { supabase } from "./supabase";
+import { after } from "next/server";
+import { headers } from "next/headers";
 import { createSupabaseAdmin, requireAuth } from "./supabase-server";
 import { VALID_INQUIRY_STATUSES, type InquiryStatus } from "./types";
+import {
+  RATE_LIMIT_PER_MIN,
+  RATE_WINDOW_MS,
+  hashIp,
+  isHoneypotFilled,
+  isTooFast,
+  isWithinDedupeWindow,
+  mergeMessage,
+  readSource,
+  type InquirySource,
+} from "./inquiry-guard";
+import { notifyNewInquiry } from "./notify";
 
 export interface Inquiry {
   id: string;
@@ -15,6 +28,10 @@ export interface Inquiry {
   status: InquiryStatus;
   created_at: string;
   updated_at: string;
+  /** 007 이후 — 유입 캡처·중복 횟수·알림 시각. 마이그레이션 전 DB 에서는 undefined. */
+  source?: InquirySource | null;
+  submit_count?: number | null;
+  notified_at?: string | null;
 }
 
 // ── 공개: 문의 제출 ─────────────────────────────────────────────────
@@ -48,17 +65,101 @@ export async function submitInquiry(formData: FormData) {
 
   const safeLocation = typeof location === "string" ? location.trim() : "";
   const safeMessage = typeof message === "string" ? message.trim() : "";
+  const safeType = inquiry_type.trim();
+  const safeName = name.trim();
 
-  const { error } = await supabase.from("inquiries").insert({
-    inquiry_type: inquiry_type.trim(),
-    name: name.trim(),
+  // ── 봇 가드: honeypot 에 값이 있거나 3초 안에 제출이면 저장·알림 없이 조용히 성공 처리 ──
+  const now = Date.now();
+  if (isHoneypotFilled(formData.get("company_website")) || isTooFast(formData.get("form_ts"), now)) {
+    console.warn("inquiry dropped as bot", { honeypot: isHoneypotFilled(formData.get("company_website")) });
+    return;
+  }
+
+  const h = await headers();
+  const ipHash = hashIp(h.get("x-forwarded-for") ?? h.get("x-real-ip"));
+  const ua = (h.get("user-agent") ?? "").slice(0, 300);
+  const source = readSource((k) => formData.get(k));
+
+  // 서비스 롤 — anon INSERT 정책은 007 에서 제거(직접 insert 로 가드 우회 방지).
+  const admin = createSupabaseAdmin();
+
+  // ── 레이트리밋: 같은 IP 해시 분당 3회 (컬럼이 아직 없으면 건너뜀) ──
+  if (ipHash) {
+    const since = new Date(now - RATE_WINDOW_MS).toISOString();
+    const { count, error: rlErr } = await admin
+      .from("inquiries")
+      .select("id", { count: "exact", head: true })
+      .eq("ip_hash", ipHash)
+      .gte("created_at", since);
+    if (!rlErr && (count ?? 0) >= RATE_LIMIT_PER_MIN) {
+      throw new Error("문의가 너무 자주 접수되고 있습니다. 잠시 후 다시 시도해 주세요.");
+    }
+  }
+
+  // ── 중복: 같은 번호·같은 구분으로 10분 안 재제출이면 새 행 대신 합친다 ──
+  const { data: prev } = await admin
+    .from("inquiries")
+    .select("*") // 007 전 DB 에도 돌아가게 컬럼을 지정하지 않는다
+    .eq("phone", normalizedPhone)
+    .eq("inquiry_type", safeType)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (prev && isWithinDedupeWindow(prev.created_at, now)) {
+    const merged: Record<string, unknown> = {
+      message: mergeMessage(prev.message ?? "", safeMessage),
+      location: prev.location || safeLocation,
+      updated_at: new Date(now).toISOString(),
+    };
+    if (typeof prev.submit_count === "number") merged.submit_count = prev.submit_count + 1;
+    const { error: upErr } = await admin.from("inquiries").update(merged).eq("id", prev.id);
+    if (upErr) console.error("inquiry dedupe update failed:", upErr.message);
+    revalidatePath("/admin/inquiries");
+    return; // 알림은 첫 제출 때 이미 나갔다
+  }
+
+  // ── 저장: 007 컬럼 포함 → 컬럼이 아직 없으면 기본 컬럼만으로 재시도 ──
+  const base = {
+    inquiry_type: safeType,
+    name: safeName,
     phone: normalizedPhone,
     location: safeLocation,
     message: safeMessage,
-  });
-
-  if (error)
+  };
+  let inserted = await admin
+    .from("inquiries")
+    .insert({ ...base, source, ip_hash: ipHash, ua })
+    .select("id")
+    .single();
+  if (inserted.error && /column|schema cache/i.test(inserted.error.message)) {
+    console.warn("inquiries: 007 columns missing, inserting base columns only");
+    inserted = await admin.from("inquiries").insert(base).select("id").single();
+  }
+  if (inserted.error || !inserted.data) {
+    console.error("inquiry insert failed:", inserted.error?.message);
     throw new Error("문의 접수에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+  }
+  const id = inserted.data.id as string;
+
+  // ── 알림: 응답을 보낸 뒤 실행(사용자는 기다리지 않는다) ──
+  after(async () => {
+    const channel = await notifyNewInquiry({
+      id,
+      inquiryType: safeType,
+      name: safeName,
+      phone: normalizedPhone,
+      location: safeLocation,
+      message: safeMessage,
+      source,
+    });
+    if (channel) {
+      console.log("inquiry notified:", id, "via", channel);
+      const { error } = await admin.from("inquiries").update({ notified_at: new Date().toISOString() }).eq("id", id);
+      if (error && !/column|schema cache/i.test(error.message)) console.warn("notified_at update failed:", error.message);
+    } else {
+      console.warn("inquiry notification not sent (no channel configured or all failed):", id);
+    }
+  });
 
   revalidatePath("/admin/inquiries");
 }

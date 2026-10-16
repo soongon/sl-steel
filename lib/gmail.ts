@@ -24,6 +24,47 @@ function getGmailClient() {
   return google.gmail({ version: "v1", auth: oauth2 });
 }
 
+// ── RFC 2822 raw 메시지 (한글 제목 base64) ───────────────────────────────
+function buildRaw(to: string, subject: string, body: string): string {
+  const message = [
+    `To: ${to}`,
+    `Subject: =?UTF-8?B?${Buffer.from(subject).toString("base64")}?=`,
+    `Content-Type: text/plain; charset=UTF-8`,
+    ``,
+    body,
+  ].join("\r\n");
+  return Buffer.from(message)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
+// ── 메일 즉시 발송 (문의 알림 폴백) ──────────────────────────────────────
+// gmail.compose 스코프면 send 도 된다. 자격증명이 없거나 실패하면 false — 호출 쪽은 막지 않는다.
+export async function sendMail({
+  to,
+  subject,
+  body,
+}: {
+  to: string;
+  subject: string;
+  body: string;
+}): Promise<boolean> {
+  const gmail = getGmailClient();
+  if (!gmail || !to) return false;
+  try {
+    await gmail.users.messages.send({
+      userId: "me",
+      requestBody: { raw: buildRaw(to, subject, body) },
+    });
+    return true;
+  } catch (err) {
+    console.error("Gmail send failed:", err);
+    return false;
+  }
+}
+
 // ── 공유 링크 임시보관함 생성 ─────────────────────────────────────────────
 export async function createShareDraft({
   title,
