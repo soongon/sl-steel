@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAdminPosts } from "@/lib/admin";
 import StatusBadge from "@/components/admin/StatusBadge";
 import DeleteButton from "@/components/admin/DeleteButton";
+import { formatKstDate } from "@/lib/types";
 
 export default async function AdminDashboardPage() {
   const posts = await getAdminPosts();
@@ -70,7 +71,7 @@ export default async function AdminDashboardPage() {
                     />
                   </td>
                   <td className="hidden px-4 py-3 text-steel md:table-cell">
-                    {post.published_at?.slice(0, 10) ?? "—"}
+                    {formatKstDate(post.published_at) || "—"}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="flex items-center justify-end gap-2">

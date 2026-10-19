@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createPost } from "@/lib/admin";
 import MultiImageUpload from "./MultiImageUpload";
 import { replaceMediaMarkers } from "@/lib/media-markers";
+import { kstToday } from "@/lib/types";
 
 interface ParsedPost {
   title: string;
@@ -85,7 +86,7 @@ export default function QuickPostForm() {
       formData.set("content", finalContent);
       formData.set("thumbnail_url", thumbnailUrl);
       formData.set("status", "draft");
-      formData.set("published_at", new Date().toISOString().slice(0, 10));
+      formData.set("published_at", kstToday());
 
       const result = await createPost(formData);
       if (result?.error) {

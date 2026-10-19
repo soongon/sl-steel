@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import CloudinaryUpload from "./CloudinaryUpload";
 import MdxPreview from "./MdxPreview";
 import type { AdminPost, Category } from "@/lib/admin";
-import type { PostStatus } from "@/lib/types";
+import { formatKstDate, kstToday, type PostStatus } from "@/lib/types";
 
 interface Props {
   post?: AdminPost;
@@ -35,7 +35,7 @@ export default function PostForm({ post, categories, action }: Props) {
   const [thumbnailUrl, setThumbnailUrl] = useState(post?.thumbnail_url ?? "");
   const [status, setStatus] = useState(post?.status ?? "draft");
   const [publishedAt, setPublishedAt] = useState(
-    post?.published_at?.slice(0, 10) ?? new Date().toISOString().slice(0, 10),
+    post?.published_at ? formatKstDate(post.published_at) : kstToday(),
   );
   const [showPreview, setShowPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);

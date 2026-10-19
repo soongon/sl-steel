@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import { formatKstDate } from "./types";
 
 export interface PostMeta {
   slug: string;
@@ -26,11 +27,6 @@ export type BlogCategory = (typeof BLOG_CATEGORIES)[number];
 
 export const POSTS_PER_PAGE = 5;
 
-function formatDate(raw: string | null): string {
-  if (!raw) return "";
-  return raw.slice(0, 10);
-}
-
 export async function getPosts(): Promise<PostMeta[]> {
   const { data, error } = await supabase
     .from("posts")
@@ -45,7 +41,7 @@ export async function getPosts(): Promise<PostMeta[]> {
     title: row.title,
     categories: row.categories ?? [],
     excerpt: row.excerpt,
-    date: formatDate(row.published_at),
+    date: formatKstDate(row.published_at),
     thumbnail: row.thumbnail_url ?? undefined,
   }));
 }
@@ -67,7 +63,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     title: data.title,
     categories: data.categories ?? [],
     excerpt: data.excerpt,
-    date: formatDate(data.published_at),
+    date: formatKstDate(data.published_at),
     thumbnail: data.thumbnail_url ?? undefined,
     content: data.content,
   };
