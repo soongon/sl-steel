@@ -125,6 +125,14 @@ export function formatPhoneDisplay(digits: string): string {
   return digits;
 }
 
+/** 문의 처리는 어드민(bk-steel-admin)에서 한다 — 알림 메일 링크는 어드민 문의 상세. */
+export const INQUIRY_ADMIN_BASE = "https://admin.sl-steel.co.kr";
+
+/** 알림 메일의 문의 상세 링크. 문의는 책과 무관한 화면이라 '전체' 보기로 연다(로그인 전이면 로그인 뒤 이 주소로). */
+export function inquiryAdminUrl(id: string, base: string = INQUIRY_ADMIN_BASE): string {
+  return `${base.replace(/\/$/, "")}/all/inquiries/${encodeURIComponent(id)}`;
+}
+
 export function buildNotifyText(input: {
   inquiryType: string;
   name: string;

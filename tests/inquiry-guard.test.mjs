@@ -5,6 +5,7 @@ import {
   describeSource,
   guessLeadSource,
   hashIp,
+  inquiryAdminUrl,
   isHoneypotFilled,
   isTooFast,
   isWithinDedupeWindow,
@@ -81,11 +82,19 @@ test("buildNotifyText: 번호 하이픈·내용 요약·링크", () => {
     location: "울산 언양",
     message: "SD-400 22mm 9M  34EA\n문의드립니다.",
     source: { referrer: "blog.naver.com" },
-    adminUrl: "https://www.sl-steel.co.kr/admin/inquiries/abc",
+    adminUrl: "https://admin.sl-steel.co.kr/all/inquiries/abc",
   });
   assert.match(t, /📩 홈페이지 매입 문의 · 홍길동/);
   assert.match(t, /010-1234-5678 · 울산 언양/);
   assert.match(t, /“SD-400 22mm 9M 34EA 문의드립니다.”/);
   assert.match(t, /유입: 네이버 블로그 · blog.naver.com/);
-  assert.match(t, /admin\/inquiries\/abc$/);
+  assert.match(t, /all\/inquiries\/abc$/);
+});
+
+test("inquiryAdminUrl: 메일 링크는 어드민 문의 상세('전체' 보기)", () => {
+  assert.equal(
+    inquiryAdminUrl("7e8fb0d6-8b53-459a-abff-767bc530de77"),
+    "https://admin.sl-steel.co.kr/all/inquiries/7e8fb0d6-8b53-459a-abff-767bc530de77",
+  );
+  assert.equal(inquiryAdminUrl("abc", "https://preview.example.com/"), "https://preview.example.com/all/inquiries/abc");
 });
