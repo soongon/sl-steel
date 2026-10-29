@@ -108,3 +108,18 @@ export function buildUserText(input: BlogPromptInput): string {
   );
   return lines.join("\n");
 }
+
+/** 검토 화면에서 받은 수정 요청 → 직전 글(assistant 턴) 뒤에 붙는 유저 메시지 */
+export function buildRevisionText(instruction: string): string {
+  return [
+    `직전에 생성한 글을 아래 요청대로 수정하라.`,
+    ``,
+    `[수정 요청]`,
+    instruction.trim(),
+    ``,
+    `- 요청과 관계없는 부분은 최대한 그대로 둘 것`,
+    `- 시스템 프롬프트의 작성 규칙(형식·카테고리·마무리 섹션·연락처)은 계속 지킬 것`,
+    `- 본문의 [사진N] 마커는 하나도 빠뜨리지 말 것 (사진 순서 변경 요청이 있을 때만 위치를 옮긴다)`,
+    `- 수정된 전체 글을 같은 JSON 형식으로 다시 출력할 것`,
+  ].join("\n");
+}

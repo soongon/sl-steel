@@ -15,15 +15,20 @@ export default function MdxPreview({ source }: Props) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  // 늦게 도착한 이전 요청의 응답이 최신 미리보기를 덮어쓰지 않도록 순번으로 거른다
+  const seqRef = useRef(0);
 
   useEffect(() => {
     if (!source.trim()) {
+      seqRef.current++;
       setMdxSource(null);
       setError("");
+      setLoading(false);
       return;
     }
 
     clearTimeout(timerRef.current);
+    const seq = ++seqRef.current;
     timerRef.current = setTimeout(async () => {
       setLoading(true);
       setError("");
@@ -34,6 +39,7 @@ export default function MdxPreview({ source }: Props) {
           body: JSON.stringify({ source }),
         });
         const data = await res.json();
+        if (seq !== seqRef.current) return;
         if (data.error) {
           setError(data.error);
           setMdxSource(null);
@@ -41,9 +47,9 @@ export default function MdxPreview({ source }: Props) {
           setMdxSource(data.mdxSource);
         }
       } catch {
-        setError("미리보기를 불러올 수 없습니다.");
+        if (seq === seqRef.current) setError("미리보기를 불러올 수 없습니다.");
       } finally {
-        setLoading(false);
+        if (seq === seqRef.current) setLoading(false);
       }
     }, 300);
 

@@ -70,7 +70,7 @@ Independent sections with separate layouts (landing / blog / admin / share / QR)
 - `app/admin/(dashboard)/` — AdminNav 레이아웃, `force-dynamic` (포스트 목록 + 문의 관리)
 - `app/admin/posts/new`, `app/admin/posts/[id]/edit` — 포스트 작성/수정 (+공유 링크 버튼)
 - `app/admin/quick-post` — Claude.ai JSON 붙여넣기 → draft 저장
-- `app/admin/(dashboard)/mobile-post` — 모바일 원탭 포스팅: 사진 업로드 + 현장명·칩 입력 → Claude API가 사진 분석·글 생성 → 자동 발행 (`maxDuration = 60`)
+- `app/admin/(dashboard)/mobile-post` — 모바일 포스팅: 사진 업로드 + 현장명·칩 입력 → Claude API가 사진 분석·글 생성 → **미리보기 확인 → 수정 프롬프트로 반복 수정(버전 v1·v2… 되돌리기 가능) → 발행 또는 초안 저장** (`maxDuration = 60`)
 
 ### QR 랜딩 — `app/q/`
 - `app/q/page.tsx` — QR 코드 전용 모바일 랜딩 (명함·차량·전단·현장), root layout만 사용
@@ -104,9 +104,10 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 - `lib/share.ts` — 공유 링크 토큰 조회 (만료/미존재 구분)
 - `lib/share-utils.ts` — MDX→텍스트 변환, `mdxToNaverHtml()`(네이버 에디터용 리치 HTML), 미디어 추출, Cloudinary 다운로드 URL 생성
 - `lib/mdx-components.tsx` — MDX 커스텀 컴포넌트 (video 등), 블로그 + 어드민 미리보기 공유
-- `lib/media-markers.ts` — `replaceMediaMarkers()`: 본문 [사진N] 마커를 이미지/비디오로 치환 (QuickPostForm + generate-post 공유)
+- `lib/media-markers.ts` — `replaceMediaMarkers()`: 본문 [사진N] 마커를 이미지/비디오로 치환 (QuickPostForm + generate-post + MobilePostForm 미리보기 공유), `ensureImageMarkers()`: 빠진 이미지 마커를 마무리 섹션 앞에 보충, `renderDraftContent()`: 모바일 초안 → 최종 MDX (미리보기·발행 공용 — 둘이 반드시 같은 결과)
 - `lib/blog-prompt.ts` — AI 블로그 생성 시스템 프롬프트 (원본: 노션 "신라철강 블로그 생성 로직" 문서 — 수정 시 동기화)
-- `lib/generate-post.ts` — `generateAndPublishPost()` server action: 사진 URL + 키워드 → Claude API(structured output) → 카테고리·slug 검증 → 자동 발행
+- `lib/generate-post.ts` — 모바일 포스팅 server actions: `generatePostDraft()`(사진+키워드 → Claude structured output, DB 저장 안 함) → `revisePostDraft()`(원 요청+사진 / 직전 글 JSON(assistant 턴) / 수정 요청의 3턴 대화, 사진 블록은 프롬프트 캐시) → `publishPostDraft()`(zod 재검증 → slug 고유화 → 마커 치환 → insert, `status=draft`면 초안, 같은 제목이 10분 내 저장돼 있으면 중복 insert 없이 기존 글 반환). 검토 중인 글과 생성 당시 사진·정보(basis)는 클라이언트(sessionStorage)가 보관 — 수정·미리보기·발행은 basis 기준, 생성 후 사진·정보를 바꾸면 기존 버전으로 못 돌아감
+- `lib/post-draft.ts` — `PostDraft` 타입, `draftToJson`, `stripOrphanMarkers`(사진 삭제 후 남은 [사진N] 제거) — 의존성 없는 순수 모듈(테스트 `tests/post-draft.test.mjs`)
 - `lib/site.ts` — 랜딩 페이지 copy/data (SITE constant, 전화번호 single source of truth)
 - `lib/ui.ts` — `COLOR` 상수 (Logo 등 SVG prop용, globals.css @theme와 동기화)
 - `lib/scroll.ts` — `scrollToContact(type)` for CTA navigation
@@ -182,7 +183,7 @@ Cloudinary (이미지·동영상 원본 + 자동 최적화)
 - Supabase Auth 기반 로그인 (`/admin/login`)
 - 블로그 포스트 CRUD (목록, 새 포스트, 수정, 삭제)
 - 빠른 등록 (`/admin/quick-post`) — Claude.ai JSON 붙여넣기 → 초안 저장
-- 모바일 포스팅 (`/admin/mobile-post`) — 사진+현장명만으로 AI가 글 생성 후 **자동 발행** → 이어서 공유 토큰 발급 + Gmail 임시보관함 메일 자동 생성(실패해도 발행 유지, `draftCreated`로 UI 표시). 카테고리는 BLOG_CATEGORIES enum으로 강제, slug 중복 시 -2 접미사, 누락된 이미지 마커는 마무리 섹션 앞에 자동 보충
+- 모바일 포스팅 (`/admin/mobile-post`) — 사진+현장명만으로 AI가 글 생성 → **검토 화면에서 미리보기 확인, 수정 요청 프롬프트로 반복 수정**(빠른 칩 + 자유 입력, 수정은 선택한 버전 기준, 이전 버전으로 되돌리기 가능) → "이대로 발행" 시 공유 토큰 발급 + Gmail 임시보관함 메일 자동 생성(실패해도 발행 유지, `draftCreated`로 UI 표시). "초안으로 저장"은 공유·메일 없이 draft 저장. 2026-10-29 이전엔 생성 즉시 자동 발행이었음. 카테고리는 BLOG_CATEGORIES enum으로 강제, slug 중복 시 -2 접미사, 누락된 이미지 마커는 마무리 섹션 앞에 자동 보충
 - 문의 관리 (`/admin/inquiries`) — 상태 변경 (new → read → resolved)
 - 대시보드 레이아웃: AdminNav + 새 문의 카운트 배지
 
