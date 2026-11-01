@@ -3,6 +3,11 @@
 // <h1>{SITE.hero.h1}</h1>
 // <p>{SITE.brand.ko}</p>
 
+// ─── 사이트 주소 ──────────────────────────────────────────────────────────────
+
+/** 서비스 도메인(www 고정 — sl-steel.co.kr 은 www 로 307 리다이렉트). metadataBase·canonical·sitemap·JSON-LD 공용. */
+export const SITE_URL = "https://www.sl-steel.co.kr";
+
 // ─── 문의 타입 ────────────────────────────────────────────────────────────────
 
 export const INQUIRY_TYPES = ["매입 문의", "납품 문의"] as const;

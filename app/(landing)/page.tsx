@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HeroSection from "@/components/sections/HeroSection";
 import ProcessSection from "@/components/sections/ProcessSection";
 import ContactSection from "@/components/sections/ContactSection";
@@ -8,6 +9,10 @@ import {
   Facilities,
 } from "@/components/sections/LandingSections";
 import { getPosts } from "@/lib/blog";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const posts = (await getPosts()).slice(0, 3);

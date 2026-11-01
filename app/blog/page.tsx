@@ -1,4 +1,12 @@
-import { getPosts, getCategoryCounts, POSTS_PER_PAGE } from "@/lib/blog";
+import type { Metadata } from "next";
+import {
+  getPosts,
+  getCategoryCounts,
+  POSTS_PER_PAGE,
+  BLOG_CATEGORIES,
+  type BlogCategory,
+  type PostMeta,
+} from "@/lib/blog";
 import BlogHeader from "@/components/blog/BlogHeader";
 import PostCard from "@/components/blog/PostCard";
 import Sidebar from "@/components/blog/Sidebar";
@@ -10,17 +18,74 @@ interface BlogPageProps {
   searchParams: Promise<{ category?: string; page?: string }>;
 }
 
+function isBlogCategory(value: string): value is BlogCategory {
+  return (BLOG_CATEGORIES as readonly string[]).includes(value);
+}
+
+/** searchParams 정규화 — 모르는 카테고리는 "전체", 페이지는 1 이상 정수. generateMetadata 와 본문이 같은 값을 쓴다. */
+function parseBlogParams(raw: { category?: string; page?: string }) {
+  const page = Math.max(1, parseInt(raw.page ?? "1") || 1);
+  const category: BlogCategory =
+    raw.category && isBlogCategory(raw.category) ? raw.category : "전체";
+  return { category, page };
+}
+
+function filterByCategory(posts: PostMeta[], category: BlogCategory) {
+  return category === "전체"
+    ? posts
+    : posts.filter((p) => p.categories.includes(category));
+}
+
+/** 내부 링크(BlogHeader·Sidebar)와 같은 encodeURIComponent 표기로 canonical 을 만든다. */
+function blogListPath(category: BlogCategory, page: number) {
+  const query = [
+    category !== "전체" ? `category=${encodeURIComponent(category)}` : null,
+    page > 1 ? `page=${page}` : null,
+  ]
+    .filter(Boolean)
+    .join("&");
+  return query ? `/blog?${query}` : "/blog";
+}
+
+/** 카테고리·페이지별 제목과 canonical — 기본값(전체·1페이지)은 /blog 로 정규화해 중복 URL 을 막는다. */
+export async function generateMetadata({
+  searchParams,
+}: BlogPageProps): Promise<Metadata> {
+  const { category, page } = parseBlogParams(await searchParams);
+
+  const filtered = filterByCategory(await getPosts(), category);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / POSTS_PER_PAGE));
+
+  if (page > totalPages) {
+    // 범위를 벗어난 페이지(빈 목록) — 색인하지 않고 canonical 은 해당 목록 1페이지로
+    return {
+      robots: { index: false, follow: true },
+      alternates: { canonical: blogListPath(category, 1) },
+    };
+  }
+
+  const titleParts = [
+    category !== "전체" ? category : null,
+    page > 1 ? `${page}페이지` : null,
+  ].filter(Boolean);
+
+  return {
+    // 기본 목록은 layout 의 title 을 그대로 쓰도록 키를 아예 넣지 않는다.
+    ...(titleParts.length
+      ? { title: `${titleParts.join(" · ")} | 신라철강 블로그` }
+      : {}),
+    alternates: { canonical: blogListPath(category, page) },
+  };
+}
+
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const { category = "전체", page: pageStr = "1" } = await searchParams;
-  const page = Math.max(1, parseInt(pageStr) || 1);
+  // generateMetadata 와 같은 정규화 — canonical 이 가리키는 목록과 실제 본문이 항상 일치
+  const { category, page } = parseBlogParams(await searchParams);
 
   const allPosts = await getPosts();
   const categories = await getCategoryCounts(allPosts);
 
-  const filtered =
-    category === "전체"
-      ? allPosts
-      : allPosts.filter((p) => p.categories.includes(category));
+  const filtered = filterByCategory(allPosts, category);
 
   const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
   const pagePosts = filtered.slice(

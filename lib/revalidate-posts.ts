@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 export function revalidatePostPages(slug?: string) {
   revalidatePath("/blog");
   revalidatePath("/");
+  revalidatePath("/sitemap.xml");
   if (slug) revalidatePath(`/blog/${slug}`);
   revalidatePath("/admin");
 }

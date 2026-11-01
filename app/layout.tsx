@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SITE } from "@/lib/site";
+import { SITE, SITE_URL } from "@/lib/site";
 import SourceCapture from "@/components/SourceCapture";
 
-const BASE_URL = "https://sl-steel.co.kr";
+const BASE_URL = SITE_URL;
 
 // 검색엔진용 구조화 데이터 (LocalBusiness)
 const jsonLd = {

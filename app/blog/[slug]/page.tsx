@@ -26,6 +26,7 @@ export async function generateMetadata({
   return {
     title: `${post.title} | 신라철강 블로그`,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
   };
 }
 
