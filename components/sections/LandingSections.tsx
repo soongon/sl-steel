@@ -54,7 +54,8 @@ export function BusinessOverview() {
               <h3>잔여 철근 매입</h3>
             </div>
             <p>
-              녹이 발생한 철근과 4m 이상 절단 철근.
+              공사 후 남은 중고철근·잉여철근, 녹이 발생한 철근과 4m 이상 절단
+              철근.
               <br />
               상태를 확인하고 현장에서 직접 수거합니다.
             </p>
@@ -68,9 +69,15 @@ export function BusinessOverview() {
                 <dd>{SITE.business.recovery.table.exclude}</dd>
               </div>
             </dl>
-            <ContactLink className="silla-inline-link">
-              매입 상담하기 <ArrowUpRight size={20} aria-hidden="true" />
-            </ContactLink>
+            <div className="silla-service-links">
+              <ContactLink className="silla-inline-link">
+                매입 상담하기 <ArrowUpRight size={20} aria-hidden="true" />
+              </ContactLink>
+              <Link href="/used-rebar" className="silla-inline-link">
+                중고철근 매입 자세히 보기{" "}
+                <ArrowUpRight size={20} aria-hidden="true" />
+              </Link>
+            </div>
           </article>
           <article>
             <div className="silla-service-photo">

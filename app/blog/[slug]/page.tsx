@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import Sidebar from "@/components/blog/Sidebar";
 import { SITE } from "@/lib/site";
 import { mdxComponents } from "@/lib/mdx-components";
+import { isPurchasePost } from "@/lib/purchase-post";
 import type { Metadata } from "next";
 
 interface PostPageProps {
@@ -105,6 +106,17 @@ export default async function PostPage({ params }: PostPageProps) {
             >
               매입 문의하기
             </Link>
+            {/* 매입 관련 글(카테고리 기준)에만 매입 안내 페이지 링크 — 본문·DB 는 건드리지 않는다 */}
+            {isPurchasePost(post.categories) && (
+              <p className="mt-4 text-sm text-steel">
+                <Link
+                  href="/used-rebar"
+                  className="font-semibold text-accent underline underline-offset-4 hover:text-accent-dark"
+                >
+                  중고철근·잉여철근 매입 기준과 사례 보기{"\u00a0"}→
+                </Link>
+              </p>
+            )}
           </div>
         </article>
 

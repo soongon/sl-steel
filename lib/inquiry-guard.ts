@@ -25,7 +25,11 @@ export function isHoneypotFilled(value: FormDataEntryValue | null): boolean {
 }
 
 /** 폼이 그려진 시각(form_ts, ms) 기준으로 너무 빨리 제출됐는지. 값이 없거나 이상하면 사람으로 본다(막지 않음). */
-export function isTooFast(formTs: FormDataEntryValue | null, now: number, minMs = MIN_FILL_MS): boolean {
+export function isTooFast(
+  formTs: FormDataEntryValue | null,
+  now: number,
+  minMs = MIN_FILL_MS,
+): boolean {
   if (typeof formTs !== "string") return false;
   const ts = Number(formTs);
   if (!Number.isFinite(ts) || ts <= 0) return false;
@@ -35,7 +39,11 @@ export function isTooFast(formTs: FormDataEntryValue | null, now: number, minMs 
 }
 
 /** 직전 같은 번호·같은 구분 문의가 창 안이면 중복(새 행 대신 합친다). */
-export function isWithinDedupeWindow(prevCreatedAt: string | Date, now: number, windowMs = DEDUPE_WINDOW_MS): boolean {
+export function isWithinDedupeWindow(
+  prevCreatedAt: string | Date,
+  now: number,
+  windowMs = DEDUPE_WINDOW_MS,
+): boolean {
   const t = new Date(prevCreatedAt).getTime();
   if (!Number.isFinite(t)) return false;
   return now - t < windowMs;
@@ -72,7 +80,9 @@ const SOURCE_KEYS: (keyof InquirySource)[] = [
 ];
 const SOURCE_MAX = 200;
 
-export function readSource(get: (key: string) => FormDataEntryValue | null): InquirySource {
+export function readSource(
+  get: (key: string) => FormDataEntryValue | null,
+): InquirySource {
   const out: InquirySource = {};
   for (const k of SOURCE_KEYS) {
     const v = get(`src_${k}`);
@@ -92,10 +102,16 @@ export function guessLeadSource(src: InquirySource): LeadGuess {
   const ref = (src.referrer ?? "").toLowerCase();
   const medium = (src.utm_medium ?? "").toLowerCase();
   const utmSource = (src.utm_source ?? "").toLowerCase();
-  if (medium === "cpc" || medium === "paid" || utmSource.includes("powerlink")) return "ad";
+  if (medium === "cpc" || medium === "paid" || utmSource.includes("powerlink"))
+    return "ad";
   if (src.qr_src) return "other";
   if (ref.includes("blog.naver.com") || utmSource === "blog") return "blog";
-  if (ref.includes("place.naver.com") || ref.includes("map.naver.com") || utmSource === "place") return "naver_place";
+  if (
+    ref.includes("place.naver.com") ||
+    ref.includes("map.naver.com") ||
+    utmSource === "place"
+  )
+    return "naver_place";
   return "homepage";
 }
 
@@ -111,6 +127,9 @@ export const LEAD_LABEL: Record<LeadGuess, string> = {
 export function describeSource(src: InquirySource): string {
   const lead = guessLeadSource(src);
   const parts: string[] = [LEAD_LABEL[lead]];
+  // 중고철근 매입 랜딩(/used-rebar)에서 시작한 문의는 같은 '홈페이지'라도 구분해 보여 준다
+  if ((src.landing_path ?? "").startsWith("/used-rebar"))
+    parts.push("매입 페이지");
   if (src.qr_src) parts.push(`QR:${src.qr_src}`);
   if (src.referrer && lead !== "homepage") parts.push(src.referrer);
   if (src.utm_campaign) parts.push(src.utm_campaign);
@@ -129,7 +148,10 @@ export function formatPhoneDisplay(digits: string): string {
 export const INQUIRY_ADMIN_BASE = "https://admin.sl-steel.co.kr";
 
 /** 알림 메일의 문의 상세 링크. 문의는 책과 무관한 화면이라 '전체' 보기로 연다(로그인 전이면 로그인 뒤 이 주소로). */
-export function inquiryAdminUrl(id: string, base: string = INQUIRY_ADMIN_BASE): string {
+export function inquiryAdminUrl(
+  id: string,
+  base: string = INQUIRY_ADMIN_BASE,
+): string {
   return `${base.replace(/\/$/, "")}/all/inquiries/${encodeURIComponent(id)}`;
 }
 
@@ -146,7 +168,9 @@ export function buildNotifyText(input: {
   const lines = [
     `📩 홈페이지 ${input.inquiryType} · ${input.name}`,
     `☎ ${formatPhoneDisplay(input.phone)}${input.location ? ` · ${input.location}` : ""}`,
-    msg ? `“${msg.length > 120 ? msg.slice(0, 120) + "…" : msg}”` : "(내용 없음)",
+    msg
+      ? `“${msg.length > 120 ? msg.slice(0, 120) + "…" : msg}”`
+      : "(내용 없음)",
     `유입: ${describeSource(input.source)}`,
     input.adminUrl,
   ];

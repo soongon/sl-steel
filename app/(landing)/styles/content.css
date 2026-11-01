@@ -109,6 +109,11 @@
   color: var(--silla-muted);
   word-break: keep-all;
 }
+.silla-service-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+}
 .silla-case-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

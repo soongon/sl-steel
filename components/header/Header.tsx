@@ -7,6 +7,7 @@ import Logo from "@/components/logo/Logo";
 const links = [
   { label: "회사소개", href: "#about" },
   { label: "사업영역", href: "#business" },
+  { label: "중고철근 매입", href: "/used-rebar" },
   { label: "현장사례", href: "#cases" },
 ];
 export default function Header() {
@@ -14,8 +15,12 @@ export default function Header() {
   // 문의하기(#contact)는 모든 랜딩 페이지가 ContactSection 을 갖고 있어 현재 페이지 안에서 이동한다.
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const sectionHref = (hash: string) => (isHome ? hash : `/${hash}`);
+  // 해시(#about)는 섹션 앵커, 그 외(/used-rebar)는 일반 경로.
+  const sectionHref = (href: string) =>
+    href.startsWith("#") ? (isHome ? href : `/${href}`) : href;
   const homeHref = isHome ? "#top" : "/";
+  const isCurrent = (href: string) =>
+    !href.startsWith("#") && pathname === href;
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -73,7 +78,11 @@ export default function Header() {
           </a>
           <nav className="silla-desktop-nav" aria-label="주요 메뉴">
             {links.map((link) => (
-              <a key={link.href} href={sectionHref(link.href)}>
+              <a
+                key={link.href}
+                href={sectionHref(link.href)}
+                aria-current={isCurrent(link.href) ? "page" : undefined}
+              >
                 {link.label}
               </a>
             ))}
@@ -133,6 +142,7 @@ export default function Header() {
                 href={
                   link.href === "#contact" ? link.href : sectionHref(link.href)
                 }
+                aria-current={isCurrent(link.href) ? "page" : undefined}
                 onClick={() => setOpen(false)}
               >
                 <span>0{i + 1}</span>

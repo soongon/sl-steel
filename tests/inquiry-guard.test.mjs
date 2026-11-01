@@ -60,7 +60,11 @@ test("readSource: src_ 접두 화이트리스트만, 200자 상한", () => {
     ["src_landing_path", "a".repeat(300)],
   ]);
   const src = readSource((k) => data.get(k) ?? null);
-  assert.deepEqual(Object.keys(src).sort(), ["landing_path", "referrer", "utm_source"]);
+  assert.deepEqual(Object.keys(src).sort(), [
+    "landing_path",
+    "referrer",
+    "utm_source",
+  ]);
   assert.equal(src.utm_source, "naver");
   assert.equal(src.landing_path?.length, 200);
 });
@@ -68,9 +72,15 @@ test("readSource: src_ 접두 화이트리스트만, 200자 상한", () => {
 test("guessLeadSource 매핑", () => {
   assert.equal(guessLeadSource({}), "homepage");
   assert.equal(guessLeadSource({ referrer: "blog.naver.com" }), "blog");
-  assert.equal(guessLeadSource({ referrer: "m.place.naver.com" }), "naver_place");
+  assert.equal(
+    guessLeadSource({ referrer: "m.place.naver.com" }),
+    "naver_place",
+  );
   assert.equal(guessLeadSource({ utm_medium: "cpc" }), "ad");
-  assert.equal(guessLeadSource({ qr_src: "card", referrer: "blog.naver.com" }), "other");
+  assert.equal(
+    guessLeadSource({ qr_src: "card", referrer: "blog.naver.com" }),
+    "other",
+  );
   assert.equal(describeSource({ qr_src: "card" }), "기타(QR 등) · QR:card");
 });
 
@@ -96,5 +106,21 @@ test("inquiryAdminUrl: 메일 링크는 어드민 문의 상세('전체' 보기)
     inquiryAdminUrl("7e8fb0d6-8b53-459a-abff-767bc530de77"),
     "https://admin.sl-steel.co.kr/all/inquiries/7e8fb0d6-8b53-459a-abff-767bc530de77",
   );
-  assert.equal(inquiryAdminUrl("abc", "https://preview.example.com/"), "https://preview.example.com/all/inquiries/abc");
+  assert.equal(
+    inquiryAdminUrl("abc", "https://preview.example.com/"),
+    "https://preview.example.com/all/inquiries/abc",
+  );
+});
+
+test("describeSource — /used-rebar 랜딩은 '매입 페이지' 표시", () => {
+  assert.equal(
+    describeSource({ landing_path: "/used-rebar" }),
+    "홈페이지 · 매입 페이지",
+  );
+  assert.equal(
+    describeSource({ landing_path: "/used-rebar?utm_source=x" }),
+    "홈페이지 · 매입 페이지",
+  );
+  assert.equal(describeSource({ landing_path: "/" }), "홈페이지");
+  assert.equal(describeSource({}), "홈페이지");
 });
