@@ -112,15 +112,20 @@ test("inquiryAdminUrl: 메일 링크는 어드민 문의 상세('전체' 보기)
   );
 });
 
-test("describeSource — /used-rebar 랜딩은 '매입 페이지' 표시", () => {
+test("describeSource — /used-rebar 로 유입한 세션은 '매입 페이지 유입' 표시", () => {
   assert.equal(
     describeSource({ landing_path: "/used-rebar" }),
-    "홈페이지 · 매입 페이지",
+    "홈페이지 · 매입 페이지 유입",
   );
   assert.equal(
     describeSource({ landing_path: "/used-rebar?utm_source=x" }),
-    "홈페이지 · 매입 페이지",
+    "홈페이지 · 매입 페이지 유입",
   );
+  assert.equal(
+    describeSource({ landing_path: "/used-rebar/" }),
+    "홈페이지 · 매입 페이지 유입",
+  );
+  assert.equal(describeSource({ landing_path: "/used-rebar-x" }), "홈페이지");
   assert.equal(describeSource({ landing_path: "/" }), "홈페이지");
   assert.equal(describeSource({}), "홈페이지");
 });

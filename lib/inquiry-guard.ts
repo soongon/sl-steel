@@ -127,9 +127,9 @@ export const LEAD_LABEL: Record<LeadGuess, string> = {
 export function describeSource(src: InquirySource): string {
   const lead = guessLeadSource(src);
   const parts: string[] = [LEAD_LABEL[lead]];
-  // 중고철근 매입 랜딩(/used-rebar)에서 시작한 문의는 같은 '홈페이지'라도 구분해 보여 준다
-  if ((src.landing_path ?? "").startsWith("/used-rebar"))
-    parts.push("매입 페이지");
+  // 중고철근 매입 랜딩(/used-rebar)으로 유입(첫 방문)한 세션의 문의 — 제출 페이지가 아니라 유입 경로 기준
+  if (/^\/used-rebar(?=[/?#]|$)/.test(src.landing_path ?? ""))
+    parts.push("매입 페이지 유입");
   if (src.qr_src) parts.push(`QR:${src.qr_src}`);
   if (src.referrer && lead !== "homepage") parts.push(src.referrer);
   if (src.utm_campaign) parts.push(src.utm_campaign);
