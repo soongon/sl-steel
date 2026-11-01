@@ -1,0 +1,374 @@
+/* used-rebar: /used-rebar 전용 섹션. shared·hero·content·process 클래스를 재사용하고 여기엔 추가분만 둔다. */
+
+/* ── 서브 히어로 (메인 히어로보다 낮고, 장점 3개를 하단에 둠) ── */
+.silla-subhero {
+  position: relative;
+  min-height: 640px;
+  padding-top: 160px;
+  padding-bottom: 72px;
+  background: #142638;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.silla-subhero .silla-subhero-image {
+  object-fit: cover;
+  object-position: center 45%;
+}
+.silla-subhero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(10, 23, 35, 0.9),
+      rgba(10, 23, 35, 0.72) 45%,
+      rgba(10, 23, 35, 0.35) 100%
+    ),
+    linear-gradient(180deg, rgba(10, 23, 35, 0.45), transparent 40%);
+}
+.silla-subhero-content {
+  position: relative;
+  /* flex 자식의 min-width:auto 가 nowrap CTA·keep-all 제목 폭만큼 커져 모바일에서 넘치는 것을 막는다 */
+  min-width: 0;
+}
+.silla-subhero .silla-eyebrow {
+  color: #b7c6d2;
+}
+.silla-subhero h1 {
+  margin-top: 18px;
+  max-width: 14em;
+  color: #fff;
+  font-size: clamp(38px, 4.6vw, 68px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  word-break: keep-all;
+}
+.silla-subhero-content > p {
+  margin-top: 22px;
+  max-width: 34em;
+  font-size: clamp(17px, 1.5vw, 21px);
+  line-height: 1.7;
+  color: #dbe4ea;
+  word-break: keep-all;
+}
+.silla-subhero .silla-hero-cta {
+  width: auto;
+  min-width: 216px;
+}
+.silla-subhero .silla-hero-actions .silla-hero-cta:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+.silla-subhero-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgb(255 255 255 / 22%);
+}
+.silla-subhero-points li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.silla-subhero-points svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #e7c38d;
+}
+.silla-subhero-points strong {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+}
+.silla-subhero-points span {
+  display: block;
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #c5d1da;
+  word-break: keep-all;
+}
+
+/* ── 매입 대상 ── */
+.silla-target-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+.silla-target-grid li {
+  padding: 26px 22px;
+  border: 1px solid #d6dfe6;
+  border-radius: 12px;
+  background: #f7f9fb;
+}
+.silla-target-index {
+  font-size: 13px;
+  color: #77848d;
+}
+.silla-target-grid h3 {
+  margin-top: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  word-break: keep-all;
+}
+.silla-target-grid p {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #526575;
+  word-break: keep-all;
+}
+
+/* ── 매입 기준 ── */
+.silla-criteria {
+  background: var(--silla-soft);
+  border-top: 1px solid var(--silla-line);
+}
+.silla-criteria-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 48px;
+  align-items: start;
+}
+.silla-criteria-cards {
+  display: grid;
+  gap: 14px;
+}
+.silla-criteria-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+.silla-criteria-card svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.silla-criteria-card h3 {
+  font-size: 18px;
+  font-weight: 750;
+}
+.silla-criteria-card p {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.8;
+  word-break: keep-all;
+}
+.silla-criteria-card.is-yes {
+  background: #142638;
+  color: #fff;
+}
+.silla-criteria-card.is-yes svg {
+  color: #e7c38d;
+}
+.silla-criteria-card.is-yes p {
+  color: #dbe4ea;
+}
+.silla-criteria-card.is-no {
+  background: #fff;
+  border-color: #d6dfe6;
+  color: var(--silla-ink);
+}
+.silla-criteria-card.is-no svg {
+  color: #985021;
+}
+.silla-criteria-card.is-no p {
+  color: #526575;
+}
+.silla-criteria-table {
+  border-top: 1px solid #9daab4;
+}
+.silla-criteria-table > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 20px;
+  padding-block: 18px;
+  border-bottom: 1px solid var(--silla-line);
+  font-size: 15px;
+}
+.silla-criteria-table dt {
+  font-weight: 650;
+}
+.silla-criteria-table dd {
+  color: var(--silla-muted);
+  line-height: 1.75;
+  word-break: keep-all;
+}
+.silla-criteria-notice {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #985021;
+  word-break: keep-all;
+}
+.silla-criteria-note {
+  margin-top: 48px;
+  padding: 28px 32px;
+  border-left: 3px solid #ac8754;
+  background: #fff;
+  border-radius: 0 12px 12px 0;
+}
+.silla-criteria-note h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.silla-criteria-note p {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: #526575;
+  word-break: keep-all;
+}
+
+/* ── 매입 사례 (silla-case-grid 재사용) ── */
+.silla-cases-lead {
+  margin: -24px 0 40px;
+  max-width: 40em;
+  font-size: 16px;
+  line-height: 1.9;
+  color: var(--silla-muted);
+  word-break: keep-all;
+}
+
+/* ── FAQ ── */
+.silla-faq {
+  background: #fff;
+  border-top: 1px solid var(--silla-line);
+}
+.silla-faq .silla-section-heading {
+  margin-bottom: 24px;
+}
+.silla-faq-list {
+  border-top: 1px solid #9daab4;
+}
+.silla-faq-list details {
+  border-bottom: 1px solid var(--silla-line);
+}
+.silla-faq-list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.silla-faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.silla-faq-list summary h3 {
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+}
+.silla-faq-list summary svg {
+  flex-shrink: 0;
+  color: #77848d;
+  transition: transform 0.2s;
+}
+.silla-faq-list details[open] summary svg {
+  transform: rotate(90deg);
+}
+.silla-faq-list details > p {
+  padding: 0 0 26px;
+  max-width: 48em;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #526575;
+  word-break: keep-all;
+}
+
+/* ── 반응형 ── */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .silla-target-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .silla-criteria-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+@media (max-width: 767px) {
+  .silla-subhero {
+    min-height: 0;
+    padding-top: 124px;
+    padding-bottom: 48px;
+  }
+  .silla-subhero h1 {
+    font-size: clamp(32px, 9vw, 42px);
+  }
+  .silla-subhero-content > p {
+    font-size: 16px;
+    margin-top: 16px;
+  }
+  .silla-subhero h1 {
+    max-width: none;
+  }
+  .silla-subhero .silla-hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .silla-subhero .silla-hero-cta {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 54px;
+    font-size: 16px;
+    padding: 14px 18px;
+    white-space: normal;
+  }
+  .silla-subhero-points {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 36px;
+    padding-top: 24px;
+  }
+  .silla-target-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .silla-target-grid li {
+    padding: 20px 18px;
+  }
+  .silla-target-grid h3 {
+    margin-top: 12px;
+    font-size: 18px;
+  }
+  .silla-criteria-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .silla-criteria-table > div {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    font-size: 14px;
+  }
+  .silla-criteria-note {
+    margin-top: 32px;
+    padding: 22px 20px;
+  }
+  .silla-cases-lead {
+    margin: -8px 0 32px;
+    font-size: 15px;
+  }
+  .silla-faq-list summary {
+    padding: 20px 0;
+  }
+  .silla-faq-list summary h3 {
+    font-size: 17px;
+  }
+  .silla-faq-list details > p {
+    font-size: 15px;
+    padding-bottom: 22px;
+  }
+}

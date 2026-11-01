@@ -16,6 +16,7 @@ export default function Footer() {
           <span>© {new Date().getFullYear()} Silla Steel</span>
           <span>{SITE.footer.address.full}</span>
           <nav aria-label="푸터 메뉴">
+            <Link href="/used-rebar">중고철근 매입</Link>
             <Link href="/blog">블로그</Link>
             <a href="#contact">문의하기</a>
             <a
