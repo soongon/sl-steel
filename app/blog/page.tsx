@@ -7,6 +7,7 @@ import {
   type BlogCategory,
   type PostMeta,
 } from "@/lib/blog";
+import { blogListPath } from "@/lib/blog-url";
 import BlogHeader from "@/components/blog/BlogHeader";
 import PostCard from "@/components/blog/PostCard";
 import Sidebar from "@/components/blog/Sidebar";
@@ -34,17 +35,6 @@ function filterByCategory(posts: PostMeta[], category: BlogCategory) {
   return category === "전체"
     ? posts
     : posts.filter((p) => p.categories.includes(category));
-}
-
-/** 내부 링크(BlogHeader·Sidebar)와 같은 encodeURIComponent 표기로 canonical 을 만든다. */
-function blogListPath(category: BlogCategory, page: number) {
-  const query = [
-    category !== "전체" ? `category=${encodeURIComponent(category)}` : null,
-    page > 1 ? `page=${page}` : null,
-  ]
-    .filter(Boolean)
-    .join("&");
-  return query ? `/blog?${query}` : "/blog";
 }
 
 /** 카테고리·페이지별 제목과 canonical — 기본값(전체·1페이지)은 /blog 로 정규화해 중복 URL 을 막는다. */

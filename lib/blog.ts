@@ -12,6 +12,8 @@ export interface PostMeta {
 
 export interface Post extends PostMeta {
   content: string;
+  /** ISO 원본 시각 — 메타데이터·구조화 데이터용(화면 표시는 date) */
+  publishedAt: string;
 }
 
 export const BLOG_CATEGORIES = [
@@ -66,6 +68,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     date: formatKstDate(data.published_at),
     thumbnail: data.thumbnail_url ?? undefined,
     content: data.content,
+    publishedAt: data.published_at,
   };
 }
 

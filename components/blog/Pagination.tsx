@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { blogListPath } from "@/lib/blog-url";
 
 interface PaginationProps {
   page: number;
@@ -6,13 +7,8 @@ interface PaginationProps {
   category: string;
 }
 
-function pageHref(p: number, category: string) {
-  const params = new URLSearchParams();
-  if (category && category !== "전체") params.set("category", category);
-  if (p > 1) params.set("page", String(p));
-  const qs = params.toString();
-  return `/blog${qs ? `?${qs}` : ""}`;
-}
+// canonical·카테고리 링크와 같은 %20 표기(URLSearchParams 의 + 를 쓰지 않는다)
+const pageHref = (p: number, category: string) => blogListPath(category, p);
 
 export default function Pagination({
   page,

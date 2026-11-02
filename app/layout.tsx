@@ -9,6 +9,7 @@ const BASE_URL = SITE_URL;
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": `${BASE_URL}/#organization`, // 블로그 BlogPosting 의 author·publisher 가 같은 엔티티를 가리킨다
   name: SITE.brand.ko,
   alternateName: SITE.brand.en,
   description: SITE.seo.description,

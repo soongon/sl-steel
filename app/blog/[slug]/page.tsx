@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Sidebar from "@/components/blog/Sidebar";
-import { SITE } from "@/lib/site";
+import { SITE, SITE_URL } from "@/lib/site";
 import { mdxComponents } from "@/lib/mdx-components";
 import { isPurchasePost } from "@/lib/purchase-post";
 import type { Metadata } from "next";
@@ -24,10 +24,67 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
+  const url = `${SITE_URL}/blog/${slug}`;
+  // openGraph·twitter 는 루트 객체를 통째로 대체한다 — 홈 제목·이미지가 새지 않도록 글 값으로 모두 채운다.
+  // 썸네일이 없을 때만 사이트 대표 이미지로 대신한다(현재 공개 글은 전부 썸네일 보유).
+  const images = post.thumbnail
+    ? [{ url: post.thumbnail, alt: post.title }]
+    : [{ url: "/og-image.png", width: 1200, height: 630, alt: SITE.brand.ko }];
   return {
     title: `${post.title} | 신라철강 블로그`,
     description: post.excerpt,
     alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      type: "article",
+      url,
+      siteName: SITE.brand.ko,
+      locale: "ko_KR",
+      title: post.title,
+      description: post.excerpt,
+      images,
+      publishedTime: post.publishedAt,
+      ...(post.categories.length ? { tags: post.categories } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: images.map((i) => i.url),
+    },
+  };
+}
+
+/** BlogPosting 구조화 데이터 — 화면에 보이는 글 데이터만 쓴다. 저자 필드가 없어 작성 주체(신라철강)를 저자로 둔다. */
+function articleJsonLd(post: NonNullable<Awaited<ReturnType<typeof getPost>>>) {
+  const url = `${SITE_URL}/blog/${post.slug}`;
+  const org = {
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`, // 루트 LocalBusiness 와 같은 엔티티
+    name: SITE.brand.ko,
+    url: SITE_URL,
+  };
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedAt,
+    // dateModified 는 넣지 않는다 — posts.updated_at 이 공유 토큰 갱신 등 비콘텐츠 변경에도 바뀜(sitemap.ts lastmod 와 같은 정책)
+    ...(post.thumbnail ? { image: [post.thumbnail] } : {}),
+    author: org,
+    publisher: {
+      ...org,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/brand/profile-512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    url,
+    inLanguage: "ko-KR",
+    ...(post.categories.length ? { articleSection: post.categories[0] } : {}),
   };
 }
 
@@ -43,6 +100,13 @@ export default async function PostPage({ params }: PostPageProps) {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          // 제목·요약에 </script> 가 들어가도 태그가 깨지지 않도록 < 를 이스케이프
+          __html: JSON.stringify(articleJsonLd(post)).replace(/</g, "\\u003c"),
+        }}
+      />
       <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
         {/* Article */}
         <article className="overflow-hidden rounded-xl border border-border bg-card">
@@ -106,8 +170,8 @@ export default async function PostPage({ params }: PostPageProps) {
             >
               매입 문의하기
             </Link>
-            {/* 매입 관련 글(카테고리 + 제목 기준)에만 매입 안내 페이지 링크 — 본문·DB 는 건드리지 않는다 */}
-            {isPurchasePost(post.categories, post.title) && (
+            {/* 매입 관련 글(카테고리 + 납품 신호 판정)에만 매입 안내 페이지 링크 — 본문·DB 는 건드리지 않는다 */}
+            {isPurchasePost(post) && (
               <p className="mt-4 text-sm text-steel">
                 <Link
                   href="/used-rebar"
