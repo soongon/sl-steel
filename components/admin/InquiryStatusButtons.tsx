@@ -12,8 +12,8 @@ const statuses = [
   },
   {
     value: "read",
-    label: "확인",
-    style: "border-yellow-300 text-yellow-700 hover:bg-yellow-50",
+    label: "진행중", // 어드민(bk-steel-admin)과 같은 이름 — 2026-11-03 '확인' 폐지, 저장값 read 그대로
+    style: "border-sky-300 text-sky-700 hover:bg-sky-50",
   },
   {
     value: "resolved",

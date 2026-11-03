@@ -1,12 +1,12 @@
 const styles: Record<string, string> = {
   new: "bg-red-100 text-red-700",
-  read: "bg-yellow-100 text-yellow-700",
+  read: "bg-sky-100 text-sky-700",
   resolved: "bg-green-100 text-green-700",
 };
 
 const labels: Record<string, string> = {
   new: "새 문의",
-  read: "확인",
+  read: "진행중", // 어드민과 같은 이름(저장값 read 그대로)
   resolved: "완료",
 };
 
