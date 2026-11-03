@@ -82,6 +82,8 @@ test("guessLeadSource 매핑", () => {
     "other",
   );
   assert.equal(describeSource({ qr_src: "card" }), "기타(QR 등) · QR:card");
+  assert.equal(describeSource({ channel: "phone" }), "전화 문의(어드민 입력)");
+  assert.equal(describeSource({ channel: "phone", lead_source: "referral", lead_note: "김소장" }), "전화 문의(어드민 입력) · 소개 · 김소장");
 });
 
 test("buildNotifyText: 번호 하이픈·내용 요약·링크", () => {

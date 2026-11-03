@@ -68,8 +68,12 @@ export type InquirySource = {
   landing_path?: string;
   qr_src?: string; // /q?src= 값(card|truck|flyer|site|qr)
   page_type?: string; // 폼에서 고른 구분(매입/납품)
+  // ↓ 어드민에서 직접 입력한 전화 문의만(폼으로는 못 넣는다 — readSource 는 SOURCE_KEYS 만 읽음)
+  channel?: "phone";
+  lead_source?: string; // 어드민 lead_source 값(받은 사람이 고른 것)
+  lead_note?: string;
 };
-const SOURCE_KEYS: (keyof InquirySource)[] = [
+const SOURCE_KEYS: Exclude<keyof InquirySource, "channel" | "lead_source" | "lead_note">[] = [
   "utm_source",
   "utm_medium",
   "utm_campaign",
@@ -123,8 +127,26 @@ export const LEAD_LABEL: Record<LeadGuess, string> = {
   other: "기타(QR 등)",
 };
 
-/** 유입을 사람이 읽는 한 줄로 — "네이버 블로그 (blog.naver.com)" / "기타 · 명함 QR". */
+/** 어드민 lead_source 전체 값 이름 — 전화 문의는 받은 사람이 고른 값(소개·재거래 포함)을 그대로 보여 준다. */
+const ADMIN_LEAD_LABEL: Record<string, string> = {
+  homepage: "홈페이지",
+  blog: "네이버 블로그",
+  naver_place: "네이버 플레이스",
+  referral: "소개",
+  repeat: "재거래",
+  ad: "광고",
+  other: "기타",
+};
+
+/** 유입을 사람이 읽는 한 줄로 — "네이버 블로그 (blog.naver.com)" / "기타 · 명함 QR" / "전화 문의(어드민 입력) · 소개 · 김소장". */
 export function describeSource(src: InquirySource): string {
+  if (src.channel === "phone") {
+    const parts = ["전화 문의(어드민 입력)"];
+    const lead = src.lead_source ? ADMIN_LEAD_LABEL[src.lead_source] : undefined;
+    if (lead) parts.push(lead);
+    if (lead && src.lead_note) parts.push(src.lead_note);
+    return parts.join(" · ");
+  }
   const lead = guessLeadSource(src);
   const parts: string[] = [LEAD_LABEL[lead]];
   // 중고철근 매입 랜딩(/used-rebar)으로 유입(첫 방문)한 세션의 문의 — 제출 페이지가 아니라 유입 경로 기준
